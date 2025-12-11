@@ -1,0 +1,9 @@
+<div id="topfocus" tabindex="0" style="height:1px; width:1px; opacity:0;"></div>
+
+<script>
+  setTimeout(() => {
+    const el = document.getElementById('topfocus');
+    if (el) el.focus();
+    window.scrollTo(0, 0);
+  }, 5000); // now 2 seconds
+</script>
