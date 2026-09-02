@@ -1,277 +1,613 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Timetable</title>
-    
-    <style>
-        /* BASE STYLES & THEME */
-        :root {
-            --color-dark-background: #121212; --color-card-background: #2b2b2b;
-            --color-sidebar-background: #1e1e1e; --color-text-light: #ffffff;
-            --color-text-dim: #ccc; --color-accent-blue: #4a90e2; 
-            --sidebar-width: 280px; --border-radius-large: 16px; --border-radius-small: 8px;
-        }
-        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--color-dark-background); color: var(--color-text-light); overflow-x: hidden; }
-        #weather-app { display: flex; min-height: 100vh; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sam's Timetable</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* SIDEBAR STYLING */
-        #sidebar { 
-            width: var(--sidebar-width); 
-            background-color: var(--color-sidebar-background); 
-            padding: 20px 0; 
-            display: flex; 
-            flex-direction: column; 
-            border-radius: 0 var(--border-radius-large) var(--border-radius-large) 0; 
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5); 
-            z-index: 10;
-            position: sticky; top: 0; height: 100vh;
-        }
-        .logo-container { width: 80px; height: 80px; margin: 0 auto 10px; border-radius: 50%; display: flex; justify-content: center; align-items: center; background-color: #333; }
-        .logo-text { font-size: 40px; } 
-        #station-header h1 { font-size: 1.4em; font-weight: 300; text-align: center; margin-bottom: 25px; color: var(--color-text-dim); }
-        
-        /* NAV LIST */
-        nav ul { 
-            list-style: none; padding: 0; width: 100%; 
-            flex-grow: 1; overflow-y: auto;
-        }
-        .nav-item { padding: 10px 20px 10px 50px; cursor: pointer; transition: background-color 0.2s; margin: 5px 0; padding-right: 20px; }
-        .nav-item a { color: var(--color-text-dim); text-decoration: none; display: block; font-size: 1.1em; }
-        .active-page { 
-            background-color: var(--color-accent-blue); 
-            border-radius: 0 25px 25px 0; 
-            margin-right: 10px; 
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); 
-        }
-        .active-page a { color: var(--color-text-light); }
-        
-        #info-section { margin-top: auto; }
-        #info-section, #dark-mode-toggle { padding: 10px 20px 10px 50px; cursor: pointer; font-size: 0.9em; opacity: 0.7; }
-        
-        /* MAIN DASHBOARD CONTENT */
-        #dashboard-content { flex-grow: 1; padding: 30px; max-width: 1000px; margin: 0 auto; }
-        .alert-card { background-color: var(--color-card-background); border-radius: var(--border-radius-small); padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); border-left: 8px solid; transition: all 0.3s ease; }
-        .alert-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .alert-level { font-weight: bold; padding: 5px 10px; border-radius: 4px; text-transform: uppercase; text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3); }
-        .alert-headline { font-size: 1.4em; font-weight: 600; margin-top: 5px; }
-        .alert-details { font-size: 0.9em; margin-top: 10px; line-height: 1.5; }
+  :root {
+    --bg: #0e0f11;
+    --surface: #16181c;
+    --surface2: #1d1f25;
+    --border: rgba(255,255,255,0.07);
+    --text: #e8eaf0;
+    --muted: #6b7280;
+    --accent: #6366f1;
+    --accent-dim: rgba(99,102,241,0.15);
+    --done: #22c55e;
+    --done-dim: rgba(34,197,94,0.12);
+    --current: #f59e0b;
+    --current-dim: rgba(245,158,11,0.15);
+    --upcoming: #3b82f6;
+    --upcoming-dim: rgba(59,130,246,0.1);
+    --free: #374151;
+    --free-dim: rgba(55,65,81,0.3);
+    --radius: 12px;
+    --font: 'Inter', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
 
-        /* PROGRESS BAR STYLES */
-        .progress-section { margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); }
-        .progress-info { display: flex; justify-content: space-between; font-size: 0.9em; margin-bottom: 6px; font-weight: bold; color: #fff; }
-        .progress-track { width: 100%; height: 8px; background-color: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
-        .progress-fill { height: 100%; background-color: #fff; width: 0%; transition: width 0.5s ease; }
+  body.light {
+    --bg: #f5f5f7;
+    --surface: #ffffff;
+    --surface2: #f0f0f5;
+    --border: rgba(0,0,0,0.08);
+    --text: #111827;
+    --muted: #6b7280;
+  }
 
-        /* RESPONSIVE */
-        @media (max-width: 600px) {
-            #weather-app { flex-direction: column; } 
-            #sidebar { width: 100%; border-radius: 0; padding: 10px 0; position: static; height: auto; }
-            #station-header h1, #info-section { display: none; }
-            #station-header { text-align: center; margin: 0 auto; }
-            nav ul { display: flex; justify-content: space-around; padding: 0 10px; overflow-x: auto; white-space: nowrap; flex-grow: 0; overflow-y: hidden; }
-            .nav-item { padding: 5px 10px; margin: 0; flex-shrink: 0; }
-            .active-page { margin-right: 0; border-radius: var(--border-radius-small); }
-            #dashboard-content { padding: 15px; max-width: none; margin: 0; }
-            .alert-header { flex-direction: column; align-items: flex-start; }
-            .alert-times { margin-top: 10px; font-size: 0.8em; }
-        }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 15px;
+    line-height: 1.5;
+    transition: background 0.25s, color 0.25s;
+  }
 
-        /* LIGHT MODE */
-        body.light-mode {
-            --color-dark-background: #f4f7f6; --color-card-background: #ffffff;
-            --color-text-light: #333333; --color-sidebar-background: #eeeeee;
-            --color-text-dim: #555555;
-            background-color: var(--color-dark-background);
-            color: var(--color-text-light);
-        }
-        body.light-mode #sidebar { background-color: var(--color-sidebar-background); box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1); }
-        body.light-mode .alert-card { background-color: var(--color-card-background); box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); }
-        body.light-mode #station-header h1 { color: var(--color-text-dim); }
-        body.light-mode .nav-item a { color: var(--color-text-dim); }
-        body.light-mode .active-page a { color: var(--color-text-light); }
-        body.light-mode .progress-info { color: #333; }
-        body.light-mode .progress-track { background-color: rgba(0,0,0,0.1); }
-        body.light-mode .progress-fill { background-color: #4a90e2; }
+  /* LAYOUT */
+  .shell { display: flex; min-height: 100vh; }
 
-        /* TOGGLE SWITCH */
-        #dark-mode-toggle { display: flex; justify-content: space-between; align-items: center; cursor: default; }
-        #dark-mode-toggle label { cursor: pointer; }
-        .switch-container { position: relative; display: inline-block; width: 50px; height: 28px; }
-        .switch-container input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #555; transition: .4s; }
-        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .4s; }
-        .slider.round { border-radius: 34px; }
-        .slider.round:before { border-radius: 50%; }
-        input:checked + .slider { background-color: var(--color-accent-blue); }
-        input:checked + .slider:before { transform: translateX(22px); }
-        
-        .no-classes { text-align: center; padding: 40px; color: var(--color-text-dim); font-style: italic; }
-    </style>
+  /* SIDEBAR */
+  .sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 24px 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
+  .sidebar-brand {
+    padding: 0 20px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sidebar-brand .icon { font-size: 26px; margin-bottom: 6px; display: block; }
+  .sidebar-brand h1 { font-size: 13px; font-weight: 600; letter-spacing: 0.02em; color: var(--text); }
+  .sidebar-brand p { font-size: 11px; color: var(--muted); margin-top: 2px; font-family: var(--mono); }
+
+  .sidebar-nav { padding: 16px 12px; flex: 1; }
+  .sidebar-nav label {
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    padding: 0 8px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 9px 12px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-family: var(--font);
+    font-size: 13.5px;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    text-align: left;
+    margin-bottom: 2px;
+  }
+  .nav-btn:hover { background: var(--surface2); color: var(--text); }
+  .nav-btn.active { background: var(--accent-dim); color: var(--accent); }
+  .nav-btn .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: currentColor; flex-shrink: 0;
+  }
+
+  .sidebar-footer {
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+  }
+  .theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .toggle-track {
+    width: 36px; height: 20px;
+    background: var(--border);
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.2s;
+    border: none;
+    flex-shrink: 0;
+  }
+  .toggle-track.on { background: var(--accent); }
+  .toggle-thumb {
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: #fff;
+    transition: transform 0.2s;
+  }
+  .toggle-track.on .toggle-thumb { transform: translateX(16px); }
+
+  /* MAIN */
+  .main { flex: 1; padding: 32px 36px; max-width: 760px; }
+
+  .page-header {
+    margin-bottom: 28px;
+  }
+  .day-label {
+    font-size: 11px;
+    font-family: var(--mono);
+    color: var(--accent);
+    margin-bottom: 6px;
+    display: block;
+  }
+  .page-header h2 {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .page-header .subtitle {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* TIMETABLE VIEW TOGGLE */
+  .view-pills {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 4px;
+    border-radius: 10px;
+    width: fit-content;
+  }
+  .pill {
+    padding: 7px 16px;
+    border-radius: 7px;
+    border: none;
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    background: transparent;
+    color: var(--muted);
+    transition: background 0.15s, color 0.15s;
+  }
+  .pill.active { background: var(--accent); color: #fff; }
+
+  /* CLASS CARDS */
+  .class-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .class-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 0 16px;
+    align-items: start;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .class-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    border-radius: 3px 0 0 3px;
+  }
+
+  .class-card.status-done::before { background: var(--done); }
+  .class-card.status-current::before { background: var(--current); }
+  .class-card.status-upcoming::before { background: var(--upcoming); }
+  .class-card.status-free::before { background: var(--free); }
+
+  .class-card.status-current {
+    background: color-mix(in srgb, var(--surface) 85%, var(--current) 15%);
+    border-color: rgba(245,158,11,0.25);
+  }
+
+  .time-col {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--muted);
+    padding-top: 2px;
+    line-height: 1.6;
+  }
+  .time-col .start { color: var(--text); font-weight: 500; }
+
+  .info-col {}
+  .class-name {
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: -0.01em;
+    margin-bottom: 3px;
+  }
+  .class-meta {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .class-meta span + span::before { content: ' · '; }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 10px;
+    font-family: var(--mono);
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 4px;
+    float: right;
+    margin-top: 1px;
+  }
+  .badge-done { background: var(--done-dim); color: var(--done); }
+  .badge-current { background: var(--current-dim); color: var(--current); }
+  .badge-upcoming { background: var(--upcoming-dim); color: var(--upcoming); }
+  .badge-free { background: var(--free-dim); color: var(--muted); }
+
+  /* PROGRESS BAR */
+  .progress-bar {
+    margin-top: 10px;
+    grid-column: 1 / -1;
+  }
+  .prog-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 5px;
+    font-family: var(--mono);
+  }
+  .prog-track {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .prog-fill {
+    height: 100%;
+    background: var(--current);
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+
+  .empty { text-align: center; padding: 60px 20px; color: var(--muted); font-size: 14px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 640px) {
+    .sidebar { width: 100%; height: auto; flex-direction: row; padding: 12px 16px; position: static; border-right: none; border-bottom: 1px solid var(--border); overflow-x: auto; }
+    .sidebar-brand { padding: 0; border: none; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .sidebar-brand .icon { margin: 0; font-size: 20px; }
+    .sidebar-brand p { display: none; }
+    .sidebar-nav { padding: 0 12px; display: flex; align-items: center; gap: 4px; }
+    .sidebar-nav label { display: none; }
+    .sidebar-footer { padding: 0; margin-left: auto; display: flex; align-items: center; }
+    .shell { flex-direction: column; }
+    .main { padding: 20px 16px; max-width: none; }
+    .class-card { grid-template-columns: 76px 1fr; }
+  }
+</style>
 </head>
 <body>
-
-    <div id="weather-app">
-        <aside id="sidebar">
-            <div id="station-header">
-                <div class="logo-container"><span class="logo-text">📅</span></div>
-                <h1>Daily Timetable</h1>
-            </div>
-            <nav>
-                <ul>
-                    <li class="nav-item active-page"><a href="#">Timetable</a></li>
-                    <li class="nav-item"><a href="#">Settings</a></li>
-                </ul>
-            </nav>
-            <div id="info-section"><p>School Schedule</p></div>
-            <div id="dark-mode-toggle">
-                <label for="theme-switch">Light mode</label>
-                <label class="switch-container">
-                    <input type="checkbox" id="theme-switch">
-                    <span class="slider round"></span>
-                </label>
-            </div>
-        </aside>
-
-        <main id="dashboard-content">
-            <h2 id="day-header">Loading...</h2>
-            <section id="alerts-container"><p>Loading timetable...</p></section>
-        </main>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <span class="icon">🎒</span>
+      <div>
+        <h1>Sam Patton</h1>
+        <p>Sutton Park School</p>
+      </div>
     </div>
-    
-    <script>
-        const themeSwitch = document.getElementById('theme-switch');
-        const body = document.body;
-        function applyTheme(theme) {
-            if (theme === 'light') {
-                body.classList.add('light-mode');
-                themeSwitch.checked = true;
-            } else {
-                body.classList.remove('light-mode');
-                themeSwitch.checked = false;
-            }
-        }
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) { applyTheme(savedTheme); } else { applyTheme('dark'); }
-        themeSwitch.addEventListener('change', function() {
-            if (this.checked) {
-                body.classList.add('light-mode');
-                localStorage.setItem('theme', 'light');
-            } else {
-                body.classList.remove('light-mode');
-                localStorage.setItem('theme', 'dark');
-            }
-        });
-    </script>
+    <nav class="sidebar-nav">
+      <label>View</label>
+      <button class="nav-btn active" onclick="switchView('today')" id="nav-today">
+        <span class="dot"></span> Today
+      </button>
+      <button class="nav-btn" onclick="switchView('week-new')" id="nav-week-new">
+        <span class="dot"></span> 2M (New)
+      </button>
+      <button class="nav-btn" onclick="switchView('week-old')" id="nav-week-old">
+        <span class="dot"></span> Old TT
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="theme-toggle">
+        <span>Light</span>
+        <button class="toggle-track" id="theme-btn" onclick="toggleTheme()">
+          <div class="toggle-thumb"></div>
+        </button>
+      </div>
+    </div>
+  </aside>
 
-    <script>
-        // Embedded Data
-        const timetable = [{"Day": "Monday", "Start Time": "08:05", "End Time": "08:43", "Subject": "Registration", "Teacher": "Miriam Rochford", "Location": "A14"}, {"Day": "Monday", "Start Time": "08:43", "End Time": "09:41", "Subject": "I Support", "Teacher": "Sophie Scanlan", "Location": "HB1"}, {"Day": "Monday", "Start Time": "09:41", "End Time": "10:39", "Subject": "English", "Teacher": "Michael Finucane", "Location": "A16"}, {"Day": "Monday", "Start Time": "10:39", "End Time": "10:59", "Subject": "Break", "Teacher": NaN, "Location": NaN}, {"Day": "Monday", "Start Time": "10:59", "End Time": "11:57", "Subject": "Science", "Teacher": "Lauren McGinn", "Location": "Check"}, {"Day": "Monday", "Start Time": "11:57", "End Time": "12:55", "Subject": "Home Ec", "Teacher": "Ciara Doherty", "Location": "L2"}, {"Day": "Monday", "Start Time": "12:55", "End Time": "13:35", "Subject": "Lunch", "Teacher": NaN, "Location": NaN}, {"Day": "Monday", "Start Time": "13:35", "End Time": "14:33", "Subject": "History", "Teacher": "C. O\u2019Reilly", "Location": "A14"}, {"Day": "Monday", "Start Time": "14:33", "End Time": "15:31", "Subject": "PE", "Teacher": "Niamh O\u2019Hare", "Location": "PE-1.2"}, {"Day": "Monday", "Start Time": "15:32", "End Time": "16:32", "Subject": "End of Day", "Teacher": NaN, "Location": NaN}, {"Day": "Tuesday", "Start Time": "08:05", "End Time": "08:43", "Subject": "Registration", "Teacher": "Miriam Rochford", "Location": "A14"}, {"Day": "Tuesday", "Start Time": "08:43", "End Time": "09:41", "Subject": "CSPE", "Teacher": "Sophie Gibbons", "Location": "TYHUB"}, {"Day": "Tuesday", "Start Time": "09:41", "End Time": "10:39", "Subject": "PE", "Teacher": "Niamh O\u2019Hare", "Location": "PE-1.2"}, {"Day": "Tuesday", "Start Time": "10:39", "End Time": "10:59", "Subject": "Break", "Teacher": NaN, "Location": NaN}, {"Day": "Tuesday", "Start Time": "10:59", "End Time": "11:57", "Subject": "German", "Teacher": "Jennifer Campbell", "Location": "S8"}, {"Day": "Tuesday", "Start Time": "11:57", "End Time": "12:55", "Subject": "Mathematics", "Teacher": "Stephen Grimes", "Location": "M26"}, {"Day": "Tuesday", "Start Time": "12:55", "End Time": "13:35", "Subject": "Lunch", "Teacher": NaN, "Location": NaN}, {"Day": "Tuesday", "Start Time": "13:35", "End Time": "14:33", "Subject": "SPHE", "Teacher": "Jenifer Campbell", "Location": "L5"}, {"Day": "Tuesday", "Start Time": "14:33", "End Time": "15:31", "Subject": "English", "Teacher": "Michael Finucane", "Location": "A16"}, {"Day": "Tuesday", "Start Time": "15:32", "End Time": "16:32", "Subject": "End of Day", "Teacher": NaN, "Location": NaN}, {"Day": "Wednesday", "Start Time": "08:05", "End Time": "08:43", "Subject": "Registration", "Teacher": "Miriam Rochford", "Location": "A14"}, {"Day": "Wednesday", "Start Time": "08:43", "End Time": "09:41", "Subject": "I Support", "Teacher": "Sophie Scanlan", "Location": "HB1"}, {"Day": "Wednesday", "Start Time": "09:41", "End Time": "10:39", "Subject": "Geography", "Teacher": "S. Gibbons", "Location": "HB7"}, {"Day": "Wednesday", "Start Time": "10:39", "End Time": "10:59", "Subject": "Break", "Teacher": NaN, "Location": NaN}, {"Day": "Wednesday", "Start Time": "10:59", "End Time": "11:57", "Subject": "English", "Teacher": "Michael Finucane", "Location": "A16"}, {"Day": "Wednesday", "Start Time": "11:57", "End Time": "12:55", "Subject": "Science", "Teacher": "Lauren McGinn", "Location": "Check"}, {"Day": "Wednesday", "Start Time": "12:55", "End Time": "13:35", "Subject": "Lunch", "Teacher": NaN, "Location": NaN}, {"Day": "Wednesday", "Start Time": "13:35", "End Time": "14:33", "Subject": "Early Half Day", "Teacher": NaN, "Location": NaN}, {"Day": "Wednesday", "Start Time": "14:33", "End Time": "15:31", "Subject": "Early Half Day", "Teacher": NaN, "Location": NaN}, {"Day": "Thursday", "Start Time": "08:05", "End Time": "08:43", "Subject": "Registration", "Teacher": "Miriam Rochford", "Location": "A14"}, {"Day": "Thursday", "Start Time": "08:43", "End Time": "09:41", "Subject": "Graphics", "Teacher": "D. O'Connor", "Location": "A20"}, {"Day": "Thursday", "Start Time": "09:41", "End Time": "10:39", "Subject": "Geography", "Teacher": "S. Gibbons", "Location": "HB7"}, {"Day": "Thursday", "Start Time": "10:39", "End Time": "10:59", "Subject": "Break", "Teacher": NaN, "Location": NaN}, {"Day": "Thursday", "Start Time": "10:59", "End Time": "11:57", "Subject": "Mathematics", "Teacher": "Stephen Grimes", "Location": "M26"}, {"Day": "Thursday", "Start Time": "11:57", "End Time": "12:55", "Subject": "I Support", "Teacher": "Sophie Scanlan", "Location": "A15"}, {"Day": "Thursday", "Start Time": "12:55", "End Time": "13:35", "Subject": "Lunch", "Teacher": NaN, "Location": NaN}, {"Day": "Thursday", "Start Time": "13:35", "End Time": "14:33", "Subject": "History", "Teacher": "C. O\u2019Reilly", "Location": "A15"}, {"Day": "Thursday", "Start Time": "14:33", "End Time": "15:31", "Subject": "German", "Teacher": "Jenifer Campbell", "Location": "S8"}, {"Day": "Friday", "Start Time": "08:05", "End Time": "08:43", "Subject": "Registration", "Teacher": "Miriam Rochford", "Location": "A14"}, {"Day": "Friday", "Start Time": "08:43", "End Time": "09:41", "Subject": "Mathematics", "Teacher": "Stephen Grimes", "Location": "M26"}, {"Day": "Friday", "Start Time": "09:41", "End Time": "10:39", "Subject": "History", "Teacher": "C. O\u2019Reilly", "Location": "A13"}, {"Day": "Friday", "Start Time": "10:39", "End Time": "10:59", "Subject": "Break", "Teacher": NaN, "Location": NaN}, {"Day": "Friday", "Start Time": "10:59", "End Time": "11:57", "Subject": "Geography", "Teacher": "S. Gibbons", "Location": "HB7"}, {"Day": "Friday", "Start Time": "11:57", "End Time": "12:55", "Subject": "Graphics", "Teacher": "D. O'Connor", "Location": "A20"}, {"Day": "Friday", "Start Time": "12:55", "End Time": "13:35", "Subject": "Lunch", "Teacher": NaN, "Location": NaN}, {"Day": "Friday", "Start Time": "13:35", "End Time": "14:33", "Subject": "Computing", "Teacher": "Joanne Hanratty", "Location": "S12"}, {"Day": "Friday", "Start Time": "14:33", "End Time": "15:31", "Subject": "Home Ec", "Teacher": "Ciara Doherty", "Location": "L2"}];
+  <main class="main">
+    <div class="page-header">
+      <span class="day-label" id="day-label"></span>
+      <h2 id="main-title">Today's Timetable</h2>
+      <p class="subtitle" id="main-subtitle"></p>
+    </div>
 
-        const STATUS_COLORS = {
-            'DONE': '#38B000',    // Green
-            'CURRENT': '#FFFFFF', // White
-            'FUTURE': '#FF0000'   // Red
-        };
+    <!-- Today view: pill switcher -->
+    <div class="view-pills" id="tt-switcher">
+      <button class="pill active" onclick="setActiveTT('new')" id="pill-new">Current (2M)</button>
+      <button class="pill" onclick="setActiveTT('old')" id="pill-old">Previous</button>
+    </div>
 
-        function getDayName() {
-            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            return days[new Date().getDay()];
-        }
+    <div class="class-list" id="class-list"></div>
+  </main>
+</div>
 
-        function parseTime(timeStr) {
-            if (!timeStr) return null;
-            const [hours, minutes] = timeStr.split(':').map(Number);
-            const now = new Date();
-            return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
-        }
+<script>
+const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 
-        function renderTimetable() {
-            const currentDay = getDayName();
-            document.getElementById('day-header').innerText = currentDay + "'s Timetable";
-            
-            const container = document.getElementById('alerts-container');
-            container.innerHTML = '';
+// ── NEW TIMETABLE (2M from photo) ──────────────────────────────────────────
+const TT_NEW = [
+  {Day:"Monday",    Start:"08:35",End:"08:43",Subject:"Registration",      Teacher:"Jennifer Campbell", Room:""},
+  {Day:"Monday",    Start:"08:43",End:"09:41",Subject:"Mathematics",        Teacher:"Stephen Grimes",    Room:"M26"},
+  {Day:"Monday",    Start:"09:41",End:"10:39",Subject:"History",            Teacher:"Catherine O'Reilly",Room:"M22"},
+  {Day:"Monday",    Start:"10:39",End:"10:59",Subject:"Break",              Teacher:"",                  Room:""},
+  {Day:"Monday",    Start:"10:59",End:"11:57",Subject:"Science (JC)",       Teacher:"Gabija Visockyte",  Room:"L5"},
+  {Day:"Monday",    Start:"11:57",End:"12:55",Subject:"1 Support",          Teacher:"Conor Gallagher",   Room:"A16"},
+  {Day:"Monday",    Start:"12:55",End:"13:35",Subject:"Lunch",              Teacher:"",                  Room:""},
+  {Day:"Monday",    Start:"13:35",End:"14:33",Subject:"English",            Teacher:"Michael Finucane",  Room:"A16"},
+  {Day:"Monday",    Start:"14:33",End:"15:31",Subject:"German",             Teacher:"Jennifer Campbell", Room:"S8"},
+  {Day:"Tuesday",   Start:"08:35",End:"08:43",Subject:"Registration",       Teacher:"Jennifer Campbell", Room:""},
+  {Day:"Tuesday",   Start:"08:43",End:"09:41",Subject:"Graphics",           Teacher:"Darragh O'Connor",  Room:"A20"},
+  {Day:"Tuesday",   Start:"09:41",End:"10:39",Subject:"Mathematics",        Teacher:"Stephen Grimes",    Room:"M26"},
+  {Day:"Tuesday",   Start:"10:39",End:"10:59",Subject:"Break",              Teacher:"",                  Room:""},
+  {Day:"Tuesday",   Start:"10:59",End:"11:57",Subject:"Home Economics",     Teacher:"Ciara Doherty",     Room:"L2"},
+  {Day:"Tuesday",   Start:"11:57",End:"12:55",Subject:"Geography",          Teacher:"Sophie Gibbons",    Room:"HB7"},
+  {Day:"Tuesday",   Start:"12:55",End:"13:35",Subject:"Lunch",              Teacher:"",                  Room:""},
+  {Day:"Tuesday",   Start:"13:35",End:"14:33",Subject:"Science (JC)",       Teacher:"Gabija Visockyte",  Room:"L5"},
+  {Day:"Tuesday",   Start:"14:33",End:"15:31",Subject:"English",            Teacher:"Michael Finucane",  Room:"A16"},
+  {Day:"Wednesday", Start:"08:35",End:"08:43",Subject:"Registration",       Teacher:"Jennifer Campbell", Room:""},
+  {Day:"Wednesday", Start:"08:43",End:"09:41",Subject:"PE",                 Teacher:"Niamh O'Hare",      Room:"Gym Hall"},
+  {Day:"Wednesday", Start:"09:41",End:"10:39",Subject:"German",             Teacher:"Jennifer Campbell", Room:"S8"},
+  {Day:"Wednesday", Start:"10:39",End:"10:59",Subject:"Break",              Teacher:"",                  Room:""},
+  {Day:"Wednesday", Start:"10:59",End:"11:57",Subject:"SPHE",               Teacher:"Jennifer Campbell", Room:"HB6"},
+  {Day:"Wednesday", Start:"11:57",End:"12:55",Subject:"1 Support",          Teacher:"Conor Gallagher",   Room:"A14"},
+  {Day:"Thursday",  Start:"08:35",End:"08:43",Subject:"Registration",       Teacher:"Jennifer Campbell", Room:""},
+  {Day:"Thursday",  Start:"08:43",End:"09:41",Subject:"Mathematics",        Teacher:"Stephen Grimes",    Room:"M26"},
+  {Day:"Thursday",  Start:"09:41",End:"10:39",Subject:"Home Economics",     Teacher:"Ciara Doherty",     Room:"L2"},
+  {Day:"Thursday",  Start:"10:39",End:"10:59",Subject:"Break",              Teacher:"",                  Room:""},
+  {Day:"Thursday",  Start:"10:59",End:"11:57",Subject:"CSPE",               Teacher:"Sophie Gibbons",    Room:"HB7"},
+  {Day:"Thursday",  Start:"11:57",End:"12:55",Subject:"German",             Teacher:"Jennifer Campbell", Room:"S8"},
+  {Day:"Thursday",  Start:"12:55",End:"13:35",Subject:"Lunch",              Teacher:"",                  Room:""},
+  {Day:"Thursday",  Start:"13:35",End:"14:33",Subject:"Graphics",           Teacher:"Darragh O'Connor",  Room:"A20"},
+  {Day:"Thursday",  Start:"14:33",End:"15:31",Subject:"1 Support",          Teacher:"Conor Gallagher",   Room:"M21"},
+  {Day:"Friday",    Start:"08:35",End:"08:43",Subject:"Registration",       Teacher:"Jennifer Campbell", Room:""},
+  {Day:"Friday",    Start:"08:43",End:"09:41",Subject:"English",            Teacher:"Michael Finucane",  Room:"A16"},
+  {Day:"Friday",    Start:"09:41",End:"10:39",Subject:"Graphics",           Teacher:"Darragh O'Connor",  Room:"A20"},
+  {Day:"Friday",    Start:"10:39",End:"10:59",Subject:"Break",              Teacher:"",                  Room:""},
+  {Day:"Friday",    Start:"10:59",End:"11:57",Subject:"Home Economics",     Teacher:"Ciara Doherty",     Room:"L2"},
+  {Day:"Friday",    Start:"11:57",End:"12:55",Subject:"Mathematics",        Teacher:"Stephen Grimes",    Room:"M26"},
+  {Day:"Friday",    Start:"12:55",End:"13:35",Subject:"Lunch",              Teacher:"",                  Room:""},
+  {Day:"Friday",    Start:"13:35",End:"14:33",Subject:"History",            Teacher:"Catherine O'Reilly",Room:"M22"},
+  {Day:"Friday",    Start:"14:33",End:"15:31",Subject:"Geography",          Teacher:"Sophie Gibbons",    Room:"HB7"},
+];
 
-            const todaysSubjects = timetable.filter(item => item.Day === currentDay);
+// ── OLD TIMETABLE (from original HTML) ────────────────────────────────────
+const TT_OLD = [
+  {Day:"Monday",    Start:"08:05",End:"08:43",Subject:"Registration",  Teacher:"Miriam Rochford",    Room:"A14"},
+  {Day:"Monday",    Start:"08:43",End:"09:41",Subject:"I Support",     Teacher:"Sophie Scanlan",     Room:"HB1"},
+  {Day:"Monday",    Start:"09:41",End:"10:39",Subject:"English",       Teacher:"Michael Finucane",   Room:"A16"},
+  {Day:"Monday",    Start:"10:39",End:"10:59",Subject:"Break",         Teacher:"",                   Room:""},
+  {Day:"Monday",    Start:"10:59",End:"11:57",Subject:"Science",       Teacher:"Lauren McGinn",      Room:"Check"},
+  {Day:"Monday",    Start:"11:57",End:"12:55",Subject:"Home Ec",       Teacher:"Ciara Doherty",      Room:"L2"},
+  {Day:"Monday",    Start:"12:55",End:"13:35",Subject:"Lunch",         Teacher:"",                   Room:""},
+  {Day:"Monday",    Start:"13:35",End:"14:33",Subject:"History",       Teacher:"C. O'Reilly",        Room:"A14"},
+  {Day:"Monday",    Start:"14:33",End:"15:31",Subject:"PE",            Teacher:"Niamh O'Hare",       Room:"PE-1.2"},
+  {Day:"Tuesday",   Start:"08:05",End:"08:43",Subject:"Registration",  Teacher:"Miriam Rochford",    Room:"A14"},
+  {Day:"Tuesday",   Start:"08:43",End:"09:41",Subject:"CSPE",          Teacher:"Sophie Gibbons",     Room:"TYHUB"},
+  {Day:"Tuesday",   Start:"09:41",End:"10:39",Subject:"PE",            Teacher:"Niamh O'Hare",       Room:"PE-1.2"},
+  {Day:"Tuesday",   Start:"10:39",End:"10:59",Subject:"Break",         Teacher:"",                   Room:""},
+  {Day:"Tuesday",   Start:"10:59",End:"11:57",Subject:"German",        Teacher:"Jennifer Campbell",  Room:"S8"},
+  {Day:"Tuesday",   Start:"11:57",End:"12:55",Subject:"Mathematics",   Teacher:"Stephen Grimes",     Room:"M26"},
+  {Day:"Tuesday",   Start:"12:55",End:"13:35",Subject:"Lunch",         Teacher:"",                   Room:""},
+  {Day:"Tuesday",   Start:"13:35",End:"14:33",Subject:"SPHE",          Teacher:"Jennifer Campbell",  Room:"L5"},
+  {Day:"Tuesday",   Start:"14:33",End:"15:31",Subject:"English",       Teacher:"Michael Finucane",   Room:"A16"},
+  {Day:"Wednesday", Start:"08:05",End:"08:43",Subject:"Registration",  Teacher:"Miriam Rochford",    Room:"A14"},
+  {Day:"Wednesday", Start:"08:43",End:"09:41",Subject:"I Support",     Teacher:"Sophie Scanlan",     Room:"HB1"},
+  {Day:"Wednesday", Start:"09:41",End:"10:39",Subject:"Geography",     Teacher:"S. Gibbons",         Room:"HB7"},
+  {Day:"Wednesday", Start:"10:39",End:"10:59",Subject:"Break",         Teacher:"",                   Room:""},
+  {Day:"Wednesday", Start:"10:59",End:"11:57",Subject:"English",       Teacher:"Michael Finucane",   Room:"A16"},
+  {Day:"Wednesday", Start:"11:57",End:"12:55",Subject:"Science",       Teacher:"Lauren McGinn",      Room:"Check"},
+  {Day:"Wednesday", Start:"12:55",End:"13:35",Subject:"Lunch",         Teacher:"",                   Room:""},
+  {Day:"Wednesday", Start:"13:35",End:"14:33",Subject:"Early Half Day",Teacher:"",                   Room:""},
+  {Day:"Thursday",  Start:"08:05",End:"08:43",Subject:"Registration",  Teacher:"Miriam Rochford",    Room:"A14"},
+  {Day:"Thursday",  Start:"08:43",End:"09:41",Subject:"Graphics",      Teacher:"D. O'Connor",        Room:"A20"},
+  {Day:"Thursday",  Start:"09:41",End:"10:39",Subject:"Geography",     Teacher:"S. Gibbons",         Room:"HB7"},
+  {Day:"Thursday",  Start:"10:39",End:"10:59",Subject:"Break",         Teacher:"",                   Room:""},
+  {Day:"Thursday",  Start:"10:59",End:"11:57",Subject:"Mathematics",   Teacher:"Stephen Grimes",     Room:"M26"},
+  {Day:"Thursday",  Start:"11:57",End:"12:55",Subject:"I Support",     Teacher:"Sophie Scanlan",     Room:"A15"},
+  {Day:"Thursday",  Start:"12:55",End:"13:35",Subject:"Lunch",         Teacher:"",                   Room:""},
+  {Day:"Thursday",  Start:"13:35",End:"14:33",Subject:"History",       Teacher:"C. O'Reilly",        Room:"A15"},
+  {Day:"Thursday",  Start:"14:33",End:"15:31",Subject:"German",        Teacher:"Jennifer Campbell",  Room:"S8"},
+  {Day:"Friday",    Start:"08:05",End:"08:43",Subject:"Registration",  Teacher:"Miriam Rochford",    Room:"A14"},
+  {Day:"Friday",    Start:"08:43",End:"09:41",Subject:"Mathematics",   Teacher:"Stephen Grimes",     Room:"M26"},
+  {Day:"Friday",    Start:"09:41",End:"10:39",Subject:"History",       Teacher:"C. O'Reilly",        Room:"A13"},
+  {Day:"Friday",    Start:"10:39",End:"10:59",Subject:"Break",         Teacher:"",                   Room:""},
+  {Day:"Friday",    Start:"10:59",End:"11:57",Subject:"Geography",     Teacher:"S. Gibbons",         Room:"HB7"},
+  {Day:"Friday",    Start:"11:57",End:"12:55",Subject:"Graphics",      Teacher:"D. O'Connor",        Room:"A20"},
+  {Day:"Friday",    Start:"12:55",End:"13:35",Subject:"Lunch",         Teacher:"",                   Room:""},
+  {Day:"Friday",    Start:"13:35",End:"14:33",Subject:"Computing",     Teacher:"Joanne Hanratty",    Room:"S12"},
+  {Day:"Friday",    Start:"14:33",End:"15:31",Subject:"Home Ec",       Teacher:"Ciara Doherty",      Room:"L2"},
+];
 
-            if (todaysSubjects.length === 0) {
-                container.innerHTML = '<div class="no-classes">No classes scheduled for today.</div>';
-                return;
-            }
+const FREE_SUBJECTS = ['Break','Lunch','Early Half Day','End of Day'];
 
-            const now = new Date();
+let currentView = 'today';   // 'today' | 'week-new' | 'week-old'
+let activeTT = 'new';        // 'new' | 'old'
+let lightMode = false;
 
-            todaysSubjects.forEach(item => {
-                const startTime = parseTime(item['Start Time']);
-                const endTime = parseTime(item['End Time']);
-                
-                let status = 'FUTURE';
-                let levelLabel = 'UPCOMING';
-                let progressHtml = '';
-                
-                if (now > endTime) {
-                    status = 'DONE';
-                    levelLabel = 'COMPLETED';
-                } else if (now >= startTime && now <= endTime) {
-                    status = 'CURRENT';
-                    levelLabel = 'IN PROGRESS';
-                    
-                    // --- PROGRESS LOGIC ---
-                    const totalDuration = (endTime - startTime);
-                    const elapsed = (now - startTime);
-                    const percentage = Math.max(0, Math.min(100, (elapsed / totalDuration) * 100));
-                    const remainingMs = totalDuration - elapsed;
-                    const remainingMins = Math.ceil(remainingMs / (1000 * 60));
-                    
-                    progressHtml = `
-                        <div class="progress-section">
-                            <div class="progress-info">
-                                <span>Time left: ${remainingMins} min</span>
-                                <span>${Math.round(percentage)}%</span>
-                            </div>
-                            <div class="progress-track">
-                                <div class="progress-fill" style="width: ${percentage}%;"></div>
-                            </div>
-                        </div>
-                    `;
-                }
+function parseTime(str) {
+  const [h, m] = str.split(':').map(Number);
+  const d = new Date();
+  d.setHours(h, m, 0, 0);
+  return d;
+}
 
-                const color = STATUS_COLORS[status];
-                
-                // Text color logic
-                let textColor = '#FFF';
-                if (status === 'CURRENT' || status === 'DONE') {
-                    textColor = '#000';
-                }
+function getStatus(start, end) {
+  const now = new Date();
+  const s = parseTime(start), e = parseTime(end);
+  if (now > e) return 'done';
+  if (now >= s) return 'current';
+  return 'upcoming';
+}
 
-                const teacher = item.Teacher && item.Teacher !== 'nan' ? `Teacher: ${item.Teacher}` : '';
-                const location = item.Location && item.Location !== 'nan' ? `Location: ${item.Location}` : '';
-                const detailsText = [teacher, location].filter(Boolean).join(' | ');
+function isFree(subject) { return FREE_SUBJECTS.includes(subject); }
 
-                const alertHtml = `
-                    <div class="alert-card" style="border-color: ${color};">
-                        <div class="alert-header">
-                            <span class="alert-level" style="background-color: ${color}; color: ${textColor};">${levelLabel}</span>
-                            <div class="alert-times">
-                                <strong>Start:</strong> ${item['Start Time']} &bull; <strong>End:</strong> ${item['End Time']}
-                            </div>
-                        </div>
-                        <div class="alert-headline">${item.Subject}</div>
-                        <div class="alert-details">
-                            <p>${detailsText}</p>
-                            ${progressHtml}
-                        </div>
-                    </div>
-                `;
-                
-                container.insertAdjacentHTML('beforeend', alertHtml);
-            });
-        }
+function buildCard(item, showStatus) {
+  const free = isFree(item.Subject);
+  let status = 'upcoming';
+  if (free) status = 'free';
+  else if (showStatus) status = getStatus(item.Start, item.End);
 
-        renderTimetable();
-        setInterval(renderTimetable, 60000); // Update every minute
-    </script>
+  const badgeLabel = { done:'done', current:'now', upcoming:'next', free:'' }[status];
+  const badgeHtml = badgeLabel
+    ? `<span class="badge badge-${status}">${badgeLabel}</span>`
+    : '';
+
+  let progressHtml = '';
+  if (status === 'current' && showStatus) {
+    const s = parseTime(item.Start), e = parseTime(item.End), now = new Date();
+    const pct = Math.round(((now - s) / (e - s)) * 100);
+    const minsLeft = Math.ceil((e - now) / 60000);
+    progressHtml = `
+      <div class="progress-bar" style="grid-column:1/-1">
+        <div class="prog-row"><span>${minsLeft} min left</span><span>${pct}%</span></div>
+        <div class="prog-track"><div class="prog-fill" style="width:${pct}%"></div></div>
+      </div>`;
+  }
+
+  const meta = [item.Teacher, item.Room].filter(Boolean);
+  const metaHtml = meta.length
+    ? `<div class="class-meta">${meta.map(m => `<span>${m}</span>`).join('')}</div>`
+    : '';
+
+  return `
+    <div class="class-card status-${status}">
+      <div class="time-col">
+        <span class="start">${item.Start}</span><br>${item.End}
+      </div>
+      <div class="info-col">
+        ${badgeHtml}
+        <div class="class-name">${item.Subject}</div>
+        ${metaHtml}
+      </div>
+      ${progressHtml}
+    </div>`;
+}
+
+function buildWeekView(tt) {
+  const weekDays = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
+  let html = '';
+  for (const day of weekDays) {
+    const items = tt.filter(i => i.Day === day);
+    html += `<div style="margin-bottom:28px">
+      <div style="font-size:12px;font-family:var(--mono);color:var(--accent);margin-bottom:10px;font-weight:500">${day.toUpperCase()}</div>
+      <div class="class-list">${items.map(i => buildCard(i, false)).join('')}</div>
+    </div>`;
+  }
+  return html;
+}
+
+function render() {
+  const dayName = DAYS[new Date().getDay()];
+  const isWeekday = dayName !== 'Saturday' && dayName !== 'Sunday';
+  const dateStr = new Date().toLocaleDateString('en-IE', {weekday:'long',day:'numeric',month:'long'});
+
+  const switcher = document.getElementById('tt-switcher');
+  const list = document.getElementById('class-list');
+  const title = document.getElementById('main-title');
+  const subtitle = document.getElementById('main-subtitle');
+  const dayLabel = document.getElementById('day-label');
+
+  dayLabel.textContent = dateStr.toUpperCase();
+
+  if (currentView === 'today') {
+    switcher.style.display = 'flex';
+    const tt = activeTT === 'new' ? TT_NEW : TT_OLD;
+    title.textContent = "Today's Classes";
+    subtitle.textContent = activeTT === 'new' ? 'Current timetable · 2M' : 'Previous timetable';
+
+    if (!isWeekday) {
+      list.innerHTML = '<div class="empty">No school today. Enjoy your weekend 🎉</div>';
+      return;
+    }
+
+    const todayItems = tt.filter(i => i.Day === dayName);
+    if (!todayItems.length) {
+      list.innerHTML = '<div class="empty">Nothing scheduled for today.</div>';
+      return;
+    }
+    list.innerHTML = todayItems.map(i => buildCard(i, true)).join('');
+
+  } else if (currentView === 'week-new') {
+    switcher.style.display = 'none';
+    title.textContent = 'Full Week · 2M';
+    subtitle.textContent = 'Current timetable';
+    list.innerHTML = buildWeekView(TT_NEW);
+
+  } else {
+    switcher.style.display = 'none';
+    title.textContent = 'Full Week · Previous';
+    subtitle.textContent = 'Old timetable for reference';
+    list.innerHTML = buildWeekView(TT_OLD);
+  }
+}
+
+function switchView(v) {
+  currentView = v;
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('nav-' + v).classList.add('active');
+  render();
+}
+
+function setActiveTT(t) {
+  activeTT = t;
+  document.getElementById('pill-new').classList.toggle('active', t === 'new');
+  document.getElementById('pill-old').classList.toggle('active', t === 'old');
+  render();
+}
+
+function toggleTheme() {
+  lightMode = !lightMode;
+  document.body.classList.toggle('light', lightMode);
+  document.getElementById('theme-btn').classList.toggle('on', lightMode);
+  localStorage.setItem('theme', lightMode ? 'light' : 'dark');
+}
+
+// Init
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme === 'light') {
+  lightMode = true;
+  document.body.classList.add('light');
+  document.getElementById('theme-btn').classList.add('on');
+}
+
+render();
+setInterval(render, 30000);
+</script>
 </body>
 </html>
