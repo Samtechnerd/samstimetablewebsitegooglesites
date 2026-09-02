@@ -1,192 +1,392 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dense Class Widget</title>
-    
-    <style>
-        :root {
-            --bg-color: #1a1a1a;
-            --text-main: #ffffff;
-            --text-dim: #a0a0a0;
-            --accent: #4a90e2; 
-            --green: #38B000;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Class Widget</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* RESET & FULL FILL */
-        body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100%; 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg-color);
-            overflow: hidden; /* No scrollbars */
-        }
+  :root {
+    --bg: #0e0f11;
+    --surface: #16181c;
+    --border: rgba(255,255,255,0.07);
+    --text: #e8eaf0;
+    --muted: #6b7280;
+    --green: #22c55e;
+    --amber: #f59e0b;
+    --blue: #6366f1;
+    --mono: 'JetBrains Mono', monospace;
+    --font: 'Inter', sans-serif;
+  }
 
-        #widget-container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            box-sizing: border-box;
-            position: relative;
-        }
+  html, body {
+    width: 100%; height: 100%;
+    background: var(--bg);
+    font-family: var(--font);
+    overflow: hidden;
+  }
 
-        /* SECTIONS */
-        .header-row {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 8px 10px 0 10px;
-            font-size: 0.75rem; font-weight: 700; color: var(--text-dim);
-            text-transform: uppercase;
-            flex-shrink: 0;
-        }
+  #widget {
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    border-left: 3px solid var(--muted);
+    transition: border-color 0.4s;
+    position: relative;
+  }
 
-        .main-content {
-            flex-grow: 1; /* Fills available space */
-            display: flex; flex-direction: column; justify-content: center;
-            padding: 0 10px;
-        }
+  #widget.active  { border-left-color: var(--amber); }
+  #widget.next    { border-left-color: var(--blue); }
+  #widget.done    { border-left-color: #374151; }
 
-        .subject {
-            font-size: 1.5rem; /* Large text */
-            font-weight: 800;
-            color: var(--text-main);
-            line-height: 1.1;
-            margin-bottom: 2px;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        }
+  /* TT SWITCHER */
+  .tt-bar {
+    display: flex;
+    gap: 0;
+    flex-shrink: 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .tt-btn {
+    flex: 1;
+    padding: 5px 0;
+    border: none;
+    background: transparent;
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    text-transform: uppercase;
+  }
+  .tt-btn.active { background: rgba(99,102,241,0.15); color: var(--blue); }
 
-        .details {
-            font-size: 0.85rem;
-            color: var(--accent);
-            font-weight: 500;
-        }
+  /* HEADER */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px 6px;
+    flex-shrink: 0;
+  }
+  .status-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .end-time {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+  }
 
-        /* PROGRESS BAR (Flush to bottom of current section) */
-        .progress-bar-bg {
-            width: 100%; height: 4px; background: rgba(255,255,255,0.1);
-            margin-top: 8px;
-        }
-        .progress-bar-fill { height: 100%; background: var(--green); width: 0%; transition: width 1s linear; }
+  /* MAIN */
+  .body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4px 14px 10px;
+    min-height: 0;
+  }
 
-        /* FOOTER (Next Class) */
-        .footer-row {
-            background: rgba(0,0,0,0.3);
-            padding: 6px 10px;
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            display: flex; justify-content: space-between; align-items: center;
-            flex-shrink: 0;
-            border-top: 1px solid rgba(255,255,255,0.05);
-        }
+  .subject {
+    font-size: clamp(1.1rem, 4vw, 1.6rem);
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
-        .next-label { font-weight: bold; margin-right: 5px; color: #666; }
-        .next-subject { color: #fff; font-weight: 600; }
+  .detail-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-top: 4px;
+    flex-wrap: wrap;
+  }
+  .room {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    background: rgba(255,255,255,0.05);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+  .time-detail {
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .teacher {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
 
-        /* STATUS COLORS STRIP (Left Border) */
-        #widget-container { border-left: 6px solid #555; }
-        .mode-active { border-left-color: var(--green) !important; }
-        .mode-next { border-left-color: var(--accent) !important; }
-        
-    </style>
+  /* PROGRESS */
+  .prog-wrap { margin-top: 10px; }
+  .prog-info {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .prog-track {
+    height: 3px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .prog-fill {
+    height: 100%;
+    background: var(--amber);
+    border-radius: 2px;
+    transition: width 1s linear;
+  }
+
+  /* FOOTER */
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 12px;
+    border-top: 1px solid var(--border);
+    background: rgba(0,0,0,0.2);
+    flex-shrink: 0;
+  }
+  .next-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted);
+    margin-right: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .next-subject {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .next-time {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .center-state {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    padding: 12px;
+    text-align: center;
+  }
+  .center-state .big { font-size: 1.4rem; font-weight: 700; color: #374151; margin-bottom: 4px; }
+  .center-state .small { font-size: 11px; font-family: var(--mono); }
+</style>
 </head>
 <body>
+<div id="widget" class="next"></div>
 
-    <div id="widget-container" class="mode-next">
+<script>
+const TT_NEW = [
+  {Day:"Monday",    Start:"08:35",End:"08:43",Subject:"Registration",  Teacher:"J. Campbell",   Room:""},
+  {Day:"Monday",    Start:"08:43",End:"09:41",Subject:"Mathematics",   Teacher:"S. Grimes",     Room:"M26"},
+  {Day:"Monday",    Start:"09:41",End:"10:39",Subject:"History",       Teacher:"C. O'Reilly",   Room:"M22"},
+  {Day:"Monday",    Start:"10:39",End:"10:59",Subject:"Break",         Teacher:"",              Room:""},
+  {Day:"Monday",    Start:"10:59",End:"11:57",Subject:"Science (JC)",  Teacher:"G. Visockyte",  Room:"L5"},
+  {Day:"Monday",    Start:"11:57",End:"12:55",Subject:"1 Support",     Teacher:"C. Gallagher",  Room:"A16"},
+  {Day:"Monday",    Start:"12:55",End:"13:35",Subject:"Lunch",         Teacher:"",              Room:""},
+  {Day:"Monday",    Start:"13:35",End:"14:33",Subject:"English",       Teacher:"M. Finucane",   Room:"A16"},
+  {Day:"Monday",    Start:"14:33",End:"15:31",Subject:"German",        Teacher:"J. Campbell",   Room:"S8"},
+  {Day:"Tuesday",   Start:"08:35",End:"08:43",Subject:"Registration",  Teacher:"J. Campbell",   Room:""},
+  {Day:"Tuesday",   Start:"08:43",End:"09:41",Subject:"Graphics",      Teacher:"D. O'Connor",   Room:"A20"},
+  {Day:"Tuesday",   Start:"09:41",End:"10:39",Subject:"Mathematics",   Teacher:"S. Grimes",     Room:"M26"},
+  {Day:"Tuesday",   Start:"10:39",End:"10:59",Subject:"Break",         Teacher:"",              Room:""},
+  {Day:"Tuesday",   Start:"10:59",End:"11:57",Subject:"Home Economics",Teacher:"C. Doherty",    Room:"L2"},
+  {Day:"Tuesday",   Start:"11:57",End:"12:55",Subject:"Geography",     Teacher:"S. Gibbons",    Room:"HB7"},
+  {Day:"Tuesday",   Start:"12:55",End:"13:35",Subject:"Lunch",         Teacher:"",              Room:""},
+  {Day:"Tuesday",   Start:"13:35",End:"14:33",Subject:"Science (JC)",  Teacher:"G. Visockyte",  Room:"L5"},
+  {Day:"Tuesday",   Start:"14:33",End:"15:31",Subject:"English",       Teacher:"M. Finucane",   Room:"A16"},
+  {Day:"Wednesday", Start:"08:35",End:"08:43",Subject:"Registration",  Teacher:"J. Campbell",   Room:""},
+  {Day:"Wednesday", Start:"08:43",End:"09:41",Subject:"PE",            Teacher:"N. O'Hare",     Room:"Gym Hall"},
+  {Day:"Wednesday", Start:"09:41",End:"10:39",Subject:"German",        Teacher:"J. Campbell",   Room:"S8"},
+  {Day:"Wednesday", Start:"10:39",End:"10:59",Subject:"Break",         Teacher:"",              Room:""},
+  {Day:"Wednesday", Start:"10:59",End:"11:57",Subject:"SPHE",          Teacher:"J. Campbell",   Room:"HB6"},
+  {Day:"Wednesday", Start:"11:57",End:"12:55",Subject:"1 Support",     Teacher:"C. Gallagher",  Room:"A14"},
+  {Day:"Thursday",  Start:"08:35",End:"08:43",Subject:"Registration",  Teacher:"J. Campbell",   Room:""},
+  {Day:"Thursday",  Start:"08:43",End:"09:41",Subject:"Mathematics",   Teacher:"S. Grimes",     Room:"M26"},
+  {Day:"Thursday",  Start:"09:41",End:"10:39",Subject:"Home Economics",Teacher:"C. Doherty",    Room:"L2"},
+  {Day:"Thursday",  Start:"10:39",End:"10:59",Subject:"Break",         Teacher:"",              Room:""},
+  {Day:"Thursday",  Start:"10:59",End:"11:57",Subject:"CSPE",          Teacher:"S. Gibbons",    Room:"HB7"},
+  {Day:"Thursday",  Start:"11:57",End:"12:55",Subject:"German",        Teacher:"J. Campbell",   Room:"S8"},
+  {Day:"Thursday",  Start:"12:55",End:"13:35",Subject:"Lunch",         Teacher:"",              Room:""},
+  {Day:"Thursday",  Start:"13:35",End:"14:33",Subject:"Graphics",      Teacher:"D. O'Connor",   Room:"A20"},
+  {Day:"Thursday",  Start:"14:33",End:"15:31",Subject:"1 Support",     Teacher:"C. Gallagher",  Room:"M21"},
+  {Day:"Friday",    Start:"08:35",End:"08:43",Subject:"Registration",  Teacher:"J. Campbell",   Room:""},
+  {Day:"Friday",    Start:"08:43",End:"09:41",Subject:"English",       Teacher:"M. Finucane",   Room:"A16"},
+  {Day:"Friday",    Start:"09:41",End:"10:39",Subject:"Graphics",      Teacher:"D. O'Connor",   Room:"A20"},
+  {Day:"Friday",    Start:"10:39",End:"10:59",Subject:"Break",         Teacher:"",              Room:""},
+  {Day:"Friday",    Start:"10:59",End:"11:57",Subject:"Home Economics",Teacher:"C. Doherty",    Room:"L2"},
+  {Day:"Friday",    Start:"11:57",End:"12:55",Subject:"Mathematics",   Teacher:"S. Grimes",     Room:"M26"},
+  {Day:"Friday",    Start:"12:55",End:"13:35",Subject:"Lunch",         Teacher:"",              Room:""},
+  {Day:"Friday",    Start:"13:35",End:"14:33",Subject:"History",       Teacher:"C. O'Reilly",   Room:"M22"},
+  {Day:"Friday",    Start:"14:33",End:"15:31",Subject:"Geography",     Teacher:"S. Gibbons",    Room:"HB7"},
+];
+
+const TT_OLD = [
+  {Day:"Monday",    Start:"08:05",End:"08:43",Subject:"Registration",  Teacher:"M. Rochford",   Room:"A14"},
+  {Day:"Monday",    Start:"08:43",End:"09:41",Subject:"I Support",     Teacher:"S. Scanlan",    Room:"HB1"},
+  {Day:"Monday",    Start:"09:41",End:"10:39",Subject:"English",       Teacher:"M. Finucane",   Room:"A16"},
+  {Day:"Monday",    Start:"10:39",End:"10:59",Subject:"Break",         Teacher:"",              Room:""},
+  {Day:"Monday",    Start:"10:59",End:"11:57",Subject:"Science",       Teacher:"L. McGinn",     Room:""},
+  {Day:"Monday",    Start:"11:57",End:"12:55",Subject:"Home Ec",       Teacher:"C. Doherty",    Room:"L2"},
+  {Day:"Monday",    Start:"12:55",End:"13:35",Subject:"Lunch",         Teacher:"",              Room:""},
+  {Day:"Monday",    Start:"13:35",End:"14:33",Subject:"History",       Teacher:"C. O'Reilly",   Room:"A14"},
+  {Day:"Monday",    Start:"14:33",End:"15:31",Subject:"PE",            Teacher:"N. O'Hare",     Room:"PE-1.2"},
+  {Day:"Tuesday",   Start:"08:05",End:"08:43",Subject:"Registration",  Teacher:"M. Rochford",   Room:"A14"},
+  {Day:"Tuesday",   Start:"08:43",End:"09:41",Subject:"CSPE",          Teacher:"S. Gibbons",    Room:"TYHUB"},
+  {Day:"Tuesday",   Start:"09:41",End:"10:39",Subject:"PE",            Teacher:"N. O'Hare",     Room:"PE-1.2"},
+  {Day:"Tuesday",   Start:"10:39",End:"10:59",Subject:"Break",         Teacher:"",              Room:""},
+  {Day:"Tuesday",   Start:"10:59",End:"11:57",Subject:"German",        Teacher:"J. Campbell",   Room:"S8"},
+  {Day:"Tuesday",   Start:"11:57",End:"12:55",Subject:"Mathematics",   Teacher:"S. Grimes",     Room:"M26"},
+  {Day:"Tuesday",   Start:"12:55",End:"13:35",Subject:"Lunch",         Teacher:"",              Room:""},
+  {Day:"Tuesday",   Start:"13:35",End:"14:33",Subject:"SPHE",          Teacher:"J. Campbell",   Room:"L5"},
+  {Day:"Tuesday",   Start:"14:33",End:"15:31",Subject:"English",       Teacher:"M. Finucane",   Room:"A16"},
+  {Day:"Wednesday", Start:"08:05",End:"08:43",Subject:"Registration",  Teacher:"M. Rochford",   Room:"A14"},
+  {Day:"Wednesday", Start:"08:43",End:"09:41",Subject:"I Support",     Teacher:"S. Scanlan",    Room:"HB1"},
+  {Day:"Wednesday", Start:"09:41",End:"10:39",Subject:"Geography",     Teacher:"S. Gibbons",    Room:"HB7"},
+  {Day:"Wednesday", Start:"10:39",End:"10:59",Subject:"Break",         Teacher:"",              Room:""},
+  {Day:"Wednesday", Start:"10:59",End:"11:57",Subject:"English",       Teacher:"M. Finucane",   Room:"A16"},
+  {Day:"Wednesday", Start:"11:57",End:"12:55",Subject:"Science",       Teacher:"L. McGinn",     Room:""},
+  {Day:"Wednesday", Start:"12:55",End:"13:35",Subject:"Lunch",         Teacher:"",              Room:""},
+  {Day:"Wednesday", Start:"13:35",End:"14:33",Subject:"Early Half Day",Teacher:"",              Room:""},
+  {Day:"Thursday",  Start:"08:05",End:"08:43",Subject:"Registration",  Teacher:"M. Rochford",   Room:"A14"},
+  {Day:"Thursday",  Start:"08:43",End:"09:41",Subject:"Graphics",      Teacher:"D. O'Connor",   Room:"A20"},
+  {Day:"Thursday",  Start:"09:41",End:"10:39",Subject:"Geography",     Teacher:"S. Gibbons",    Room:"HB7"},
+  {Day:"Thursday",  Start:"10:39",End:"10:59",Subject:"Break",         Teacher:"",              Room:""},
+  {Day:"Thursday",  Start:"10:59",End:"11:57",Subject:"Mathematics",   Teacher:"S. Grimes",     Room:"M26"},
+  {Day:"Thursday",  Start:"11:57",End:"12:55",Subject:"I Support",     Teacher:"S. Scanlan",    Room:"A15"},
+  {Day:"Thursday",  Start:"12:55",End:"13:35",Subject:"Lunch",         Teacher:"",              Room:""},
+  {Day:"Thursday",  Start:"13:35",End:"14:33",Subject:"History",       Teacher:"C. O'Reilly",   Room:"A15"},
+  {Day:"Thursday",  Start:"14:33",End:"15:31",Subject:"German",        Teacher:"J. Campbell",   Room:"S8"},
+  {Day:"Friday",    Start:"08:05",End:"08:43",Subject:"Registration",  Teacher:"M. Rochford",   Room:"A14"},
+  {Day:"Friday",    Start:"08:43",End:"09:41",Subject:"Mathematics",   Teacher:"S. Grimes",     Room:"M26"},
+  {Day:"Friday",    Start:"09:41",End:"10:39",Subject:"History",       Teacher:"C. O'Reilly",   Room:"A13"},
+  {Day:"Friday",    Start:"10:39",End:"10:59",Subject:"Break",         Teacher:"",              Room:""},
+  {Day:"Friday",    Start:"10:59",End:"11:57",Subject:"Geography",     Teacher:"S. Gibbons",    Room:"HB7"},
+  {Day:"Friday",    Start:"11:57",End:"12:55",Subject:"Graphics",      Teacher:"D. O'Connor",   Room:"A20"},
+  {Day:"Friday",    Start:"12:55",End:"13:35",Subject:"Lunch",         Teacher:"",              Room:""},
+  {Day:"Friday",    Start:"13:35",End:"14:33",Subject:"Computing",     Teacher:"J. Hanratty",   Room:"S12"},
+  {Day:"Friday",    Start:"14:33",End:"15:31",Subject:"Home Ec",       Teacher:"C. Doherty",    Room:"L2"},
+];
+
+let activeTT = 'new';
+
+function pt(str) {
+  const [h, m] = str.split(':').map(Number);
+  const d = new Date();
+  d.setHours(h, m, 0, 0);
+  return d;
+}
+
+function dayName() {
+  return ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date().getDay()];
+}
+
+function render() {
+  const now = new Date();
+  const tt = activeTT === 'new' ? TT_NEW : TT_OLD;
+  const day = dayName();
+  const w = document.getElementById('widget');
+
+  const todayItems = tt.filter(i => i.Day === day).sort((a,b) => pt(a.Start) - pt(b.Start));
+
+  const cur = todayItems.find(i => now >= pt(i.Start) && now < pt(i.End));
+  const nxt = todayItems.find(i => pt(i.Start) > now);
+
+  const ttBar = `
+    <div class="tt-bar">
+      <button class="tt-btn ${activeTT==='new'?'active':''}" onclick="setTT('new')">2M · Current</button>
+      <button class="tt-btn ${activeTT==='old'?'active':''}" onclick="setTT('old')">Previous</button>
+    </div>`;
+
+  const footerHtml = (nxt) => `
+    <div class="footer">
+      <div><span class="next-label">Next</span><span class="next-subject">${nxt ? nxt.Subject : 'End of day'}</span></div>
+      <span class="next-time">${nxt ? nxt.Start : ''}</span>
+    </div>`;
+
+  if (cur) {
+    const s = pt(cur.Start), e = pt(cur.End);
+    const pct = Math.min(100, Math.max(0, ((now - s) / (e - s)) * 100));
+    const minsLeft = Math.ceil((e - now) / 60000);
+    w.className = 'active';
+    w.innerHTML = ttBar + `
+      <div class="header">
+        <span class="status-label" style="color:var(--amber)">Now</span>
+        <span class="end-time">ends ${cur.End}</span>
+      </div>
+      <div class="body">
+        <div class="subject">${cur.Subject}</div>
+        <div class="detail-row">
+          ${cur.Room ? `<span class="room">${cur.Room}</span>` : ''}
+          <span class="time-detail" style="color:var(--amber)">${minsLeft} min left</span>
         </div>
+        ${cur.Teacher ? `<div class="teacher">${cur.Teacher}</div>` : ''}
+        <div class="prog-wrap">
+          <div class="prog-info"><span>${Math.round(pct)}%</span><span>${cur.Start} → ${cur.End}</span></div>
+          <div class="prog-track"><div class="prog-fill" style="width:${pct}%"></div></div>
+        </div>
+      </div>
+      ${footerHtml(nxt)}`;
+  } else if (nxt) {
+    const s = pt(nxt.Start);
+    const diff = Math.ceil((s - now) / 60000);
+    const timeStr = diff > 60 ? `at ${nxt.Start}` : `in ${diff} min`;
+    w.className = 'next';
+    w.innerHTML = ttBar + `
+      <div class="header">
+        <span class="status-label" style="color:var(--blue)">Up next</span>
+        <span class="end-time">${nxt.Start}</span>
+      </div>
+      <div class="body">
+        <div class="subject">${nxt.Subject}</div>
+        <div class="detail-row">
+          ${nxt.Room ? `<span class="room">${nxt.Room}</span>` : ''}
+          <span class="time-detail" style="color:var(--blue)">${timeStr}</span>
+        </div>
+        ${nxt.Teacher ? `<div class="teacher">${nxt.Teacher}</div>` : ''}
+      </div>`;
+  } else {
+    w.className = 'done';
+    w.innerHTML = ttBar + `
+      <div class="center-state">
+        <div class="big">Done</div>
+        <div class="small">No more classes today</div>
+      </div>`;
+  }
+}
 
-    <script>
-        const timetable = [{"Day": "Monday", "Start Time": "08:05", "End Time": "08:43", "Subject": "Registration", "Teacher": "Miriam Rochford", "Location": "A14"}, {"Day": "Monday", "Start Time": "08:43", "End Time": "09:41", "Subject": "I Support", "Teacher": "Sophie Scanlan", "Location": "HB1"}, {"Day": "Monday", "Start Time": "09:41", "End Time": "10:39", "Subject": "English", "Teacher": "Michael Finucane", "Location": "A16"}, {"Day": "Monday", "Start Time": "10:39", "End Time": "10:59", "Subject": "Break", "Teacher": NaN, "Location": NaN}, {"Day": "Monday", "Start Time": "10:59", "End Time": "11:57", "Subject": "Science", "Teacher": "Lauren McGinn", "Location": "Check"}, {"Day": "Monday", "Start Time": "11:57", "End Time": "12:55", "Subject": "Home Ec", "Teacher": "Ciara Doherty", "Location": "L2"}, {"Day": "Monday", "Start Time": "12:55", "End Time": "13:35", "Subject": "Lunch", "Teacher": NaN, "Location": NaN}, {"Day": "Monday", "Start Time": "13:35", "End Time": "14:33", "Subject": "History", "Teacher": "C. O\u2019Reilly", "Location": "A14"}, {"Day": "Monday", "Start Time": "14:33", "End Time": "15:31", "Subject": "PE", "Teacher": "Niamh O\u2019Hare", "Location": "PE-1.2"}, {"Day": "Monday", "Start Time": "15:32", "End Time": "16:32", "Subject": "End of Day", "Teacher": NaN, "Location": NaN}, {"Day": "Tuesday", "Start Time": "08:05", "End Time": "08:43", "Subject": "Registration", "Teacher": "Miriam Rochford", "Location": "A14"}, {"Day": "Tuesday", "Start Time": "08:43", "End Time": "09:41", "Subject": "CSPE", "Teacher": "Sophie Gibbons", "Location": "TYHUB"}, {"Day": "Tuesday", "Start Time": "09:41", "End Time": "10:39", "Subject": "PE", "Teacher": "Niamh O\u2019Hare", "Location": "PE-1.2"}, {"Day": "Tuesday", "Start Time": "10:39", "End Time": "10:59", "Subject": "Break", "Teacher": NaN, "Location": NaN}, {"Day": "Tuesday", "Start Time": "10:59", "End Time": "11:57", "Subject": "German", "Teacher": "Jennifer Campbell", "Location": "S8"}, {"Day": "Tuesday", "Start Time": "11:57", "End Time": "12:55", "Subject": "Mathematics", "Teacher": "Stephen Grimes", "Location": "M26"}, {"Day": "Tuesday", "Start Time": "12:55", "End Time": "13:35", "Subject": "Lunch", "Teacher": NaN, "Location": NaN}, {"Day": "Tuesday", "Start Time": "13:35", "End Time": "14:33", "Subject": "SPHE", "Teacher": "Jenifer Campbell", "Location": "L5"}, {"Day": "Tuesday", "Start Time": "14:33", "End Time": "15:31", "Subject": "English", "Teacher": "Michael Finucane", "Location": "A16"}, {"Day": "Tuesday", "Start Time": "15:32", "End Time": "16:32", "Subject": "End of Day", "Teacher": NaN, "Location": NaN}, {"Day": "Wednesday", "Start Time": "08:05", "End Time": "08:43", "Subject": "Registration", "Teacher": "Miriam Rochford", "Location": "A14"}, {"Day": "Wednesday", "Start Time": "08:43", "End Time": "09:41", "Subject": "I Support", "Teacher": "Sophie Scanlan", "Location": "HB1"}, {"Day": "Wednesday", "Start Time": "09:41", "End Time": "10:39", "Subject": "Geography", "Teacher": "S. Gibbons", "Location": "HB7"}, {"Day": "Wednesday", "Start Time": "10:39", "End Time": "10:59", "Subject": "Break", "Teacher": NaN, "Location": NaN}, {"Day": "Wednesday", "Start Time": "10:59", "End Time": "11:57", "Subject": "English", "Teacher": "Michael Finucane", "Location": "A16"}, {"Day": "Wednesday", "Start Time": "11:57", "End Time": "12:55", "Subject": "Science", "Teacher": "Lauren McGinn", "Location": "Check"}, {"Day": "Wednesday", "Start Time": "12:55", "End Time": "13:35", "Subject": "Lunch", "Teacher": NaN, "Location": NaN}, {"Day": "Wednesday", "Start Time": "13:35", "End Time": "14:33", "Subject": "Early Half Day", "Teacher": NaN, "Location": NaN}, {"Day": "Wednesday", "Start Time": "14:33", "End Time": "15:31", "Subject": "Early Half Day", "Teacher": NaN, "Location": NaN}, {"Day": "Thursday", "Start Time": "08:05", "End Time": "08:43", "Subject": "Registration", "Teacher": "Miriam Rochford", "Location": "A14"}, {"Day": "Thursday", "Start Time": "08:43", "End Time": "09:41", "Subject": "Graphics", "Teacher": "D. O'Connor", "Location": "A20"}, {"Day": "Thursday", "Start Time": "09:41", "End Time": "10:39", "Subject": "Geography", "Teacher": "S. Gibbons", "Location": "HB7"}, {"Day": "Thursday", "Start Time": "10:39", "End Time": "10:59", "Subject": "Break", "Teacher": NaN, "Location": NaN}, {"Day": "Thursday", "Start Time": "10:59", "End Time": "11:57", "Subject": "Mathematics", "Teacher": "Stephen Grimes", "Location": "M26"}, {"Day": "Thursday", "Start Time": "11:57", "End Time": "12:55", "Subject": "I Support", "Teacher": "Sophie Scanlan", "Location": "A15"}, {"Day": "Thursday", "Start Time": "12:55", "End Time": "13:35", "Subject": "Lunch", "Teacher": NaN, "Location": NaN}, {"Day": "Thursday", "Start Time": "13:35", "End Time": "14:33", "Subject": "History", "Teacher": "C. O\u2019Reilly", "Location": "A15"}, {"Day": "Thursday", "Start Time": "14:33", "End Time": "15:31", "Subject": "German", "Teacher": "Jenifer Campbell", "Location": "S8"}, {"Day": "Friday", "Start Time": "08:05", "End Time": "08:43", "Subject": "Registration", "Teacher": "Miriam Rochford", "Location": "A14"}, {"Day": "Friday", "Start Time": "08:43", "End Time": "09:41", "Subject": "Mathematics", "Teacher": "Stephen Grimes", "Location": "M26"}, {"Day": "Friday", "Start Time": "09:41", "End Time": "10:39", "Subject": "History", "Teacher": "C. O\u2019Reilly", "Location": "A13"}, {"Day": "Friday", "Start Time": "10:39", "End Time": "10:59", "Subject": "Break", "Teacher": NaN, "Location": NaN}, {"Day": "Friday", "Start Time": "10:59", "End Time": "11:57", "Subject": "Geography", "Teacher": "S. Gibbons", "Location": "HB7"}, {"Day": "Friday", "Start Time": "11:57", "End Time": "12:55", "Subject": "Graphics", "Teacher": "D. O'Connor", "Location": "A20"}, {"Day": "Friday", "Start Time": "12:55", "End Time": "13:35", "Subject": "Lunch", "Teacher": NaN, "Location": NaN}, {"Day": "Friday", "Start Time": "13:35", "End Time": "14:33", "Subject": "Computing", "Teacher": "Joanne Hanratty", "Location": "S12"}, {"Day": "Friday", "Start Time": "14:33", "End Time": "15:31", "Subject": "Home Ec", "Teacher": "Ciara Doherty", "Location": "L2"}];
+function setTT(t) {
+  activeTT = t;
+  render();
+}
 
-        function getDayName() {
-            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            return days[new Date().getDay()];
-        }
-        function parseTime(timeStr) {
-            if (!timeStr) return null;
-            const [hours, minutes] = timeStr.split(':').map(Number);
-            const now = new Date();
-            return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0);
-        }
-
-        function render() {
-            const now = new Date();
-            const dayName = getDayName();
-            const container = document.getElementById('widget-container');
-            
-            const todaysClasses = timetable.filter(item => item.Day === dayName)
-                                           .sort((a, b) => parseTime(a['Start Time']) - parseTime(b['Start Time']));
-
-            const currentClass = todaysClasses.find(c => {
-                const s = parseTime(c['Start Time']);
-                const e = parseTime(c['End Time']);
-                return now >= s && now < e;
-            });
-
-            const nextClass = todaysClasses.find(c => parseTime(c['Start Time']) > now);
-
-            // --- 1. CLASS IN SESSION ---
-            if (currentClass) {
-                container.className = 'mode-active';
-                const s = parseTime(currentClass['Start Time']);
-                const e = parseTime(currentClass['End Time']);
-                const pct = Math.min(100, Math.max(0, ((now - s) / (e - s)) * 100));
-                const timeLeft = Math.ceil((e - now) / 60000);
-                const loc = currentClass.Location && currentClass.Location !== 'nan' ? currentClass.Location : '';
-
-                container.innerHTML = `
-                    <div class="header-row">
-                        <span style="color:var(--green)">HAPPENING NOW</span>
-                        <span>${currentClass['End Time']}</span>
-                    </div>
-                    <div class="main-content">
-                        <div class="subject">${currentClass.Subject}</div>
-                        <div class="details">${loc} &bull; ${timeLeft}m left</div>
-                        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
-                    </div>
-                    <div class="footer-row">
-                        <div><span class="next-label">NEXT</span><span class="next-subject">${nextClass ? nextClass.Subject : 'End'}</span></div>
-                        <span>${nextClass ? nextClass['Start Time'] : ''}</span>
-                    </div>
-                `;
-            } 
-            // --- 2. UPCOMING CLASS ---
-            else if (nextClass) {
-                container.className = 'mode-next';
-                const s = parseTime(nextClass['Start Time']);
-                const diffMins = Math.ceil((s - now) / 60000);
-                let timeDisplay = diffMins > 60 ? `at ${nextClass['Start Time']}` : `in ${diffMins} min`;
-                const loc = nextClass.Location && nextClass.Location !== 'nan' ? nextClass.Location : '';
-
-                container.innerHTML = `
-                    <div class="header-row">
-                        <span style="color:var(--accent)">UP NEXT</span>
-                        <span>${nextClass['Start Time']}</span>
-                    </div>
-                    <div class="main-content">
-                        <div class="subject">${nextClass.Subject}</div>
-                        <div class="details" style="color:#fff">Starts ${timeDisplay}</div>
-                        <div class="details" style="font-size:0.75rem; margin-top:2px; color:#888">${loc}</div>
-                    </div>
-                `;
-            } 
-            // --- 3. END OF DAY ---
-            else {
-                container.className = 'mode-next';
-                container.style.borderLeftColor = '#555';
-                container.innerHTML = `
-                    <div class="header-row">
-                        <span>STATUS</span>
-                    </div>
-                    <div class="main-content" style="align-items:center; text-align:center">
-                        <div class="subject" style="color:#777">Done</div>
-                        <div class="details" style="color:#555">No more classes</div>
-                    </div>
-                `;
-            }
-        }
-
-        render();
-        setInterval(render, 10000);
-    </script>
+render();
+setInterval(render, 10000);
+</script>
 </body>
 </html>
