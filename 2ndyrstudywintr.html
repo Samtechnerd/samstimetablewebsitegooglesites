@@ -11,14 +11,22 @@
 :root{--bg:#f5f6fb;--card:#fff;--ink:#0f172a;--mute:#64748b;--line:#e6e8f0;--acc:#4f46e5;--accsoft:#eef0ff;--ok:#16a34a;--hard:#ea580c;--glass:rgba(255,255,255,.82);--grad:linear-gradient(120deg,#4f46e5,#7c3aed 60%,#db2777);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1020;--card:#141b2f;--ink:#e8ecf8;--mute:#93a0bd;--line:#252e48;--acc:#8b93ff;--accsoft:#1e2547;--ok:#4ade80;--hard:#fb923c;--glass:rgba(11,16,32,.82)}}
 :root[data-theme="dark"]{--bg:#0b1020;--card:#141b2f;--ink:#e8ecf8;--mute:#93a0bd;--line:#252e48;--acc:#8b93ff;--accsoft:#1e2547;--ok:#4ade80;--hard:#fb923c;--glass:rgba(11,16,32,.82)}
-*{box-sizing:border-box}html{scroll-padding-top:90px}
+*{box-sizing:border-box}html{scroll-padding-top:130px}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 Inter,system-ui,sans-serif}
 h1,h2,h3{margin:0;line-height:1.2;letter-spacing:-.02em;font-weight:700}
 .header{background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:14px 24px;display:flex;align-items:center;gap:14px;position:sticky;top:env(safe-area-inset-top,0px);z-index:100}
 .header h1{font-size:19px;font-weight:800}.header p{margin:0;font-size:13px;color:var(--mute)}
 .badge{margin-left:auto;background:var(--accsoft);color:var(--acc);border-radius:99px;padding:8px 16px;font-size:13px;font-weight:600;white-space:nowrap}.badge b{font-size:17px;font-weight:800}
+.hr{margin-left:auto;display:flex;align-items:center;gap:8px;justify-content:flex-end}.hr .badge{margin-left:0}.badge .sm{display:none}
+.hb{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:8px 14px;font:600 13px Inter,sans-serif;cursor:pointer;white-space:nowrap;transition:.15s}
+.hb:hover{border-color:var(--acc);color:var(--acc)}.hb.pri{background:var(--grad);border-color:transparent;color:#fff}.hb.pri:hover{color:#fff;filter:brightness(1.08)}
+.ov{position:fixed;inset:0;z-index:300;background:rgba(8,11,24,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:16px}
+.mod{position:relative;width:100%;max-width:460px;max-height:100%;overflow-y:auto;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:22px;padding:28px 24px 22px;box-shadow:0 24px 60px -20px rgba(0,0,0,.5);animation:pop .2s}
+.mod h2{font-size:22px;font-weight:800;margin-bottom:6px}
+.mx{position:absolute;top:10px;right:10px;width:34px;height:34px;border-radius:50%;border:0;background:var(--accsoft);color:var(--acc);cursor:pointer;font-size:15px}
+.pd{display:flex;gap:6px;justify-content:center;margin:4px 0 18px}.pd i{width:8px;height:8px;border-radius:50%;background:var(--line);transition:.2s}.pd i.on{background:var(--acc);width:22px;border-radius:99px}
 .container{display:flex;align-items:flex-start}
-nav{width:240px;min-width:240px;padding:14px 12px;position:sticky;top:calc(66px + env(safe-area-inset-top,0px));max-height:calc(100vh - 66px);overflow-y:auto}
+nav{width:240px;min-width:240px;padding:14px 12px;position:sticky;top:calc(var(--hh,66px) + env(safe-area-inset-top,0px));max-height:calc(100vh - var(--hh,66px));overflow-y:auto}
 nav .sec{padding:14px 12px 6px;font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--mute);text-transform:uppercase}
 nav button{width:100%;text-align:left;background:none;border:0;border-radius:12px;padding:10px 12px;margin:1px 0;color:var(--ink);font:500 14px Inter,sans-serif;cursor:pointer;display:flex;gap:10px;align-items:center;transition:.15s}
 nav button:hover{background:var(--accsoft)}
@@ -62,8 +70,8 @@ input[type=text],input[type=password]{padding:11px 12px;border:1px solid var(--l
 .ft{font-size:22px;font-weight:700;letter-spacing:-.01em}
 @keyframes pop{from{transform:scale(.97);opacity:.6}to{transform:none;opacity:1}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-@media (max-width:720px){.container{flex-direction:column;align-items:stretch}.header{padding:12px 16px}.header p{display:none}
-nav{width:auto;min-width:0;max-height:none;display:flex;overflow-x:auto;padding:8px 10px;position:sticky;top:calc(58px + env(safe-area-inset-top,0px));z-index:50;background:var(--glass);backdrop-filter:blur(14px)}nav .sec{display:none}nav button{width:auto;flex:0 0 auto;white-space:nowrap}
+@media (max-width:720px){.container{flex-direction:column;align-items:stretch}.header{padding:12px 16px;gap:10px}.header p{display:none}.header h1{font-size:15px;line-height:1.2}.header>div:first-child{display:none}.header>div:nth-child(2){flex:1;min-width:0}.hr{gap:6px}.badge{padding:7px 11px}.badge #cdt{display:none}.badge .sm{display:inline}.hb{padding:8px 11px}.hb .lg{display:none}
+nav{width:auto;min-width:0;max-height:none;display:flex;overflow-x:auto;padding:8px 10px;position:sticky;top:calc(var(--hh,58px) + env(safe-area-inset-top,0px));z-index:50;background:var(--glass);backdrop-filter:blur(14px)}nav .sec{display:none}nav button{width:auto;flex:0 0 auto;white-space:nowrap}
 .main{padding:16px 16px 40px}.th,.welcome{padding:22px 22px;border-radius:20px}.th h2,.welcome h2{font-size:23px}}
 </style>
 </head>
@@ -74,7 +82,11 @@ nav{width:auto;min-width:0;max-height:none;display:flex;overflow-x:auto;padding:
     <h1>2nd Year Study Planner</h1>
     <p id="cdp"></p>
   </div>
-  <div class="badge">🗓️ <b id="cd">–</b> <span id="cdt">days to first exam</span></div>
+  <div class="hr">
+    <div class="badge" id="bdg">🗓️ <b id="cd">–</b><span class="sm">d</span> <span id="cdt">days to first exam</span></div>
+    <button class="hb" data-open="tut" aria-label="Open the tutorial">❓ <span class="lg">Tutorial</span></button>
+    <button class="hb pri" id="hacc" data-open="auth">👤 <span class="lg">Sign in / Sign up</span></button>
+  </div>
 </header>
 <div class="container">
   <nav id="nav"></nav>
@@ -83,6 +95,8 @@ nav{width:auto;min-width:0;max-height:none;display:flex;overflow-x:auto;padding:
     <div id="v"></div>
   </main>
 </div>
+
+<div id="modal"></div>
 
 <script>
 // --- SUPABASE CONFIGURATION ---
@@ -113,6 +127,7 @@ let st={mine:['maths','irish','english','history','science','geo'],done:{},hard:
 try{const x=localStorage.getItem('sp1');if(x)st=Object.assign(st,JSON.parse(x))}catch(e){}
 let acc=null;try{acc=JSON.parse(localStorage.getItem('spacc')||'null')}catch(e){}
 let rows=[],tm,msg='',bm='';
+let modal=null,ti=0,lastUn='';
 
 const live=()=>SUPABASE_URL !== 'YOUR_PROJECT_URL_HERE';
 const esc=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -175,7 +190,7 @@ h+=`<div class="card mute">Period 3 on Monday 23 November is study. Normal class
 
 function acct(){if(!live())return `<div class="card mute">Supabase is not configured yet. Set your <b>SUPABASE_URL</b> and <b>SUPABASE_ANON_KEY</b> in the code to enable account sign-in and cloud syncing.</div>`;
 let h='';
-if(!acc)h+=`<div class="card"><b>Sign in to sync</b><div class="mute" style="margin:4px 0 8px">Choose a username and password to create an account, or sign in to an existing one.</div><div class="row" style="justify-content:flex-start"><input type="text" id="an" placeholder="Username" autocomplete="username"><input type="password" id="ap" placeholder="Password" autocomplete="current-password"></div><div class="row" style="justify-content:flex-start;margin-top:8px"><button class="btn" data-si>Sign in</button><button class="btn ghost" data-cr>Create account</button></div></div>`;
+if(!acc)h+=`<div class="card" data-box><b>Sign in to sync</b><div class="mute" style="margin:4px 0 8px">Choose a username and password to create an account, or sign in to an existing one.</div><div class="row" style="justify-content:flex-start"><input type="text" data-un placeholder="Username" autocomplete="username" value="${esc(lastUn)}"><input type="password" data-pw placeholder="Password" autocomplete="current-password"></div><div class="row" style="justify-content:flex-start;margin-top:8px"><button class="btn" data-si>Sign in</button><button class="btn ghost" data-cr>Create account</button></div></div>`;
 else h+=`<div class="card"><div class="row"><b>${esc(acc.n)}</b><button class="btn ghost" data-so>Sign out</button></div><label class="row" style="margin-top:10px;justify-content:flex-start"><input type="checkbox" data-sh ${st.share?'checked':''}> Show me on the class leaderboard</label><div class="mute">Shares your username, readiness %, study streak and score with other students who also share. Untick to stop sharing.</div></div>`;
 return h+`<div class="mute" style="margin-bottom:10px">${esc(msg)}</div>`}
 
@@ -259,7 +274,7 @@ return h}
 
 function acctPage(){return acct()+`<h3 class="day" style="margin-top:6px">My subjects</h3><div class="pick">`+S.map(s=>`<label><input type="checkbox" data-m="${s.id}" ${st.mine.includes(s.id)?'checked':''}>${s.n}</label>`).join('')+`</div>`}
 function view(){return tab==='exams'?exams():tab==='acct'?acctPage():tab==='board'?board():tab.startsWith('subj:')?subjPage(tab.slice(5)):home()}
-function draw(){hero();if(tab==='today'||(tab.startsWith('subj:')&&!st.mine.includes(tab.slice(5))))tab='home';$('#nav').innerHTML=navHtml();th();$('#v').innerHTML=view()}
+function draw(){hero();if(tab==='today'||(tab.startsWith('subj:')&&!st.mine.includes(tab.slice(5))))tab='home';$('#nav').innerHTML=navHtml();th();$('#v').innerHTML=view();hdr();drawModal()}
 
 document.addEventListener('click',e=>{const el=e.target.closest('[data-t],[data-go],[data-it]');if(!el)return;if(el.dataset.it){itab=el.dataset.it;draw();return}
 tab=el.dataset.t||el.dataset.go;itab='revise';qz=null;fc={i:0,f:false};draw();window.scrollTo(0,0);if(tab==='board')loadBoard()});
@@ -273,6 +288,58 @@ else return;save();draw()});
 
 document.addEventListener('change',e=>{const m=e.target.dataset.m;if(!m)return;st.mine=e.target.checked?[...new Set([...st.mine,m])]:st.mine.filter(x=>x!==m);save();draw()});
 document.addEventListener('change',e=>{if(e.target.dataset.sh===undefined)return;st.share=e.target.checked;save()});
+
+
+// --- TOP BAR BUTTONS, TUTORIAL AND SIGN-IN POP-UP ---
+const TUT=[
+{e:'👋',h:'Welcome!',p:'This planner helps you get ready for your winter assessments, Monday 23 to Monday 30 November. This quick tour takes about a minute.'},
+{e:'⚙️',h:'1. Choose your subjects',p:'Open <b>My account</b> in the menu and tick the subjects you take. They appear under <b>My subjects</b>. Geography has no topics yet, so add yours from your Geography journal.'},
+{e:'🎯',h:'2. Today’s focus',p:'The <b>Home</b> page picks the topics you should revise next, based on how soon the exam is, how many reviews you’ve done and how hard you rated it. Tap <b>I did a review</b> when you finish one.'},
+{e:'📖',h:'3. Track your topics',p:'Open a subject, then <b>Topics</b>. The five circles are your five reviews (after 1 hour, 1 day, 1 week, then closer to the exam). A topic counts as ready after 3. Tap <b>Okay / Hard / Easy</b> to change its priority, and add your own topics.'},
+{e:'🧠',h:'4. Quiz yourself',p:'Use the <b>Quiz</b> tab for a short multiple-choice test, or <b>Cards</b> to flip flashcards and make your own. Close your notes and try to recall first. That is what makes revision stick.'},
+{e:'🗓️',h:'5. Know your exams',p:'The <b>Exams</b> page shows every exam by day and period, with rooms. The countdown at the top of the page shows the days left until your first exam.'},
+{e:'🏆',h:'6. Sign in and compete',p:'Use <b>Sign in / Sign up</b> at the top to save your progress and carry it between school and home. You can join the <b>Leaderboard</b> if you want. Points: 10 per review, 5 per streak day and 2 per quiz mark. Nothing is shared unless you tick the box.'}];
+
+function modalHtml(){
+  if(!modal)return '';
+  let body,label;
+  if(modal==='tut'){
+    const s=TUT[ti],last=ti===TUT.length-1;label='Tutorial';
+    body=`<div class="center" style="padding:6px 0 0"><div class="em" aria-hidden="true">${s.e}</div><h2 id="mt">${s.h}</h2><p class="mute">${s.p}</p></div><div class="pd" aria-hidden="true">${TUT.map((_,i)=>`<i class="${i===ti?'on':''}"></i>`).join('')}</div><div class="row"><button class="btn ghost" data-tp ${ti===0?'disabled style="opacity:.4;cursor:default"':''}>Back</button><span class="mute">${ti+1} of ${TUT.length}</span><button class="btn" data-tn>${last?'Done':'Next'}</button></div>`;
+  }else{
+    label='Sign in or sign up';
+    body=`<h2 id="mt">Sign in or sign up</h2><p class="mute" style="margin:0 0 14px">Save your progress and use it on any device. Choose a username and password to create an account, or sign in to the one you have.</p><div data-box><input type="text" data-un placeholder="Username" autocomplete="username" value="${esc(lastUn)}" style="width:100%;margin-bottom:8px"><input type="password" data-pw placeholder="Password" autocomplete="current-password" style="width:100%;margin-bottom:12px"><div class="row" style="justify-content:flex-start"><button class="btn" data-si>Sign in</button><button class="btn ghost" data-cr>Create account</button></div><div class="mute" style="margin-top:10px" role="status">${esc(msg)}</div></div>`;
+  }
+  return `<div class="ov" data-bd><div class="mod" role="dialog" aria-modal="true" aria-labelledby="mt"><button class="mx" data-mx aria-label="Close">✕</button>${body}</div></div>`;
+}
+let shownModal=null;
+function drawModal(){
+  $('#modal').innerHTML=modalHtml();
+  if(modal&&modal!==shownModal){setTimeout(()=>{const f=$('#modal [data-un],#modal [data-tn]');if(f)f.focus()},0)}
+  shownModal=modal;
+}
+function openModal(m){modal=m;if(m==='tut'){ti=0;try{localStorage.setItem('sptut','1')}catch(x){}}if(m==='auth')msg='';draw()}
+function closeModal(){modal=null;draw()}
+function hdr(){const b=$('#hacc');
+  if(acc){b.innerHTML='👤 <span class="lg">'+esc(acc.n)+'</span>';b.dataset.open='acct';b.className='hb';b.setAttribute('aria-label','My account, signed in as '+acc.n)}
+  else{b.innerHTML='👤 <span class="lg">Sign in / Sign up</span>';b.dataset.open='auth';b.className='hb pri';b.setAttribute('aria-label','Sign in or sign up')}
+  $('#bdg').setAttribute('title',$('#cd').textContent+' '+$('#cdt').textContent);
+  document.documentElement.style.setProperty('--hh',$('.header').offsetHeight+'px')}
+window.addEventListener('resize',()=>document.documentElement.style.setProperty('--hh',$('.header').offsetHeight+'px'));
+
+document.addEventListener('click',e=>{
+  const o=e.target.closest('[data-open]');
+  if(o){const v=o.dataset.open;if(v==='acct'){tab='acct';itab='revise';qz=null;fc={i:0,f:false};modal=null;draw();window.scrollTo(0,0)}else openModal(v);return}
+  if(e.target.closest('[data-mx]')||e.target.hasAttribute('data-bd')){closeModal();return}
+  if(e.target.closest('[data-tn]')){if(ti>=TUT.length-1)closeModal();else{ti++;draw()}return}
+  if(e.target.closest('[data-tp]')){if(ti>0){ti--;draw()}}
+});
+document.addEventListener('keydown',e=>{
+  if(!modal)return;
+  if(e.key==='Escape'){closeModal();return}
+  if(modal==='tut'){if(e.key==='ArrowRight'&&ti<TUT.length-1){ti++;draw()}else if(e.key==='ArrowLeft'&&ti>0){ti--;draw()}}
+  if(e.key==='Enter'&&e.target.matches&&e.target.matches('[data-un],[data-pw]')){const bx=e.target.closest('[data-box]');const sb=bx&&bx.querySelector('[data-si]');if(sb)sb.click()}
+});
 
 // --- SUPABASE AUTH & LEADERBOARD METHODS ---
 async function loadBoard(){
@@ -290,33 +357,40 @@ document.addEventListener('click',async e=>{
   if(!b)return;
   
   if(b.dataset.si!==undefined||b.dataset.cr!==undefined){
-    const n=$('#an').value.trim(), p=$('#ap').value;
+    const box=b.closest('[data-box]');if(!box)return;
+    const n=box.querySelector('[data-un]').value.trim(), p=box.querySelector('[data-pw]').value;
+    lastUn=n;
     const isCreate=b.dataset.cr!==undefined;
     if(!n||!p){ msg='Enter a username and password.'; draw(); return; }
+    if(!supabaseClient){ msg='Sign-in is unavailable right now. Check your internet connection and refresh the page.'; draw(); return; }
     
     // Map username to a mock email for Supabase auth
     const email=`${n.toLowerCase().replace(/[^a-z0-9]/g,'')}@studyplanner.app`;
     
-    if(isCreate){
-      const {data, error}=await supabaseClient.auth.signUp({email, password:p});
-      if(error){ msg=error.message; draw(); return; }
-      // Insert initial profile row
-      await supabaseClient.from('profiles').insert([{id:data.user.id, username:n, state:st, share:false}]);
-      acc={n, t:data.session.access_token};
-      try{localStorage.setItem('spacc',JSON.stringify(acc))}catch(x){}
-      msg=''; save();
-    }else{
-      const {data, error}=await supabaseClient.auth.signInWithPassword({email, password:p});
-      if(error){ msg=error.message; draw(); return; }
-      // Fetch user profile & state
-      const {data:profile}=await supabaseClient.from('profiles').select('*').eq('id', data.user.id).single();
-      if(profile){
-        if(profile.state) st=Object.assign(st, profile.state);
-        acc={n:profile.username, t:data.session.access_token};
+    try{
+      if(isCreate){
+        const {data, error}=await supabaseClient.auth.signUp({email, password:p});
+        if(error){ msg=error.message; draw(); return; }
+        if(!data.session){ msg='Account created. If your school requires email confirmation, confirm it first, then sign in.'; draw(); return; }
+        // Insert initial profile row
+        await supabaseClient.from('profiles').insert([{id:data.user.id, username:n, state:st, share:false}]);
+        acc={n, t:data.session.access_token};
         try{localStorage.setItem('spacc',JSON.stringify(acc))}catch(x){}
+        msg=''; save();
+      }else{
+        const {data, error}=await supabaseClient.auth.signInWithPassword({email, password:p});
+        if(error){ msg=error.message; draw(); return; }
+        // Fetch user profile & state
+        const {data:profile}=await supabaseClient.from('profiles').select('*').eq('id', data.user.id).single();
+        if(profile){
+          if(profile.state) st=Object.assign(st, profile.state);
+          acc={n:profile.username, t:data.session.access_token};
+          try{localStorage.setItem('spacc',JSON.stringify(acc))}catch(x){}
+          msg=''; save();
+        }else{ msg='Signed in, but no profile was found for this username.'; }
       }
-      msg=''; save();
-    }
+    }catch(err){ msg='Could not reach the server. Try again in a moment.'; }
+    if(acc)modal=null;
     draw();
   }
   else if(b.dataset.so!==undefined){
@@ -341,6 +415,7 @@ document.addEventListener('click',async e=>{
   }
 })();
 
+try{if(!localStorage.getItem('sptut')){modal='tut';ti=0;localStorage.setItem('sptut','1')}}catch(e){}
 draw();
 </script>
 </body>
