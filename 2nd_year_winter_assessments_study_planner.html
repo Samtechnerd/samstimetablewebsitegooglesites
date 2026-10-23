@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>2nd Year Winter Assessments Study Planner</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<!-- Include Supabase JS Client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#f5f6fb;--card:#fff;--ink:#0f172a;--mute:#64748b;--line:#e6e8f0;--acc:#4f46e5;--accsoft:#eef0ff;--ok:#16a34a;--hard:#ea580c;--glass:rgba(255,255,255,.82);--grad:linear-gradient(120deg,#4f46e5,#7c3aed 60%,#db2777);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1020;--card:#141b2f;--ink:#e8ecf8;--mute:#93a0bd;--line:#252e48;--acc:#8b93ff;--accsoft:#1e2547;--ok:#4ade80;--hard:#fb923c;--glass:rgba(11,16,32,.82)}}
+:root[data-theme="dark"]{--bg:#0b1020;--card:#141b2f;--ink:#e8ecf8;--mute:#93a0bd;--line:#252e48;--acc:#8b93ff;--accsoft:#1e2547;--ok:#4ade80;--hard:#fb923c;--glass:rgba(11,16,32,.82)}
+*{box-sizing:border-box}html{scroll-padding-top:90px}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 Inter,system-ui,sans-serif}
+h1,h2,h3{margin:0;line-height:1.2;letter-spacing:-.02em;font-weight:700}
+.header{background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:14px 24px;display:flex;align-items:center;gap:14px;position:sticky;top:env(safe-area-inset-top,0px);z-index:100}
+.header h1{font-size:19px;font-weight:800}.header p{margin:0;font-size:13px;color:var(--mute)}
+.badge{margin-left:auto;background:var(--accsoft);color:var(--acc);border-radius:99px;padding:8px 16px;font-size:13px;font-weight:600;white-space:nowrap}.badge b{font-size:17px;font-weight:800}
+.container{display:flex;align-items:flex-start}
+nav{width:240px;min-width:240px;padding:14px 12px;position:sticky;top:calc(66px + env(safe-area-inset-top,0px));max-height:calc(100vh - 66px);overflow-y:auto}
+nav .sec{padding:14px 12px 6px;font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--mute);text-transform:uppercase}
+nav button{width:100%;text-align:left;background:none;border:0;border-radius:12px;padding:10px 12px;margin:1px 0;color:var(--ink);font:500 14px Inter,sans-serif;cursor:pointer;display:flex;gap:10px;align-items:center;transition:.15s}
+nav button:hover{background:var(--accsoft)}
+nav button.on{background:var(--accsoft);color:var(--acc);font-weight:700}
+.main{flex:1;padding:24px 32px 48px;max-width:900px;min-width:0}
+.th,.welcome{background:var(--grad);color:#fff;border-radius:24px;padding:28px 32px;margin-bottom:24px;position:relative;overflow:hidden;box-shadow:0 12px 32px -12px rgba(79,70,229,.55)}
+.th::before{content:attr(data-e);position:absolute;right:22px;top:50%;transform:translateY(-50%);font-size:76px;opacity:.22}
+.th h2,.welcome h2{font-size:28px;font-weight:800;margin-bottom:4px}.th p,.welcome p{margin:0;opacity:.85}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 20px;margin-bottom:12px;box-shadow:0 1px 2px rgba(15,23,42,.04)}
+.row{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.chip{display:inline-block;padding:3px 11px;border-radius:99px;font-size:12px;font-weight:600;color:#fff}
+.mute{color:var(--mute);font-size:14px}
+.btn{border:0;background:var(--acc);color:#fff;padding:10px 18px;border-radius:12px;font:600 14px Inter,sans-serif;cursor:pointer;transition:.15s}
+:root:not([data-theme="light"]) .btn{color:#0b1020}
+.btn:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btn.ghost{background:var(--accsoft);color:var(--acc)}
+.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:8px}.bar i{display:block;height:100%;background:linear-gradient(90deg,#6366f1,#a855f7);border-radius:99px;transition:width .4s}
+.dots{display:flex;gap:6px}.dots button{width:32px;height:32px;border-radius:50%;border:2px solid var(--line);background:transparent;color:var(--mute);cursor:pointer;font-weight:700}
+.dots button.on{background:var(--ok);border-color:var(--ok);color:#fff}
+.day{margin:24px 0 12px;font-size:18px}
+.pick{display:flex;flex-wrap:wrap;gap:8px}.pick label{display:flex;gap:6px;align-items:center;padding:8px 14px;border:1px solid var(--line);border-radius:99px;cursor:pointer;background:var(--card)}
+.pick input{accent-color:var(--acc)}
+.d{font:600 12px Inter,sans-serif;border:1px solid var(--line);background:transparent;color:var(--mute);border-radius:99px;padding:5px 12px;cursor:pointer}
+.d.h{color:var(--hard);border-color:var(--hard)}.d.e{color:var(--ok);border-color:var(--ok)}
+input[type=text],input[type=password]{padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:inherit;flex:1;min-width:0}
+.tbl{width:100%;border-collapse:collapse;font-size:14px}.tbl td,.tbl th{padding:10px 8px;border-bottom:1px solid var(--line);text-align:left}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:14px}
+.tcard{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;cursor:pointer;transition:.18s}.tcard:hover{transform:translateY(-3px);box-shadow:0 14px 30px -14px rgba(15,23,42,.3);border-color:var(--acc)}
+.tcard .em{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:10px}.tcard h3{font-size:16px}.tcard p{margin:2px 0 0;color:var(--mute);font-size:13px}.tcard .tc{font-size:12px;color:var(--mute);margin-top:8px}
+.tabs{display:flex;gap:4px;margin-bottom:20px;background:var(--line);border-radius:14px;padding:4px;overflow-x:auto}.tabs button{flex:1;padding:10px 14px;border:0;background:none;border-radius:11px;font:600 13px Inter,sans-serif;color:var(--mute);cursor:pointer;white-space:nowrap}.tabs button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 4px rgba(15,23,42,.12)}
+.center{text-align:center;padding:32px 20px}.center .em{font-size:48px}.center p{max-width:420px;margin:8px auto 16px}
+.opt{width:100%;text-align:left;display:flex;gap:12px;align-items:center;padding:13px 16px;margin-bottom:10px;border:2px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);font:500 15px Inter,sans-serif;cursor:pointer;transition:.15s}
+.opt b{width:28px;height:28px;border-radius:50%;background:var(--line);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.opt:hover:not(:disabled){border-color:var(--acc)}.opt:disabled{cursor:default}
+.opt.right{border-color:#16a34a;background:rgba(22,163,74,.14)}.opt.right b{background:#16a34a;color:#fff}
+.opt.wrong{border-color:#dc2626;background:rgba(220,38,38,.12)}.opt.wrong b{background:#dc2626;color:#fff}
+.fb{margin:6px 0 14px;padding:12px 14px;border-radius:12px;background:var(--accsoft)}
+.fcard{min-height:230px;border-radius:24px;padding:28px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;cursor:pointer;background:var(--card);border:1px solid var(--line);box-shadow:0 10px 30px -16px rgba(15,23,42,.3);animation:pop .25s}
+.fcard.back{background:var(--grad);color:#fff;border:0}.fcard.back .mute{color:rgba(255,255,255,.8)}
+.ft{font-size:22px;font-weight:700;letter-spacing:-.01em}
+@keyframes pop{from{transform:scale(.97);opacity:.6}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:720px){.container{flex-direction:column;align-items:stretch}.header{padding:12px 16px}.header p{display:none}
+nav{width:auto;min-width:0;max-height:none;display:flex;overflow-x:auto;padding:8px 10px;position:sticky;top:calc(58px + env(safe-area-inset-top,0px));z-index:50;background:var(--glass);backdrop-filter:blur(14px)}nav .sec{display:none}nav button{width:auto;flex:0 0 auto;white-space:nowrap}
+.main{padding:16px 16px 40px}.th,.welcome{padding:22px 22px;border-radius:20px}.th h2,.welcome h2{font-size:23px}}
+</style>
+</head>
+<body>
+<header class="header">
+  <div style="font-size:34px">📚</div>
+  <div>
+    <h1>2nd Year Study Planner</h1>
+    <p id="cdp"></p>
+  </div>
+  <div class="badge">🗓️ <b id="cd">–</b> <span id="cdt">days to first exam</span></div>
+</header>
+<div class="container">
+  <nav id="nav"></nav>
+  <main class="main">
+    <div class="th" id="th"><h2 id="thh"></h2><p id="thp"></p></div>
+    <div id="v"></div>
+  </main>
+</div>
+
+<script>
+// --- SUPABASE CONFIGURATION ---
+const SUPABASE_URL = 'https://ibvrequgqcyaahxhfrlg.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_LWooinYN0s2vVXolmXXiGQ_smb1-vJ3';
+// Use supabaseClient instead of 'supabase' to prevent re-declaration conflicts
+const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+const S=[
+{id:'maths',n:'Maths (Higher)',c:'#1f4fd8',e:['2026-11-23',1],t:['Algebra I: introduction','Solving linear equations','Factorising','Linear inequalities','Simultaneous equations','Quadratic equations','Algebraic fractions','Functions','Number patterns','Trigonometry','Applied arithmetic']},
+{id:'mathol',n:'Maths (Ordinary)',c:'#2563eb',e:['2026-11-23',1],t:['Sets','Natural numbers','Integers','Rational numbers','Decimals and percentages','Probability and counting','Coordinate geometry 1','Number patterns 1','Number patterns 2','Statistics 1','Statistics 2','Statistics 3','Algebra: introduction','Solving linear equations','Linear inequalities','Algebraic factorising','Solving quadratics','Applied arithmetic','Indices','Functions','Trigonometry']},
+{id:'irish',n:'Irish',c:'#15803d',e:['2026-11-23',4],t:['An Scoil','Mo Theach, Sláinte agus An Timpeallacht','Saol an duine óig, an teaghlach agus poist','Na seasúir, an aimsir, na féilte','Spórt, aclaíocht, sláinte, bia','Ceol','Teilifís, scannáin, leabhair agus teicneolaíocht','Taisteal agus laethanta saoire','Litríocht']},
+{id:'graphics',n:'Graphics',c:'#7c3aed',e:['2026-11-24',1],t:['Conic sections: parabola','Conic sections: ellipse','Orthographic projection 2','Freehand sketching','Developments 2']},
+{id:'business',n:'Business',c:'#b45309',e:['2026-11-24',3],t:['Unit 11: Marketing','Unit 16: Developing a business plan','Unit 4: Banking, saving and borrowing','Unit 5: Insurance','Unit 19: Economic indicators and sustainability','Unit 12: Organisations’ impacts on communities','Unit 13: Impact of technologies','Unit 21: Globalisation of trade','Unit 15: Double entry bookkeeping','Final accounts','Cash flow budget']},
+{id:'french',n:'French',c:'#be185d',e:['2026-11-25',2],t:['Bienvenue en France','Bonjour, c’est moi!','J’aime la campagne','Un, deux, trois…','La famille','Je présente ma famille','Chez moi','Mes amis et moi','J’aime la mode','Quelle heure est-il?','Quel temps fait-il?','En ville','Book 2: Bon appétit','Je fais le marché','Je fais les courses','Bon voyage','Je pars en vacances']},
+{id:'german',n:'German',c:'#a16207',e:['2026-11-25',2],t:['Kapitel 4: Ich und meine Familie','Kapitel 5: Mein Wohnort und mein Haus','Kapitel 7: Meine Stadt','Kapitel 7: Das Wetter','Kapitel 8: Sport','Kapitel 9: Freizeit','Kapitel 9: Das Essen und Getränke']},
+{id:'spanish',n:'Spanish',c:'#dc2626',e:['2026-11-25',2],t:['QP1 U1: Bienvenidos','QP1 U2: En el aula','QP1 U3: Los números','QP1 U4: Todo sobre mí','QP1 U5: Mi familia','QP1 U6: Mi colegio','QP1 U7: Mi casa','QP1 U8: Mis pasatiempos','QP2 U1: La rutina diaria','QP2 U2: La comida','QP2 U3: En el restaurante']},
+{id:'history',n:'History',c:'#92400e',e:['2026-11-25',4],t:['Topic 8: The Ulster Plantation','Topic 9: American/French Revolution','Topic 10: The 1798 Rebellion','Topic 11: The Famine and the diaspora','Topic 12: Parliamentary leaders','Topic 13: Cultural nationalism','Topic 14: Nationalism and Unionism','Topic 15: Ireland 1916–1923']},
+{id:'english',n:'English',c:'#0e7490',e:['2026-11-27',1],t:['Poetry on a theme','Drama: a modern play','Film study','Functional writing','Studied fiction']},
+{id:'homec',n:'Home Economics',c:'#c026d3',e:['2026-11-27',3],t:['Textile choice','Textile care','Sewing and embellishment','Food commodities: meat','Fish','Eggs','Milk, cheese and dairy','Fruit and vegetables','Cereals, pasta, potatoes, rice','Digestion','Family']},
+{id:'geo',n:'Geography',c:'#0f766e',e:['2026-11-30',2],t:[],note:'Add your topics from your Geography journal using the box below.'},
+{id:'science',n:'Science',c:'#4d7c0f',e:['2026-11-30',3],t:['Ch5 Cells and the microscope','Ch6 Atomic nature of matter','Ch8 Human nutrition','Ch9 Digestive system','Ch11 Circulatory system','Ch10 Respiratory system','Ch12 Interactions','Ch13 Micro-organisms','Ch21 The atom','Ch22 Molecules and formulae','Ch14 Separation','Ch15 Materials','Ch16 Acids and bases','Ch17 Solutions and solubility','Ch35 Ecology and habitats','Ch29 Energy flow','Ch39 Biodiversity','Ch37 Sustainability','Ch34 Big Bang','Ch23 Seasons, eclipses, lunar phases','Ch36 Human spaceflight']},
+{id:'music',n:'Music',c:'#6d28d9',e:null,t:['Music theory 1','Instruments of the orchestra','Musical ingredients','Music theory 2','Melody writing','Backing chords','Musical eras','Opera','Illustrative music','Graphic scores','Practical: instrument and clapping test']}];
+const P=['Period 1','Period 2','Period 3','Period 4'];
+const NOTE={maths:'Rooms M25, M26, M22, L5. Go to your normal class location.',mathol:'Rooms M25, M26, M22, L5. Go to your normal class location.',irish:'Go to your normal class location. Not studying Irish? A16 as normal.',graphics:'DOC class to A20, PT class to L1.',business:'OB2 and M23. Others study in L7, A17, L2.',french:'Normal timetable arrangements.',german:'Normal timetable arrangements.',spanish:'Normal timetable arrangements.',history:'Normal timetabled rooms.',english:'Normal timetabled rooms.',homec:'CD class in L2 or OB2, EL class in M23.',geo:'Go to your normal timetabled room.',science:'Normal timetable arrangements.'};
+
+let st={mine:['maths','irish','english','history','science','geo'],done:{},hard:{},custom:{}},tab='home';
+try{const x=localStorage.getItem('sp1');if(x)st=Object.assign(st,JSON.parse(x))}catch(e){}
+let acc=null;try{acc=JSON.parse(localStorage.getItem('spacc')||'null')}catch(e){}
+let rows=[],tm,msg='',bm='';
+
+const live=()=>SUPABASE_URL !== 'YOUR_PROJECT_URL_HERE';
+const esc=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const save=()=>{try{localStorage.setItem('sp1',JSON.stringify(st))}catch(e){}sync()};
+
+function sync(){
+  clearTimeout(tm);
+  tm=setTimeout(async()=>{
+    if(!acc||!live()||!supabaseClient)return;
+    try{
+      const session = (await supabaseClient.auth.getSession()).data.session;
+      if(!session)return;
+      const m=myStats();
+      const summaryData={days:m.days,reviews:m.reviews,quiz:m.quiz,ready:mine().length?Math.round(mine().reduce((x,s)=>x+pct(s),0)/mine().length):0};
+      await supabaseClient.from('profiles').update({
+        state:st,
+        share:!!st.share,
+        summary:summaryData,
+        updated_at:new Date()
+      }).eq('id', session.user.id);
+    }catch(e){}
+  },1000);
+}
+
+const ymd=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const logDay=()=>{st.log=st.log||{};const k=ymd(new Date());st.log[k]=(st.log[k]||0)+1};
+function streakOf(days){const set=new Set(days);const d=new Date();if(!set.has(ymd(d)))d.setDate(d.getDate()-1);let n=0;while(set.has(ymd(d))){n++;d.setDate(d.getDate()-1)}return n}
+function stats(days,reviews,quiz){const streak=streakOf(days);return{streak,score:reviews*10+streak*5+quiz*2}}
+function myStats(){const days=Object.keys(st.log||{}).filter(k=>st.log[k]>0).sort().slice(-120);const reviews=Object.values(st.done).reduce((a,b)=>a+Math.min(b,5),0);const quiz=Object.values(st.best||{}).reduce((a,b)=>a+b,0);return{days,reviews,quiz}}
+function summary(){const m=myStats(),a=mine(),o={s:{},days:m.days,reviews:m.reviews,quiz:m.quiz,ready:a.length?Math.round(a.reduce((x,s)=>x+pct(s),0)/a.length):0};a.forEach(s=>{o.s[s.id]={p:pct(s)}});return o}
+const $=s=>document.querySelector(s),sub=id=>S.find(s=>s.id===id);
+const topics=s=>s.t.concat(st.custom[s.id]||[]);
+const key=(s,i)=>s.id+i;
+const dt=s=>{if(!s.e)return new Date(2026,10,30);const[y,m,d]=s.e[0].split('-').map(Number);return new Date(y,m-1,d)};
+const today=()=>{const n=new Date();return new Date(n.getFullYear(),n.getMonth(),n.getDate())};
+const left=s=>Math.round((dt(s)-today())/864e5);
+const when=n=>n<0?'finished':n===0?'today':n===1?'tomorrow':'in '+n+' days';
+const pct=s=>{const t=topics(s);if(!t.length)return 0;return Math.round(t.reduce((a,_,i)=>a+Math.min(st.done[key(s,i)]||0,3),0)/(t.length*3)*100)};
+const mine=()=>S.filter(s=>st.mine.includes(s.id));
+const fmt=d=>d.toLocaleDateString('en-IE',{weekday:'long',day:'numeric',month:'long'});
+
+function hero(){const m=mine().filter(s=>s.e&&left(s)>=0).sort((a,b)=>dt(a)-dt(b));const f=m[0]||S[0];const n=Math.max(0,Math.round((dt(f)-today())/864e5));
+$('#cd').textContent=n;$('#cdt').textContent=n===1?'day to first exam':'days to first exam';
+$('#cdp').textContent=m.length?sub(f.id).n+' on '+fmt(dt(f))+'. Winter assessments run 23–30 November.':'Choose your subjects in My account.'}
+
+function plan(){const out=[],per={};
+const c=[];mine().forEach(s=>{const n=left(s);if(n<0)return;topics(s).forEach((t,i)=>{const d=st.done[key(s,i)]||0;if(d>=5)return;const w=st.hard[key(s,i)]||1;c.push({s,i,t,d,n,sc:(5-d)*w/Math.max(1,n+1)})})});
+c.sort((a,b)=>b.sc-a.sc);c.forEach(x=>{per[x.s.id]=per[x.s.id]||0;if(out.length<6&&per[x.s.id]<2){per[x.s.id]++;out.push(x)}});return out}
+
+function chip(s){return `<span class="chip" style="background:${s.c}">${s.n}</span>`}
+function today_(){const p=plan();let h=`<p class="mute" style="margin:0 0 12px">Sorted by how soon the exam is, how few reviews you’ve done and how hard you rated it. Tick a review once you’ve done it.</p>`;
+if(!p.length)h+=`<div class="card">Nothing to review. Pick your subjects in My account, or add topics.</div>`;
+p.forEach(x=>{h+=`<div class="card"><div class="row"><div>${chip(x.s)}<div style="margin-top:6px"><b>${x.t}</b></div><div class="mute">Exam ${when(x.n)}. Reviewed ${x.d} of 5 times.</div></div><button class="btn" data-r="${key(x.s,x.i)}">I did a review</button></div></div>`});
+h+=`<h3 style="margin:20px 0 8px">Spaced review rhythm</h3><div class="card mute">Revisit new notes after 1 hour, 1 day, 1 week, then closer to the exam. Close your notes and write down everything you remember first, then check what you missed.</div>`;return h}
+
+function exams(){let h='';const ex=S.filter(s=>s.e),days=[...new Set(ex.map(s=>s.e[0]))].sort();
+days.forEach(d=>{const[y,m,dd]=d.split('-').map(Number);h+=`<h3 class="day">${fmt(new Date(y,m-1,dd))}</h3>`;
+ex.filter(s=>s.e[0]===d).sort((a,b)=>a.e[1]-b.e[1]).forEach(s=>{const me=st.mine.includes(s.id);h+=`<div class="card" style="${me?'border-left:6px solid '+s.c:'opacity:.55'}"><div class="row"><div>${chip(s)} <span class="mute">${P[s.e[1]-1]}</span></div><span class="mute">${when(left(s))}</span></div><div class="mute" style="margin-top:6px">${NOTE[s.id]||''}</div>${me?`<div class="bar"><i style="width:${pct(s)}%"></i></div><div class="mute">${pct(s)}% ready</div>`:''}</div>`})});
+h+=`<div class="card mute">Period 3 on Monday 23 November is study. Normal classes resume Monday 30 November after Period 3. Music has a practical rather than a timetabled written paper here.</div>`;return h}
+
+function acct(){if(!live())return `<div class="card mute">Supabase is not configured yet. Set your <b>SUPABASE_URL</b> and <b>SUPABASE_ANON_KEY</b> in the code to enable account sign-in and cloud syncing.</div>`;
+let h='';
+if(!acc)h+=`<div class="card"><b>Sign in to sync</b><div class="mute" style="margin:4px 0 8px">Choose a username and password to create an account, or sign in to an existing one.</div><div class="row" style="justify-content:flex-start"><input type="text" id="an" placeholder="Username" autocomplete="username"><input type="password" id="ap" placeholder="Password" autocomplete="current-password"></div><div class="row" style="justify-content:flex-start;margin-top:8px"><button class="btn" data-si>Sign in</button><button class="btn ghost" data-cr>Create account</button></div></div>`;
+else h+=`<div class="card"><div class="row"><b>${esc(acc.n)}</b><button class="btn ghost" data-so>Sign out</button></div><label class="row" style="margin-top:10px;justify-content:flex-start"><input type="checkbox" data-sh ${st.share?'checked':''}> Show me on the class leaderboard</label><div class="mute">Shares your username, readiness %, study streak and score with other students who also share. Untick to stop sharing.</div></div>`;
+return h+`<div class="mute" style="margin-bottom:10px">${esc(msg)}</div>`}
+
+function board(){
+if(!live())return `<div class="card mute">Supabase is not configured yet.</div>`;
+if(!acc)return `<div class="card">Sign in in <b>My account</b> to see the leaderboard.</div>`;
+if(!st.share)return `<div class="card"><b>Join the leaderboard</b><div class="mute" style="margin-top:4px">Tick “Show me on the class leaderboard” in My account to see how everyone is doing.</div></div>`;
+const me=myStats(),ms=stats(me.days,me.reviews,me.quiz);
+const list=rows.filter(x=>x.d&&x.n!==acc.n).map(x=>{const d=x.d,a=stats(d.days||[],d.reviews||0,d.quiz||0);return{n:x.n,r:d.ready||0,streak:a.streak,score:a.score,reviews:d.reviews||0}});
+list.push({n:acc.n,r:summary().ready,streak:ms.streak,score:ms.score,reviews:me.reviews,me:1});
+list.sort((a,b)=>b.score-a.score);const best=list[0],hot=list.slice().sort((a,b)=>b.streak-a.streak)[0];
+let h=bm?`<div class="card mute">${esc(bm)}</div>`:'';
+h+=`<div class="grid"><div class="card"><div class="mute">🏆 Top studier</div><h3>${esc(best?best.n:'None')}</h3><div class="mute">${best?best.score:0} points</div></div><div class="card"><div class="mute">🔥 Longest streak</div><h3>${esc(hot?hot.n:'None')}</h3><div class="mute">${hot?hot.streak:0} day${(hot?hot.streak:0)==1?'':'s'}</div></div><div class="card"><div class="mute">⭐ Your score</div><h3>${ms.score}</h3><div class="mute">${ms.streak} day streak</div></div></div>`;
+h+=`<div class="card" style="overflow-x:auto"><table class="tbl"><tr><th>#</th><th>Student</th><th>Score</th><th>Streak</th><th>Ready</th><th>Reviews</th></tr>`+list.map((x,i)=>`<tr${x.me?' style="font-weight:700"':''}><td>${i+1}</td><td>${esc(x.n)}${x.me?' (you)':''}</td><td>${x.score}</td><td>🔥 ${x.streak}</td><td>${x.r}%</td><td>${x.reviews}</td></tr>`).join('')+`</table></div>`;
+return h}
+
+const EM={maths:'🧮',mathol:'🧮',irish:'☘️',graphics:'📐',business:'💼',french:'🥐',german:'🥨',spanish:'💃',history:'🏰',english:'📚',homec:'🧵',geo:'🌍',science:'🔬',music:'🎵'};
+let itab='revise';
+const BANK={
+maths:["Solve 2x + 5 = 17|x = 6|x = 5|x = 7|x = 11","Factorise x² + 5x + 6|(x + 2)(x + 3)|(x + 1)(x + 6)|(x − 2)(x − 3)|(x + 5)(x + 1)","In a right-angled triangle, sin θ equals|opposite ÷ hypotenuse|adjacent ÷ hypotenuse|opposite ÷ adjacent|hypotenuse ÷ opposite","Solve x² − 9 = 0|x = 3 or x = −3|x = 3 only|x = 9 or x = −9|x = 81","€1,000 at 5% compound interest for 2 years becomes|€1,102.50|€1,100.00|€1,050.00|€1,002.50"],
+science:["Which part of a plant cell contains chlorophyll?|Chloroplast|Nucleus|Mitochondrion|Cell membrane","The enzyme amylase in saliva breaks starch down into|Maltose|Amino acids|Fatty acids|Glycerol","Where does oxygen pass into the blood in the lungs?|Alveoli|Trachea|Diaphragm|Bronchi","An atom has atomic number 11. How many protons does it have?|11|12|22|1","Which method gets salt crystals from salt solution?|Evaporation|Sieving|Decanting|Chromatography","What is the pH of a neutral solution?|7|0|1|14"],
+history:["The Flight of the Earls took place in|1607|1601|1649|1798","Who sought French help for the 1798 Rebellion?|Wolfe Tone|Daniel O’Connell|Charles Stewart Parnell|Michael Collins","The Great Famine was caused by the failure of which crop?|Potato|Wheat|Oats|Turnips","Which organisation was founded in 1884 to promote Gaelic games?|The GAA|The Gaelic League|Sinn Féin|The IRB","The Easter Rising took place in|1916|1913|1919|1921","The Anglo-Irish Treaty was signed in|1921|1916|1919|1923"],
+business:["Desk research uses information that|already exists|is gathered by new surveys|comes from focus groups only|is gathered by interviews","The 4 Ps of the marketing mix are|Product, Price, Promotion, Place|Profit, Price, People, Place|Product, Profit, Promotion, Plan|Price, Paper, Place, People","Simple interest on €2,000 at 3% for 1 year is|€60|€6|€600|€30","An insurance premium is|the amount paid to the insurer|the compensation paid out|the value of the item insured|the claim form","SWOT stands for|Strengths, Weaknesses, Opportunities, Threats|Sales, Wages, Orders, Tax|Strategy, Work, Output, Targets|Savings, Wealth, Orders, Trade","Inflation is|a general rise in prices over time|a fall in unemployment|growth in national income|a fall in interest rates"],
+homec:["Wool is a|natural animal fibre|natural plant fibre|synthetic fibre|man-made mineral","Which food is the best source of omega-3?|Oily fish|White bread|Cheese|Potatoes","Pasteurisation of milk means|heating it to destroy harmful bacteria|mixing the fat evenly|removing the lactose|adding vitamins","On an egg, the code 0 means|organic|free range|barn|cage","Fibre in the diet helps|digestion and prevents constipation|build muscle|repair bones|produce quick energy"],
+english:["A simile compares two things using|like or as|is or was|a question|alliteration","Of Mice and Men was written by|John Steinbeck|Harper Lee|F. Scott Fitzgerald|Arthur Miller","A formal letter starting ‘Dear Sir or Madam’ ends with|Yours faithfully|Yours sincerely|Best wishes|Cheers","In film, a low camera angle usually makes a character look|powerful|weak|small|calm","Personification means|giving human qualities to non-human things|repeating the same sound|exaggeration|words that sound like their meaning","George and Lennie dream of|owning their own farm|moving to the city|becoming ranch bosses|sailing the world"],
+french:["How do you say ‘I am 13’ in French?|J’ai treize ans|Je suis treize ans|Je mange treize ans|Il y a treize ans","Il fait chaud means|It is hot|It is cold|It is raining|It is windy","Je vais manger means|I am going to eat|I ate|I eat every day|I would eat","J’ai mangé is the passé composé of|manger|avoir|aller|être","Quelle heure est-il? means|What time is it?|What is your name?|Where are you?|How old are you?"],
+german:["Ich habe zwei Geschwister means|I have two siblings|I am two years old|I live with two friends|I have two pets","Es regnet means|It is raining|It is snowing|It is sunny|It is windy","In German, all nouns start with|a capital letter|a small letter|der|ein","The accusative form of masculine ‘ein’ is|einen|eine|einem|eines","Wie viel kostet das? means|How much does that cost?|Where is that?|What is that?|Who is that?"],
+spanish:["¿Cómo te llamas? means|What is your name?|How old are you?|Where do you live?|How are you?","How do you say ‘I am 13 years old’?|Tengo trece años|Soy trece años|Estoy trece años|Hago trece años","Complete: Me ___ los deportes.|gustan|gusta|gusto|gustas","Voy al colegio en autobús means|I go to school by bus|I walk to school|I like school buses|I leave school at noon","‘I am tall’ in Spanish is|Soy alto|Estoy alto|Tengo alto|Hago alto"],
+irish:["Cad is ainm duit? means|What is your name?|How are you?|Where do you live?|How old are you?","An aimsir fháistineach is the|future tense|past tense|present tense|conditional mood","What does ‘taisteal’ mean?|travel|weather|music|school","Lá le Pádraig is|St Patrick’s Day|St Brigid’s Day|Halloween|Christmas Day","An aimsir chaite is the|past tense|present tense|future tense|conditional mood"],
+geo:["The thinnest layer of the Earth is the|crust|mantle|outer core|inner core","Contour lines on an OS map show|height of the land|roads|rivers|borders","On a 1:50,000 map, 1 cm represents|500 m|50 m|5 km|50 km","Rock formed when magma cools is|igneous|sedimentary|metamorphic|organic"],
+graphics:["A parabola is formed when a plane cuts a cone|parallel to its sloping side|parallel to its base|through its apex|parallel to its axis","The concentric circle method constructs an|ellipse|parabola|hyperbola|spiral","A line appears in true length when it is|parallel to the plane of projection|perpendicular to the plane|at 45° to both planes|hidden","A development shows|the surface of a solid laid flat|the solid’s hidden edges|its shadow|its plan only","In freehand sketching, crating helps you keep|proportion|colour|shadow|texture"],
+music:["A pentatonic scale has how many notes?|5|6|7|8","A triad is a chord made of|three notes|two notes|four notes|five notes","The oboe belongs to which section?|Woodwind|Brass|Strings|Percussion","Which composer is from the Baroque era?|J. S. Bach|Mozart|Chopin|Stravinsky","A dotted crotchet lasts|1½ beats|1 beat|2 beats|3 beats"]};
+const BK={mathol:'maths'};
+const bank=id=>(BANK[BK[id]||id]||[]).map(x=>x.split('|'));
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+let qz=null,fc={i:0,f:false};
+
+function quizTab(s){const b=bank(s.id);
+if(!b.length)return `<div class="card">No quiz questions yet for ${s.n}. Make your own in the Cards tab.</div>`;
+if(!qz||qz.id!==s.id)return `<div class="card center"><div class="em">🧠</div><h3>${s.n} quiz</h3><p class="mute">${Math.min(8,b.length)} questions. Choose an answer, then see how you did.</p><button class="btn" data-qs>Start quiz</button></div>`;
+if(qz.i>=qz.l.length){const n=qz.l.length,p=qz.s/n;return `<div class="card center"><div class="em">${p>=.8?'🏆':p>=.5?'👍':'💪'}</div><h3>${qz.s} out of ${n}</h3><div class="row" style="justify-content:center"><button class="btn" data-qs>Try again</button><button class="btn ghost" data-it="cards">Flashcards</button></div></div>`}
+const q=qz.l[qz.i];
+return `<div class="card"><div class="mute">Question ${qz.i+1} of ${qz.l.length}</div><div class="bar" style="margin-bottom:14px"><i style="width:${qz.i/qz.l.length*100}%"></i></div><h3 style="margin-bottom:16px">${esc(q.q)}</h3>`+q.o.map((o,k)=>`<button class="opt ${qz.a==null?'':k===q.c?'right':k===qz.a?'wrong':''}" data-qa="${k}" ${qz.a==null?'':'disabled'}><b>${'ABCD'[k]}</b>${esc(o)}</button>`).join('')+(qz.a==null?'':`<div class="fb">${qz.a===q.c?'✅ Correct!':'❌ Not quite. The answer is '+esc(q.o[q.c])+'.'}</div><button class="btn" data-qn>${qz.i+1<qz.l.length?'Next question':'See results'}</button>`)+`</div>`}
+
+const cardsOf=s=>bank(s.id).map(x=>({f:x[0],b:x[1]})).concat((st.cards&&st.cards[s.id])||[]);
+function cardsTab(s){const c=cardsOf(s);let h='';
+if(c.length){if(fc.i>=c.length)fc.i=0;const x=c[fc.i];h+=`<div class="fcard ${fc.f?'back':''}" data-fl role="button" tabindex="0"><div class="mute">${fc.f?'Answer':'Question'} · card ${fc.i+1} of ${c.length}</div><div class="ft">${esc(fc.f?x.b:x.f)}</div><div class="mute">Tap to flip</div></div><div class="row" style="justify-content:center;margin:14px 0 20px"><button class="btn ghost" data-fn="-1">Previous</button><button class="btn ghost" data-fs>Shuffle</button><button class="btn" data-fn="1">Next</button></div>`}
+h+=`<div class="card"><b>Make your own card</b><input type="text" id="fi" placeholder="Question or term" style="width:100%;margin-bottom:8px"><input type="text" id="bi" placeholder="Answer" style="width:100%;margin-bottom:10px"><button class="btn" data-fa>Add card</button></div>`;
+const mc=(st.cards&&st.cards[s.id])||[];if(mc.length)h+=`<div class="card"><b>Your cards</b>`+mc.map((x,i)=>`<div class="row" style="margin-top:10px"><span>${esc(x.f)}</span><button class="d" data-fx="${i}">Delete</button></div>`).join('')+`</div>`;return h}
+
+document.addEventListener('click',e=>{const b=e.target.closest('[data-qs],[data-qa],[data-qn],[data-fl],[data-fn],[data-fs],[data-fa],[data-fx]');if(!b||!tab.startsWith('subj:'))return;const id=tab.slice(5),s=sub(id),d=b.dataset;if(!s)return;
+if(d.qs!==undefined)qz={id,l:shuf(bank(id)).slice(0,8).map(x=>{const o=shuf(x.slice(1));return{q:x[0],o,c:o.indexOf(x[1])}}),i:0,s:0,a:null};
+else if(d.qa!==undefined&&qz&&qz.a==null){qz.a=+d.qa;if(qz.a===qz.l[qz.i].c)qz.s++}
+else if(d.qn!==undefined&&qz){qz.i++;qz.a=null;if(qz.i>=qz.l.length){st.best=st.best||{};st.best[id]=Math.max(st.best[id]||0,qz.s);logDay();save()}}
+else if(d.fl!==undefined)fc.f=!fc.f;
+else if(d.fn!==undefined){const n=cardsOf(s).length;fc.i=(fc.i+ +d.fn+n)%n;fc.f=false}
+else if(d.fs!==undefined){fc.i=Math.floor(Math.random()*cardsOf(s).length);fc.f=false}
+else if(d.fa!==undefined){const f=$('#fi').value.trim(),a=$('#bi').value.trim();if(!f||!a)return;st.cards=st.cards||{};(st.cards[id]=st.cards[id]||[]).push({f,b:a});save()}
+else if(d.fx!==undefined){st.cards[id].splice(+d.fx,1);save()}
+draw()});
+
+const T={home:['🏠','Your study hub','Winter assessments, Monday 23 to Monday 30 November.'],exams:['🗓️','Exam timetable','Every exam with its day, period and room.'],acct:['⚙️','My account','Sign in, choose your subjects and join the leaderboard.'],board:['🏆','Leaderboard','Streaks, scores and progress from students who choose to share.']};
+function th(){let t;if(tab.startsWith('subj:')){const s=sub(tab.slice(5));t=[EM[s.id]||'📖',s.n,s.e?`Exam ${fmt(dt(s))}, ${P[s.e[1]-1]} · ${when(left(s))}`:'No timetabled written paper.']}else t=T[tab]||T.home;$('#th').dataset.e=t[0];$('#thh').textContent=t[1];$('#thp').textContent=t[2]}
+
+function navHtml(){const b=(id,e,n)=>`<button data-t="${id}" class="${tab===id?'on':''}"><span>${e}</span> ${n}</button>`;
+return `<div class="sec">Start here</div>`+b('home','🏠','Home')+b('exams','🗓️','Exams')+b('board','🏆','Leaderboard')+b('acct','⚙️','My account')+`<div class="sec">My subjects</div>`+mine().map(s=>b('subj:'+s.id,EM[s.id]||'📖',s.n)).join('')}
+
+function home(){const m=mine();let h=`<div class="welcome"><h2>Welcome to your study hub 👋</h2><p>Pick a subject to revise its topics, tick off reviews and check your exam.</p></div>`;
+if(!m.length)return h+`<div class="card">Choose your subjects in <b>My account</b> to get started.</div>`;
+h+=`<h3 class="day">🎯 Today’s focus</h3>`+today_()+`<h3 class="day">Your subjects</h3><div class="grid">`+m.map(s=>`<div class="tcard" data-go="subj:${s.id}" role="button" tabindex="0"><div class="em" style="background:${s.c}26">${EM[s.id]||'📖'}</div><h3>${s.n}</h3><p>${topics(s).length} topics</p><div class="bar"><i style="width:${pct(s)}%"></i></div><div class="tc">${pct(s)}% ready</div></div>`).join('')+`</div>`;return h}
+
+function subjPage(id){const s=sub(id),t=topics(s);const tb=(k,l)=>`<button data-it="${k}" class="${itab===k?'on':''}">${l}</button>`;
+let h=`<div class="tabs">${tb('revise','🎯 Revise now')}${tb('topics','📖 Topics')}${tb('quiz','🧠 Quiz')}${tb('cards','🃏 Cards')}${tb('exam','🗓️ Exam')}</div>`;
+if(itab==='revise'){const c=[];t.forEach((x,i)=>{const k=key(s,i),d=st.done[k]||0;if(d<5)c.push({x,k,d,sc:(5-d)*(st.hard[k]||1)})});c.sort((a,b)=>b.sc-a.sc);
+h+=c.length?c.slice(0,5).map(o=>`<div class="card"><div class="row"><div><b>${esc(o.x)}</b><div class="mute">Reviewed ${o.d} of 5 times</div></div><button class="btn" data-r="${o.k}">I did a review</button></div></div>`).join(''):`<div class="card">All topics reviewed! 🎉</div>`}
+else if(itab==='topics'){h+=`<div class="mute">${pct(s)}% ready</div><div class="bar" style="margin:4px 0 14px"><i style="width:${pct(s)}%"></i></div>`;if(s.note)h+=`<div class="card mute">${s.note}</div>`;
+t.forEach((x,i)=>{const k=key(s,i),d=st.done[k]||0,w=st.hard[k]||1;h+=`<div class="card"><b>${esc(x)}</b><div class="row" style="margin-top:8px"><div class="dots">`+[1,2,3,4,5].map(n=>`<button class="${d>=n?'on':''}" data-d="${k}" data-n="${n}">${d>=n?'✓':n}</button>`).join('')+`</div><button class="d ${w==2?'h':w==0.5?'e':''}" data-w="${k}">${w==2?'Hard':w==0.5?'Easy':'Okay'}</button></div></div>`});
+h+=`<div class="card row"><input type="text" placeholder="Add a topic" data-i="${s.id}"><button class="btn ghost" data-a="${s.id}">Add topic</button></div>`}
+else if(itab==='quiz')h+=quizTab(s);else if(itab==='cards')h+=cardsTab(s);else h+=`<div class="card"><b>${s.e?fmt(dt(s))+', '+P[s.e[1]-1]:'No timetabled written paper'}</b></div>`;
+return h}
+
+function acctPage(){return acct()+`<h3 class="day" style="margin-top:6px">My subjects</h3><div class="pick">`+S.map(s=>`<label><input type="checkbox" data-m="${s.id}" ${st.mine.includes(s.id)?'checked':''}>${s.n}</label>`).join('')+`</div>`}
+function view(){return tab==='exams'?exams():tab==='acct'?acctPage():tab==='board'?board():tab.startsWith('subj:')?subjPage(tab.slice(5)):home()}
+function draw(){hero();if(tab==='today'||(tab.startsWith('subj:')&&!st.mine.includes(tab.slice(5))))tab='home';$('#nav').innerHTML=navHtml();th();$('#v').innerHTML=view()}
+
+document.addEventListener('click',e=>{const el=e.target.closest('[data-t],[data-go],[data-it]');if(!el)return;if(el.dataset.it){itab=el.dataset.it;draw();return}
+tab=el.dataset.t||el.dataset.go;itab='revise';qz=null;fc={i:0,f:false};draw();window.scrollTo(0,0);if(tab==='board')loadBoard()});
+
+document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.dataset.t||b.dataset.it)return;
+if(b.dataset.r){st.done[b.dataset.r]=Math.min(5,(st.done[b.dataset.r]||0)+1);logDay()}
+else if(b.dataset.d){const k=b.dataset.d,n=+b.dataset.n,p=st.done[k]||0;st.done[k]=p===n?n-1:n;if(st.done[k]>p)logDay()}
+else if(b.dataset.w){const k=b.dataset.w,w=st.hard[k]||1;st.hard[k]=w==1?2:w==2?0.5:1}
+else if(b.dataset.a){const i=document.querySelector(`input[data-i="${b.dataset.a}"]`);const v=i.value.trim();if(!v)return;(st.custom[b.dataset.a]=st.custom[b.dataset.a]||[]).push(v)}
+else return;save();draw()});
+
+document.addEventListener('change',e=>{const m=e.target.dataset.m;if(!m)return;st.mine=e.target.checked?[...new Set([...st.mine,m])]:st.mine.filter(x=>x!==m);save();draw()});
+document.addEventListener('change',e=>{if(e.target.dataset.sh===undefined)return;st.share=e.target.checked;save()});
+
+// --- SUPABASE AUTH & LEADERBOARD METHODS ---
+async function loadBoard(){
+  if(!acc||!live()||!supabaseClient)return;
+  try{
+    const {data, error} = await supabaseClient.from('profiles').select('username, share, summary').eq('share', true);
+    if(error){ bm='Could not load leaderboard.'; }
+    else{ rows=data.map(row=>({n:row.username, d:row.summary})); bm=''; }
+  }catch(e){ bm='Could not reach Supabase.'; }
+  if(tab==='board')draw();
+}
+
+document.addEventListener('click',async e=>{
+  const b=e.target.closest('button');
+  if(!b)return;
+  
+  if(b.dataset.si!==undefined||b.dataset.cr!==undefined){
+    const n=$('#an').value.trim(), p=$('#ap').value;
+    const isCreate=b.dataset.cr!==undefined;
+    if(!n||!p){ msg='Enter a username and password.'; draw(); return; }
+    
+    // Map username to a mock email for Supabase auth
+    const email=`${n.toLowerCase().replace(/[^a-z0-9]/g,'')}@studyplanner.app`;
+    
+    if(isCreate){
+      const {data, error}=await supabaseClient.auth.signUp({email, password:p});
+      if(error){ msg=error.message; draw(); return; }
+      // Insert initial profile row
+      await supabaseClient.from('profiles').insert([{id:data.user.id, username:n, state:st, share:false}]);
+      acc={n, t:data.session.access_token};
+      try{localStorage.setItem('spacc',JSON.stringify(acc))}catch(x){}
+      msg=''; save();
+    }else{
+      const {data, error}=await supabaseClient.auth.signInWithPassword({email, password:p});
+      if(error){ msg=error.message; draw(); return; }
+      // Fetch user profile & state
+      const {data:profile}=await supabaseClient.from('profiles').select('*').eq('id', data.user.id).single();
+      if(profile){
+        if(profile.state) st=Object.assign(st, profile.state);
+        acc={n:profile.username, t:data.session.access_token};
+        try{localStorage.setItem('spacc',JSON.stringify(acc))}catch(x){}
+      }
+      msg=''; save();
+    }
+    draw();
+  }
+  else if(b.dataset.so!==undefined){
+    if(supabaseClient) await supabaseClient.auth.signOut();
+    acc=null;
+    try{localStorage.removeItem('spacc')}catch(x){}
+    draw();
+  }
+});
+
+// Auto-login check on page load
+(async()=>{
+  if(!live()||!supabaseClient)return;
+  const session = (await supabaseClient.auth.getSession()).data.session;
+  if(session){
+    const {data:profile}=await supabaseClient.from('profiles').select('*').eq('id', session.user.id).single();
+    if(profile){
+      if(profile.state) st=Object.assign(st, profile.state);
+      acc={n:profile.username, t:session.access_token};
+      draw();
+    }
+  }
+})();
+
+draw();
+</script>
+</body>
+</html>
