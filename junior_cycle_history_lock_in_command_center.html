@@ -12,6 +12,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Mozilla PDF.js for reliable cross-browser & GitHub Pages in-app PDF rendering -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    if (window.pdfjsLib) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+  </script>
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -339,10 +346,10 @@
       <div class="bg-gradient-to-r from-rose-500/15 via-surface to-indigo-500/15 border border-rose-500/30 rounded-3xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div class="space-y-1">
           <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-xs font-bold">
-            <i data-lucide="file-check-2" class="w-3.5 h-3.5"></i> Hosted Revision PDFs Ready
+            <i data-lucide="file-check-2" class="w-3.5 h-3.5"></i> GitHub Pages PDF.js Canvas Reader
           </div>
           <h2 class="text-xl sm:text-2xl font-black text-white">Cheat Sheets PDF Library &amp; Built-In Reader</h2>
-          <p class="text-xs sm:text-sm text-slate-300">Read your 4 uploaded one-page cheat sheets right inside the app while your Lock-In timer runs, or open/download them directly.</p>
+          <p class="text-xs sm:text-sm text-slate-300">Click <strong class="text-white">Preview in App</strong> on any topic below to render crisp, zoomable pages directly inside your study hub.</p>
         </div>
         <a id="pdf-active-external-top" href="https://samtechnerd.github.io/samstimetablewebsitegooglesites/cs1.pdf" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-rose-500 hover:bg-rose-400 text-white font-extrabold text-xs sm:text-sm flex items-center gap-2 shrink-0 shadow-lg shadow-rose-500/20 transition">
           <i data-lucide="external-link" class="w-4 h-4"></i> Open Active PDF in New Tab
@@ -354,42 +361,90 @@
         <!-- Populated dynamically by JS -->
       </div>
 
-      <!-- Interactive Embedded PDF Viewer Stage -->
-      <div class="bg-surface border border-borderDark rounded-3xl p-4 sm:p-6 space-y-4 shadow-2xl">
+      <!-- Interactive Embedded PDF.js Viewer Stage -->
+      <div id="pdf-viewer-stage" class="bg-surface border border-borderDark rounded-3xl p-4 sm:p-6 space-y-4 shadow-2xl">
+        <!-- Viewer Header & External Links -->
         <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-borderDark">
           <div class="flex items-center gap-2.5">
-            <span id="pdf-viewer-badge" class="px-3 py-1 rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-xs font-bold">Topic 8 • cs1.pdf</span>
-            <h3 id="pdf-viewer-title" class="text-sm sm:text-base font-extrabold text-white">The Plantations &amp; Growth of Towns</h3>
+            <span id="pdf-viewer-badge" class="px-3 py-1 rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-xs font-bold font-mono">Topic 8 • cs1.pdf</span>
+            <h3 id="pdf-viewer-title" class="text-sm sm:text-base font-extrabold text-white">Cheat Sheet 1: The Plantations &amp; Growth of Towns</h3>
           </div>
 
           <div class="flex flex-wrap items-center gap-2">
-            <button onclick="togglePdfEmbedMode()" id="btn-pdf-embed-mode" class="px-3 py-1.5 rounded-xl bg-obsidian hover:bg-slate-800 border border-borderDark text-xs font-bold text-slate-300 flex items-center gap-1.5 transition" title="Switch between Direct PDF Embed and Google Docs Viewer if your browser blocks inline PDFs">
-              <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-cyan-400"></i> <span id="pdf-embed-label">Compatibility Viewer</span>
-            </button>
+            <span id="pdf-page-count-badge" class="px-3 py-1.5 rounded-xl bg-obsidian border border-borderDark font-mono text-xs font-bold text-slate-300">
+              Pages: —
+            </span>
             <a id="pdf-viewer-open-link" href="https://samtechnerd.github.io/samstimetablewebsitegooglesites/cs1.pdf" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-extrabold flex items-center gap-1.5 transition">
-              <i data-lucide="external-link" class="w-3.5 h-3.5"></i> New Tab
+              <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Open in New Tab
             </a>
             <a id="pdf-viewer-download-link" href="https://samtechnerd.github.io/samstimetablewebsitegooglesites/cs1.pdf" download="cs1.pdf" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-obsidian hover:bg-slate-800 border border-borderDark text-xs font-bold text-slate-200 flex items-center gap-1.5 transition">
-              <i data-lucide="download" class="w-3.5 h-3.5 text-amber-400"></i> Download
+              <i data-lucide="download" class="w-3.5 h-3.5 text-amber-400"></i> Download PDF
             </a>
           </div>
         </div>
 
-        <!-- Fallback Helper Banner -->
-        <div class="bg-obsidian/90 border border-borderDark rounded-2xl px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
-          <span>Not seeing the PDF inside the frame below (e.g. on mobile Safari/Chrome)? Use the <strong class="text-white">Compatibility Viewer</strong> button or open it directly:</span>
-          <a id="pdf-fallback-direct-link" href="https://samtechnerd.github.io/samstimetablewebsitegooglesites/cs1.pdf" target="_blank" rel="noopener noreferrer" class="text-rose-400 hover:text-rose-300 font-mono font-bold underline">
-            samtechnerd.github.io/.../cs1.pdf ↗
-          </a>
+        <!-- Zoom, Fit-Width & Renderer Mode Toolbar -->
+        <div class="flex flex-wrap items-center justify-between gap-3 bg-obsidian/90 border border-borderDark rounded-2xl px-3.5 py-2.5">
+          <div id="pdf-zoom-controls" class="flex items-center gap-1.5">
+            <button onclick="adjustPdfZoom(-0.15)" class="p-2 rounded-xl bg-surface hover:bg-slate-800 border border-borderDark text-slate-200 transition" title="Zoom Out">
+              <i data-lucide="zoom-out" class="w-4 h-4"></i>
+            </button>
+            <span id="pdf-zoom-readout" class="font-mono text-xs font-bold text-white px-2.5 py-1.5 rounded-lg bg-surface border border-borderDark min-w-[58px] text-center">
+              100%
+            </span>
+            <button onclick="adjustPdfZoom(0.15)" class="p-2 rounded-xl bg-surface hover:bg-slate-800 border border-borderDark text-slate-200 transition" title="Zoom In">
+              <i data-lucide="zoom-in" class="w-4 h-4"></i>
+            </button>
+            <button onclick="fitPdfToWidth()" class="px-3 py-2 rounded-xl bg-surface hover:bg-slate-800 border border-borderDark text-xs font-bold text-cyan-400 flex items-center gap-1.5 transition">
+              <i data-lucide="maximize" class="w-3.5 h-3.5"></i> Fit Width
+            </button>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="togglePdfEmbedMode()" id="btn-pdf-embed-mode" class="px-3 py-2 rounded-xl bg-surface hover:bg-slate-800 border border-borderDark text-xs font-bold text-slate-200 flex items-center gap-1.5 transition">
+              <i data-lucide="layers" class="w-3.5 h-3.5 text-rose-400"></i>
+              <span>Renderer: <strong id="pdf-embed-label" class="text-emerald-400">PDF.js Canvas (Recommended)</strong></span>
+            </button>
+          </div>
         </div>
 
-        <!-- Embedded PDF Iframe -->
-        <div class="w-full h-[650px] sm:h-[780px] rounded-2xl overflow-hidden border border-borderDark bg-slate-950">
+        <!-- Viewport Stage: PDF.js Canvas Stack + Native Embed Fallback -->
+        <div id="pdf-viewport-box" class="relative w-full h-[680px] sm:h-[820px] rounded-2xl overflow-auto border border-borderDark bg-slate-950 p-3 sm:p-6">
+          <!-- Loading Indicator -->
+          <div id="pdf-loading-state" class="hidden flex-col items-center justify-center h-full text-center space-y-3">
+            <div class="w-10 h-10 rounded-full border-4 border-emerald-500/30 border-t-emerald-400 animate-spin"></div>
+            <div id="pdf-loading-text" class="text-sm font-bold text-white">Loading cs1.pdf...</div>
+            <p class="text-xs text-slate-400">Rendering high-DPI pages via Mozilla PDF.js</p>
+          </div>
+
+          <!-- Graceful Error / Network Fallback Banner -->
+          <div id="pdf-error-state" class="hidden flex-col items-center justify-center h-full text-center max-w-md mx-auto space-y-4 p-6">
+            <div class="w-12 h-12 rounded-2xl bg-rose-500/20 text-rose-400 flex items-center justify-center">
+              <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+            </div>
+            <h4 class="text-base font-extrabold text-white">Could Not Render PDF Inside Canvas</h4>
+            <p id="pdf-error-detail" class="text-xs text-slate-400 leading-relaxed">
+              Your network or browser blocked inline PDF fetching. You can switch to Browser Native Embed or open the PDF directly on GitHub Pages.
+            </p>
+            <div class="flex flex-wrap justify-center gap-2.5">
+              <a id="pdf-error-direct-link" href="https://samtechnerd.github.io/samstimetablewebsitegooglesites/cs1.pdf" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-rose-500 hover:bg-rose-400 text-white font-extrabold text-xs flex items-center gap-1.5 transition">
+                <i data-lucide="external-link" class="w-4 h-4"></i> Open PDF Directly
+              </a>
+              <button onclick="togglePdfEmbedMode()" class="px-4 py-2.5 rounded-xl bg-surface hover:bg-slate-800 border border-borderDark text-xs font-bold text-slate-200 transition">
+                Try Native Embed
+              </button>
+            </div>
+          </div>
+
+          <!-- Stacked High-DPI Canvases Container -->
+          <div id="pdf-canvas-stack" class="flex flex-col items-center gap-5 w-full"></div>
+
+          <!-- Optional Native Browser Iframe Fallback -->
           <iframe
-            id="pdf-viewer-iframe"
-            src="https://samtechnerd.github.io/samstimetablewebsitegooglesites/cs1.pdf"
-            class="w-full h-full border-0"
-            title="Cheat Sheet PDF Viewer">
+            id="pdf-native-iframe"
+            src="about:blank"
+            class="hidden w-full h-full rounded-xl border-0 bg-white"
+            title="Native PDF Viewer Fallback">
           </iframe>
         </div>
       </div>
@@ -815,14 +870,10 @@
     };
 
     let activePdfKey = 'plantations';
-    let useGoogleDocsFallback = false;
-
-    function getPdfViewerUrl(rawUrl) {
-      if (useGoogleDocsFallback) {
-        return `https://docs.google.com/gview?url=${encodeURIComponent(rawUrl)}&embedded=true`;
-      }
-      return rawUrl;
-    }
+    let pdfRendererMode = 'pdfjs'; // 'pdfjs' | 'native'
+    let currentPdfDoc = null;
+    let currentPdfScale = 1.0;
+    let pdfRenderTaskId = 0;
 
     function renderPdfLibrary() {
       const grid = document.getElementById('pdf-cards-grid');
@@ -842,7 +893,7 @@
             </div>
 
             <div class="flex flex-wrap items-center gap-2 pt-1">
-              <button onclick="previewPdfInApp('${pdf.key}')" class="flex-1 min-w-[120px] py-2 px-3 rounded-xl ${isActive ? 'bg-rose-500 text-white' : 'bg-emerald-500 hover:bg-emerald-400 text-slate-950'} font-extrabold text-xs flex items-center justify-center gap-1.5 transition">
+              <button onclick="previewPdfInApp('${pdf.key}', true)" class="flex-1 min-w-[120px] py-2 px-3 rounded-xl ${isActive ? 'bg-rose-500 text-white' : 'bg-emerald-500 hover:bg-emerald-400 text-slate-950'} font-extrabold text-xs flex items-center justify-center gap-1.5 transition">
                 <i data-lucide="eye" class="w-3.5 h-3.5"></i> Preview in App
               </button>
               <a href="${pdf.url}" target="_blank" rel="noopener noreferrer" class="py-2 px-3 rounded-xl bg-obsidian hover:bg-slate-800 border border-borderDark text-xs font-bold text-slate-200 flex items-center gap-1.5 transition">
@@ -861,26 +912,158 @@
       document.getElementById('pdf-viewer-title').textContent = activePdf.title;
       document.getElementById('pdf-viewer-open-link').href = activePdf.url;
       document.getElementById('pdf-active-external-top').href = activePdf.url;
+      document.getElementById('pdf-error-direct-link').href = activePdf.url;
 
       const dlLink = document.getElementById('pdf-viewer-download-link');
       dlLink.href = activePdf.url;
       dlLink.setAttribute('download', activePdf.file);
 
-      const fallbackLink = document.getElementById('pdf-fallback-direct-link');
-      fallbackLink.href = activePdf.url;
-      fallbackLink.textContent = `samtechnerd.github.io/.../${activePdf.file} ↗`;
-
-      document.getElementById('pdf-viewer-iframe').src = getPdfViewerUrl(activePdf.url);
+      loadActivePdfIntoViewer();
       lucide.createIcons();
     }
 
-    function previewPdfInApp(topicKey, scrollToViewer = false) {
+    async function loadActivePdfIntoViewer() {
+      const activePdf = HOSTED_PDFS[activePdfKey];
+      const loadingEl = document.getElementById('pdf-loading-state');
+      const loadingText = document.getElementById('pdf-loading-text');
+      const errorEl = document.getElementById('pdf-error-state');
+      const canvasStack = document.getElementById('pdf-canvas-stack');
+      const nativeIframe = document.getElementById('pdf-native-iframe');
+      const pageBadge = document.getElementById('pdf-page-count-badge');
+      const zoomControls = document.getElementById('pdf-zoom-controls');
+
+      errorEl.classList.add('hidden');
+      errorEl.classList.remove('flex');
+
+      if (pdfRendererMode === 'native') {
+        loadingEl.classList.add('hidden');
+        loadingEl.classList.remove('flex');
+        canvasStack.classList.add('hidden');
+        zoomControls.classList.add('opacity-40', 'pointer-events-none');
+        nativeIframe.classList.remove('hidden');
+        nativeIframe.src = activePdf.url;
+        pageBadge.textContent = 'Native Embed';
+        return;
+      }
+
+      // PDF.js Canvas Mode
+      nativeIframe.classList.add('hidden');
+      nativeIframe.src = 'about:blank';
+      zoomControls.classList.remove('opacity-40', 'pointer-events-none');
+      canvasStack.innerHTML = '';
+      canvasStack.classList.remove('hidden');
+      loadingText.textContent = `Loading ${activePdf.file}...`;
+      loadingEl.classList.remove('hidden');
+      loadingEl.classList.add('flex');
+      pageBadge.textContent = 'Pages: ...';
+
+      const thisTask = ++pdfRenderTaskId;
+
+      try {
+        if (!window.pdfjsLib) {
+          throw new Error('PDF.js library unavailable');
+        }
+        const loadingTask = pdfjsLib.getDocument({
+          url: activePdf.url,
+          withCredentials: false
+        });
+        const pdfDoc = await loadingTask.promise;
+        if (thisTask !== pdfRenderTaskId) return;
+
+        currentPdfDoc = pdfDoc;
+        pageBadge.textContent = `Pages: ${pdfDoc.numPages}`;
+
+        // Auto-calculate Fit-Width scale on initial load
+        const firstPage = await pdfDoc.getPage(1);
+        const unscaledViewport = firstPage.getViewport({ scale: 1.0 });
+        const viewportBox = document.getElementById('pdf-viewport-box');
+        const availableWidth = Math.max((viewportBox ? viewportBox.clientWidth : 780) - 48, 280);
+        currentPdfScale = Math.min(Math.max(availableWidth / unscaledViewport.width, 0.6), 1.8);
+
+        await renderAllPdfPages(thisTask);
+      } catch (err) {
+        if (thisTask !== pdfRenderTaskId) return;
+        console.error('PDF.js render error:', err);
+        loadingEl.classList.add('hidden');
+        loadingEl.classList.remove('flex');
+        canvasStack.classList.add('hidden');
+        pageBadge.textContent = 'Pages: Error';
+        errorEl.classList.remove('hidden');
+        errorEl.classList.add('flex');
+      }
+    }
+
+    async function renderAllPdfPages(taskId) {
+      if (!currentPdfDoc) return;
+      const loadingEl = document.getElementById('pdf-loading-state');
+      const canvasStack = document.getElementById('pdf-canvas-stack');
+      const zoomReadout = document.getElementById('pdf-zoom-readout');
+
+      zoomReadout.textContent = `${Math.round(currentPdfScale * 100)}%`;
+      canvasStack.innerHTML = '';
+
+      const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+
+      for (let pageNum = 1; pageNum <= currentPdfDoc.numPages; pageNum++) {
+        if (taskId !== pdfRenderTaskId) return;
+        const page = await currentPdfDoc.getPage(pageNum);
+        const viewport = page.getViewport({ scale: currentPdfScale });
+
+        const pageWrapper = document.createElement('div');
+        pageWrapper.className = 'relative bg-white rounded-xl shadow-2xl overflow-hidden border border-slate-700';
+
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = Math.floor(viewport.width * dpr);
+        canvas.height = Math.floor(viewport.height * dpr);
+        canvas.style.width = `${Math.floor(viewport.width)}px`;
+        canvas.style.height = `${Math.floor(viewport.height)}px`;
+        canvas.className = 'block max-w-none';
+
+        const pageLabel = document.createElement('div');
+        pageLabel.className = 'bg-slate-900/90 text-slate-300 font-mono text-[11px] px-3 py-1 flex justify-between items-center border-t border-slate-800';
+        pageLabel.innerHTML = `<span>${HOSTED_PDFS[activePdfKey].file}</span><span>Page ${pageNum} of ${currentPdfDoc.numPages}</span>`;
+
+        pageWrapper.appendChild(canvas);
+        pageWrapper.appendChild(pageLabel);
+        canvasStack.appendChild(pageWrapper);
+
+        await page.render({
+          canvasContext: ctx,
+          transform: dpr !== 1 ? [dpr, 0, 0, dpr, 0, 0] : null,
+          viewport: viewport
+        }).promise;
+      }
+
+      if (taskId === pdfRenderTaskId) {
+        loadingEl.classList.add('hidden');
+        loadingEl.classList.remove('flex');
+      }
+    }
+
+    function adjustPdfZoom(delta) {
+      if (pdfRendererMode !== 'pdfjs' || !currentPdfDoc) return;
+      currentPdfScale = Math.min(Math.max(currentPdfScale + delta, 0.5), 2.6);
+      renderAllPdfPages(pdfRenderTaskId);
+    }
+
+    async function fitPdfToWidth() {
+      if (pdfRendererMode !== 'pdfjs' || !currentPdfDoc) return;
+      const firstPage = await currentPdfDoc.getPage(1);
+      const unscaledViewport = firstPage.getViewport({ scale: 1.0 });
+      const viewportBox = document.getElementById('pdf-viewport-box');
+      const availableWidth = Math.max((viewportBox ? viewportBox.clientWidth : 780) - 48, 280);
+      currentPdfScale = Math.min(Math.max(availableWidth / unscaledViewport.width, 0.5), 2.4);
+      renderAllPdfPages(pdfRenderTaskId);
+    }
+
+    function previewPdfInApp(topicKey, scrollToViewer = true) {
       activePdfKey = topicKey;
       renderPdfLibrary();
       if (scrollToViewer) {
-        const iframeEl = document.getElementById('pdf-viewer-iframe');
-        if (iframeEl) {
-          iframeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const stageEl = document.getElementById('pdf-viewer-stage');
+        if (stageEl) {
+          stageEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       }
     }
@@ -891,11 +1074,11 @@
     }
 
     function togglePdfEmbedMode() {
-      useGoogleDocsFallback = !useGoogleDocsFallback;
+      pdfRendererMode = pdfRendererMode === 'pdfjs' ? 'native' : 'pdfjs';
       const label = document.getElementById('pdf-embed-label');
-      label.textContent = useGoogleDocsFallback ? 'Direct PDF Embed' : 'Compatibility Viewer';
-      renderPdfLibrary();
-      showToast(useGoogleDocsFallback ? 'Switched to Google Docs Compatibility PDF Viewer' : 'Switched to Direct Browser PDF Embed');
+      label.textContent = pdfRendererMode === 'pdfjs' ? 'PDF.js Canvas (Recommended)' : 'Browser Native Embed';
+      loadActivePdfIntoViewer();
+      showToast(pdfRendererMode === 'pdfjs' ? 'Switched to PDF.js High-DPI Canvas Renderer' : 'Switched to Browser Native PDF Embed');
     }
 
     // ---------------------------------------------------------
