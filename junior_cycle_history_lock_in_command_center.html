@@ -109,14 +109,6 @@
       height: 100vh !important;
       overflow-y: auto !important;
     }
-
-    @keyframes pulseGlow {
-      0%, 100% { box-shadow: 0 0 18px rgba(16, 185, 129, 0.25); }
-      50% { box-shadow: 0 0 28px rgba(16, 185, 129, 0.55); }
-    }
-    .lock-glow {
-      animation: pulseGlow 2.5s infinite ease-in-out;
-    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col selection:bg-emerald-500 selection:text-slate-950">
@@ -136,7 +128,7 @@
               <i data-lucide="flame" class="w-3 h-3"></i> EXAM MODE
             </span>
           </div>
-          <p class="text-xs text-slate-400">2nd Year Junior Cycle • Topics 8, 9, 10 & 12</p>
+          <p class="text-xs text-slate-400">Junior Cycle History • Topics 8, 9, 10 &amp; 12</p>
         </div>
       </div>
 
@@ -184,26 +176,29 @@
         <button onclick="switchTab('overview')" data-tab="overview" class="nav-tab flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
           <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Command Center
         </button>
+        <button onclick="switchTab('pdf')" data-tab="pdf" class="nav-tab flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 transition border border-rose-500/30">
+          <i data-lucide="file-down" class="w-4 h-4 text-rose-400"></i> Cheat Sheets PDF
+        </button>
         <button onclick="switchTab('cheatsheets')" data-tab="cheatsheets" class="nav-tab flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-400 hover:text-white hover:bg-surface transition border border-transparent">
           <i data-lucide="file-text" class="w-4 h-4"></i> Cheat Sheets
         </button>
         <button onclick="switchTab('slides')" data-tab="slides" class="nav-tab flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-400 hover:text-white hover:bg-surface transition border border-transparent">
-          <i data-lucide="presentation" class="w-4 h-4"></i> PowerPoint Decks
+          <i data-lucide="presentation" class="w-4 h-4"></i> PowerPoints
         </button>
         <button onclick="switchTab('flashcards')" data-tab="flashcards" class="nav-tab flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-400 hover:text-white hover:bg-surface transition border border-transparent">
           <i data-lucide="layers" class="w-4 h-4"></i> Flashcards
         </button>
         <button onclick="switchTab('quizzes')" data-tab="quizzes" class="nav-tab flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-400 hover:text-white hover:bg-surface transition border border-transparent">
-          <i data-lucide="check-circle-2" class="w-4 h-4"></i> Exam Quizzes & Sources
+          <i data-lucide="check-circle-2" class="w-4 h-4"></i> Exam Quiz &amp; Sources
         </button>
         <button onclick="switchTab('videos')" data-tab="videos" class="nav-tab flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-400 hover:text-white hover:bg-surface transition border border-transparent">
-          <i data-lucide="play-square" class="w-4 h-4"></i> Videos & Timeline
+          <i data-lucide="play-square" class="w-4 h-4"></i> Videos &amp; Timeline
         </button>
       </div>
     </nav>
   </header>
 
-  <!-- TOAST NOTIFICATION BANNER (Replaces alert()) -->
+  <!-- TOAST NOTIFICATION BANNER -->
   <div id="toast-banner" class="fixed bottom-5 right-5 z-50 hidden transform transition-all duration-300 max-w-sm">
     <div class="bg-slate-900 border border-emerald-500/50 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3">
       <div class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
@@ -234,11 +229,14 @@
               Time to Lock In. Master Every Topic Before Tomorrow's Bell.
             </h1>
             <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
-              Everything from your class presentations—<strong class="text-white">The Plantations & Towns</strong>, <strong class="text-white">The French Revolution</strong>, <strong class="text-white">The 1798 Rebellion</strong>, and <strong class="text-white">Daniel O'Connell</strong>—organized into high-yield cheat sheets, visual decks, 3D active-recall flashcards, and exam simulators.
+              Everything from your class presentations—<strong class="text-white">The Plantations &amp; Towns</strong>, <strong class="text-white">The French Revolution</strong>, <strong class="text-white">The 1798 Rebellion</strong>, and <strong class="text-white">Daniel O'Connell</strong>—plus your hosted <strong class="text-rose-400">Cheat Sheet PDFs (cs1–cs4)</strong>, 34 visual slides, 40 flashcards, and mock exams.
             </p>
             <div class="pt-2 flex flex-wrap gap-3">
+              <button onclick="switchTab('pdf')" class="px-5 py-2.5 rounded-xl bg-rose-500 hover:bg-rose-400 text-white font-extrabold text-sm transition flex items-center gap-2 shadow-lg shadow-rose-500/20">
+                <i data-lucide="file-down" class="w-4 h-4"></i> Cheat Sheets PDF
+              </button>
               <button onclick="switchTab('cheatsheets')" class="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm transition flex items-center gap-2 shadow-lg shadow-emerald-500/20">
-                <i data-lucide="book-open" class="w-4 h-4"></i> Open Cheat Sheets
+                <i data-lucide="book-open" class="w-4 h-4"></i> Interactive Notes
               </button>
               <button onclick="switchTab('quizzes')" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm border border-slate-700 transition flex items-center gap-2">
                 <i data-lucide="target" class="w-4 h-4 text-amber-400"></i> Take Mock Exam
@@ -259,12 +257,12 @@
             </div>
             <div class="space-y-2 text-xs">
               <div class="flex items-start gap-2.5 p-2 rounded-xl bg-surface/80 border border-borderDark/80">
-                <span class="font-mono font-bold text-emerald-400">15m</span>
-                <span class="text-slate-300">Skim the <strong>4 Cheat Sheets</strong> & memorize comparison tables.</span>
+                <span class="font-mono font-bold text-rose-400">15m</span>
+                <span class="text-slate-300">Read your <strong>4 Cheat Sheet PDFs</strong> &amp; memorize comparison tables.</span>
               </div>
               <div class="flex items-start gap-2.5 p-2 rounded-xl bg-surface/80 border border-borderDark/80">
                 <span class="font-mono font-bold text-cyan-400">15m</span>
-                <span class="text-slate-300">Flip through the <strong>34 Visual PowerPoint Slides</strong> for diagrams.</span>
+                <span class="text-slate-300">Flip through the <strong>34 Visual PowerPoint Slides</strong> for maps &amp; diagrams.</span>
               </div>
               <div class="flex items-start gap-2.5 p-2 rounded-xl bg-surface/80 border border-borderDark/80">
                 <span class="font-mono font-bold text-purple-400">15m</span>
@@ -272,7 +270,7 @@
               </div>
               <div class="flex items-start gap-2.5 p-2 rounded-xl bg-surface/80 border border-borderDark/80">
                 <span class="font-mono font-bold text-amber-400">15m</span>
-                <span class="text-slate-300">Complete the <strong>28-Q Exam Quiz</strong> & 4 Source Drills.</span>
+                <span class="text-slate-300">Complete the <strong>28-Q Exam Quiz</strong> &amp; 4 Source Drills.</span>
               </div>
             </div>
           </div>
@@ -283,9 +281,9 @@
       <div>
         <div class="flex items-center justify-between mb-4">
           <h2 class="text-lg sm:text-xl font-extrabold text-white flex items-center gap-2">
-            <i data-lucide="compass" class="w-5 h-5 text-emerald-400"></i> Exam Syllabus Breakdown & Mastery
+            <i data-lucide="compass" class="w-5 h-5 text-emerald-400"></i> Exam Syllabus Breakdown &amp; Mastery
           </h2>
-          <span class="text-xs text-slate-400">Click any topic to jump straight into its notes or deck</span>
+          <span class="text-xs text-slate-400">Open each topic's PDF, Notes, Slides, or Quiz directly</span>
         </div>
 
         <div id="overview-topic-cards" class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -296,18 +294,18 @@
       <!-- HIGH-YIELD EXAM CHEAT SHEET SNAPSHOT (Must-Know Dates & Numbers) -->
       <div class="bg-surface border border-borderDark rounded-3xl p-6">
         <h3 class="text-base sm:text-lg font-extrabold text-white mb-4 flex items-center gap-2">
-          <i data-lucide="award" class="w-5 h-5 text-amber-400"></i> Non-Negotiable Exam Numbers & Dates (Instant Marks)
+          <i data-lucide="award" class="w-5 h-5 text-amber-400"></i> Non-Negotiable Exam Numbers &amp; Dates (Instant Marks)
         </h3>
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
           <div class="bg-obsidian border border-borderDark rounded-2xl p-3.5">
             <div class="font-mono font-black text-emerald-400 text-lg">1534 / 1536</div>
             <div class="text-xs font-bold text-white mt-0.5">Henry VIII Acts</div>
-            <div class="text-[11px] text-slate-400 mt-1">Act of Supremacy & Dissolution of Monasteries</div>
+            <div class="text-[11px] text-slate-400 mt-1">Act of Supremacy &amp; Dissolution of Monasteries</div>
           </div>
           <div class="bg-obsidian border border-borderDark rounded-2xl p-3.5">
             <div class="font-mono font-black text-emerald-400 text-lg">1607 / 1609</div>
             <div class="text-xs font-bold text-white mt-0.5">Ulster Plantation</div>
-            <div class="text-[11px] text-slate-400 mt-1">Flight of the Earls & 6 counties planted</div>
+            <div class="text-[11px] text-slate-400 mt-1">Flight of the Earls &amp; 6 counties planted</div>
           </div>
           <div class="bg-obsidian border border-borderDark rounded-2xl p-3.5">
             <div class="font-mono font-black text-cyan-400 text-lg">14 July 1789</div>
@@ -322,19 +320,83 @@
           <div class="bg-obsidian border border-borderDark rounded-2xl p-3.5">
             <div class="font-mono font-black text-amber-400 text-lg">1791 / 1798</div>
             <div class="text-xs font-bold text-white mt-0.5">United Irishmen</div>
-            <div class="text-[11px] text-slate-400 mt-1">Wolfe Tone, Vinegar Hill & Act of Union (1801)</div>
+            <div class="text-[11px] text-slate-400 mt-1">Wolfe Tone, Vinegar Hill &amp; Act of Union (1801)</div>
           </div>
           <div class="bg-obsidian border border-borderDark rounded-2xl p-3.5">
             <div class="font-mono font-black text-purple-400 text-lg">1829 / 1843</div>
             <div class="text-xs font-bold text-white mt-0.5">Daniel O'Connell</div>
-            <div class="text-[11px] text-slate-400 mt-1">Catholic Emancipation & Clontarf Monster Meeting</div>
+            <div class="text-[11px] text-slate-400 mt-1">Catholic Emancipation &amp; Clontarf Monster Meeting</div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- =========================================================
-         MODULE 2: CHEAT SHEETS
+         MODULE 1B: CHEAT SHEETS PDF LIBRARY & BUILT-IN VIEWER
+    ========================================================== -->
+    <section id="tab-pdf" class="tab-panel hidden space-y-6">
+      <!-- PDF Library Header Banner -->
+      <div class="bg-gradient-to-r from-rose-500/15 via-surface to-indigo-500/15 border border-rose-500/30 rounded-3xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="space-y-1">
+          <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-xs font-bold">
+            <i data-lucide="file-check-2" class="w-3.5 h-3.5"></i> Hosted Revision PDFs Ready
+          </div>
+          <h2 class="text-xl sm:text-2xl font-black text-white">Cheat Sheets PDF Library &amp; Built-In Reader</h2>
+          <p class="text-xs sm:text-sm text-slate-300">Read your 4 uploaded one-page cheat sheets right inside the app while your Lock-In timer runs, or open/download them directly.</p>
+        </div>
+        <a id="pdf-active-external-top" href="https://samtechnerd.github.io/samstimetablewebsitegooglesites/cs1.pdf" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-rose-500 hover:bg-rose-400 text-white font-extrabold text-xs sm:text-sm flex items-center gap-2 shrink-0 shadow-lg shadow-rose-500/20 transition">
+          <i data-lucide="external-link" class="w-4 h-4"></i> Open Active PDF in New Tab
+        </a>
+      </div>
+
+      <!-- 4 Topic PDF Cards Grid -->
+      <div id="pdf-cards-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Populated dynamically by JS -->
+      </div>
+
+      <!-- Interactive Embedded PDF Viewer Stage -->
+      <div class="bg-surface border border-borderDark rounded-3xl p-4 sm:p-6 space-y-4 shadow-2xl">
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-borderDark">
+          <div class="flex items-center gap-2.5">
+            <span id="pdf-viewer-badge" class="px-3 py-1 rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-xs font-bold">Topic 8 • cs1.pdf</span>
+            <h3 id="pdf-viewer-title" class="text-sm sm:text-base font-extrabold text-white">The Plantations &amp; Growth of Towns</h3>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <button onclick="togglePdfEmbedMode()" id="btn-pdf-embed-mode" class="px-3 py-1.5 rounded-xl bg-obsidian hover:bg-slate-800 border border-borderDark text-xs font-bold text-slate-300 flex items-center gap-1.5 transition" title="Switch between Direct PDF Embed and Google Docs Viewer if your browser blocks inline PDFs">
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-cyan-400"></i> <span id="pdf-embed-label">Compatibility Viewer</span>
+            </button>
+            <a id="pdf-viewer-open-link" href="https://samtechnerd.github.io/samstimetablewebsitegooglesites/cs1.pdf" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-extrabold flex items-center gap-1.5 transition">
+              <i data-lucide="external-link" class="w-3.5 h-3.5"></i> New Tab
+            </a>
+            <a id="pdf-viewer-download-link" href="https://samtechnerd.github.io/samstimetablewebsitegooglesites/cs1.pdf" download="cs1.pdf" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-obsidian hover:bg-slate-800 border border-borderDark text-xs font-bold text-slate-200 flex items-center gap-1.5 transition">
+              <i data-lucide="download" class="w-3.5 h-3.5 text-amber-400"></i> Download
+            </a>
+          </div>
+        </div>
+
+        <!-- Fallback Helper Banner -->
+        <div class="bg-obsidian/90 border border-borderDark rounded-2xl px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
+          <span>Not seeing the PDF inside the frame below (e.g. on mobile Safari/Chrome)? Use the <strong class="text-white">Compatibility Viewer</strong> button or open it directly:</span>
+          <a id="pdf-fallback-direct-link" href="https://samtechnerd.github.io/samstimetablewebsitegooglesites/cs1.pdf" target="_blank" rel="noopener noreferrer" class="text-rose-400 hover:text-rose-300 font-mono font-bold underline">
+            samtechnerd.github.io/.../cs1.pdf ↗
+          </a>
+        </div>
+
+        <!-- Embedded PDF Iframe -->
+        <div class="w-full h-[650px] sm:h-[780px] rounded-2xl overflow-hidden border border-borderDark bg-slate-950">
+          <iframe
+            id="pdf-viewer-iframe"
+            src="https://samtechnerd.github.io/samstimetablewebsitegooglesites/cs1.pdf"
+            class="w-full h-full border-0"
+            title="Cheat Sheet PDF Viewer">
+          </iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         MODULE 2: INTERACTIVE CHEAT SHEETS
     ========================================================== -->
     <section id="tab-cheatsheets" class="tab-panel hidden space-y-5">
       <!-- Controls Bar -->
@@ -342,7 +404,7 @@
         <!-- Topic Selector Pills -->
         <div class="flex flex-wrap gap-2" id="cs-topic-pills">
           <button onclick="selectCheatSheet('plantations')" data-cs="plantations" class="cs-pill px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-500 text-slate-950 transition">
-            1. Plantations & Towns
+            1. Plantations &amp; Towns
           </button>
           <button onclick="selectCheatSheet('french')" data-cs="french" class="cs-pill px-3.5 py-2 rounded-xl text-xs font-bold bg-obsidian text-slate-300 border border-borderDark hover:border-slate-600 transition">
             2. French Revolution
@@ -387,7 +449,7 @@
       <div class="bg-surface border border-borderDark rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3">
         <div class="flex flex-wrap gap-2">
           <button onclick="selectDeck('plantations')" data-deck="plantations" class="deck-pill px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-500 text-slate-950 transition">
-            Deck 1: Plantations & Towns (9 Slides)
+            Deck 1: Plantations &amp; Towns (9 Slides)
           </button>
           <button onclick="selectDeck('french')" data-deck="french" class="deck-pill px-3.5 py-2 rounded-xl text-xs font-bold bg-obsidian text-slate-300 border border-borderDark hover:border-slate-600 transition">
             Deck 2: French Revolution (9 Slides)
@@ -472,7 +534,7 @@
         <div class="flex flex-wrap items-center gap-2">
           <select id="fc-topic-filter" onchange="filterFlashcards()" class="bg-obsidian border border-borderDark rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-emerald-500">
             <option value="all">All Topics (40 Cards)</option>
-            <option value="plantations">Topic 8: Plantations & Towns</option>
+            <option value="plantations">Topic 8: Plantations &amp; Towns</option>
             <option value="french">Topic 9: French Revolution</option>
             <option value="rebellion1798">Topic 10: 1798 Rebellion</option>
             <option value="oconnell">Topic 12: Daniel O'Connell</option>
@@ -570,7 +632,7 @@
         <div id="mcq-controls" class="flex flex-wrap items-center gap-2">
           <select id="quiz-topic-filter" onchange="startQuiz()" class="bg-obsidian border border-borderDark rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-emerald-500">
             <option value="all">Full Mock Exam (All 28 Questions)</option>
-            <option value="plantations">Topic 8: Plantations & Towns (7 Qs)</option>
+            <option value="plantations">Topic 8: Plantations &amp; Towns (7 Qs)</option>
             <option value="french">Topic 9: French Revolution (7 Qs)</option>
             <option value="rebellion1798">Topic 10: 1798 Rebellion (7 Qs)</option>
             <option value="oconnell">Topic 12: Daniel O'Connell (7 Qs)</option>
@@ -593,7 +655,7 @@
         <div class="bg-gradient-to-r from-indigo-500/10 to-cyan-500/10 border border-indigo-500/30 rounded-2xl p-4 flex items-center gap-3">
           <i data-lucide="file-search" class="w-6 h-6 text-indigo-400 shrink-0"></i>
           <p class="text-xs sm:text-sm text-slate-200">
-            <strong>Junior Cycle Exam Tip:</strong> Paper 1 always tests <em>"Working with the Evidence"</em>—analyzing primary extracts, bias/perspective, and historical maps. Read each source below, attempt the questions, and reveal the full marking-scheme model answers.
+            <strong>Junior Cycle Exam Tip:</strong> Paper 1 always tests <em>"Working with the Evidence"</em>—analyzing primary extracts, bias/perspective, and historical cartoons/reports. Read each source below, attempt the questions, and reveal the full marking-scheme model answers.
           </p>
         </div>
         <div id="sources-container" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -611,7 +673,7 @@
         <div class="flex flex-wrap items-center justify-between gap-3">
           <div>
             <h2 class="text-xl font-black text-white flex items-center gap-2">
-              <i data-lucide="youtube" class="w-6 h-6 text-rose-500"></i> Video Tutorials & Guided Walkthroughs
+              <i data-lucide="youtube" class="w-6 h-6 text-rose-500"></i> Video Tutorials &amp; Guided Walkthroughs
             </h2>
             <p class="text-xs sm:text-sm text-slate-400">Watch concise exam explainers with clickable chapter timestamps and key summary notes.</p>
           </div>
@@ -656,7 +718,7 @@
 
   <!-- FOOTER -->
   <footer class="border-t border-borderDark py-4 text-center text-xs text-slate-500 no-print">
-    Junior Cycle History Lock-In Command Center • Covers Topics 8, 9, 10 & 12 • Progress saved automatically in your browser
+    Junior Cycle History Lock-In Command Center • Covers Topics 8, 9, 10 &amp; 12 • Progress saved automatically in your browser
   </footer>
 
   <!-- =========================================================
@@ -666,7 +728,7 @@
     // ---------------------------------------------------------
     // 1. PERSISTENT STATE & LOCALSTORAGE
     // ---------------------------------------------------------
-    const STORAGE_KEY = 'jc_history_lockin_v1';
+    const STORAGE_KEY = 'jc_history_lockin_v2';
     let appState = {
       sessionsCompleted: 0,
       masteredCards: [],
@@ -708,6 +770,132 @@
       window._toastTimeout = setTimeout(() => {
         banner.classList.add('hidden');
       }, 3500);
+    }
+
+    // ---------------------------------------------------------
+    // 1B. HOSTED PDF LIBRARY DATA & BUILT-IN VIEWER
+    // ---------------------------------------------------------
+    const HOSTED_PDFS = {
+      plantations: {
+        key: 'plantations',
+        file: 'cs1.pdf',
+        badge: 'Topic 8 • cs1.pdf',
+        title: 'Cheat Sheet 1: The Plantations & Growth of Towns',
+        coverage: 'Ireland in 1500 • Brehon vs. Common Law • Surrender & Regrant • Laois-Offaly, Munster & 1609 Ulster Plantation • 5 Stages of Towns',
+        url: 'https://samtechnerd.github.io/samstimetablewebsitegooglesites/cs1.pdf',
+        color: 'emerald'
+      },
+      french: {
+        key: 'french',
+        file: 'cs2.pdf',
+        badge: 'Topic 9 • cs2.pdf',
+        title: 'Cheat Sheet 2: The French Revolution (1789–1794)',
+        coverage: 'Three Estates • Absolute Monarchy • Estates General & Tennis Court Oath • Storming the Bastille • Louis XVI Execution • Reign of Terror',
+        url: 'https://samtechnerd.github.io/samstimetablewebsitegooglesites/cs2.pdf',
+        color: 'cyan'
+      },
+      rebellion1798: {
+        key: 'rebellion1798',
+        file: 'cs3.pdf',
+        badge: 'Topic 10 • cs3.pdf',
+        title: 'Cheat Sheet 3: The 1798 Rebellion',
+        coverage: 'Protestant Ascendancy • Wolfe Tone & United Irishmen • Bantry Bay (1796) • Wexford (Vinegar Hill), Ulster & Connacht • Act of Union (1801)',
+        url: 'https://samtechnerd.github.io/samstimetablewebsitegooglesites/cs3.pdf',
+        color: 'amber'
+      },
+      oconnell: {
+        key: 'oconnell',
+        file: 'cs4.pdf',
+        badge: 'Topic 12 • cs4.pdf',
+        title: 'Cheat Sheet 4: Daniel O\'Connell & Parliamentary Tradition',
+        coverage: 'Parliamentary Tradition vs. Physical Force • Catholic Rent • 1828 Clare By-Election & Emancipation (1829) • Clontarf Monster Meeting (1843)',
+        url: 'https://samtechnerd.github.io/samstimetablewebsitegooglesites/cs4.pdf',
+        color: 'purple'
+      }
+    };
+
+    let activePdfKey = 'plantations';
+    let useGoogleDocsFallback = false;
+
+    function getPdfViewerUrl(rawUrl) {
+      if (useGoogleDocsFallback) {
+        return `https://docs.google.com/gview?url=${encodeURIComponent(rawUrl)}&embedded=true`;
+      }
+      return rawUrl;
+    }
+
+    function renderPdfLibrary() {
+      const grid = document.getElementById('pdf-cards-grid');
+      if (!grid) return;
+
+      grid.innerHTML = Object.values(HOSTED_PDFS).map(pdf => {
+        const isActive = pdf.key === activePdfKey;
+        return `
+          <div class="bg-surface border ${isActive ? 'border-rose-500 ring-1 ring-rose-500/40' : 'border-borderDark hover:border-slate-600'} rounded-3xl p-5 flex flex-col justify-between gap-4 transition">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between gap-2">
+                <span class="px-2.5 py-1 rounded-lg bg-${pdf.color}-500/15 text-${pdf.color}-400 border border-${pdf.color}-500/30 text-xs font-bold font-mono">${pdf.badge}</span>
+                ${isActive ? '<span class="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[11px] font-bold">● Currently Previewing</span>' : ''}
+              </div>
+              <h3 class="text-base sm:text-lg font-extrabold text-white">${pdf.title}</h3>
+              <p class="text-xs text-slate-400 leading-relaxed">${pdf.coverage}</p>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2 pt-1">
+              <button onclick="previewPdfInApp('${pdf.key}')" class="flex-1 min-w-[120px] py-2 px-3 rounded-xl ${isActive ? 'bg-rose-500 text-white' : 'bg-emerald-500 hover:bg-emerald-400 text-slate-950'} font-extrabold text-xs flex items-center justify-center gap-1.5 transition">
+                <i data-lucide="eye" class="w-3.5 h-3.5"></i> Preview in App
+              </button>
+              <a href="${pdf.url}" target="_blank" rel="noopener noreferrer" class="py-2 px-3 rounded-xl bg-obsidian hover:bg-slate-800 border border-borderDark text-xs font-bold text-slate-200 flex items-center gap-1.5 transition">
+                <i data-lucide="external-link" class="w-3.5 h-3.5 text-cyan-400"></i> New Tab
+              </a>
+              <a href="${pdf.url}" download="${pdf.file}" target="_blank" rel="noopener noreferrer" class="py-2 px-3 rounded-xl bg-obsidian hover:bg-slate-800 border border-borderDark text-xs font-bold text-slate-200 flex items-center gap-1.5 transition">
+                <i data-lucide="download" class="w-3.5 h-3.5 text-amber-400"></i> Download
+              </a>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const activePdf = HOSTED_PDFS[activePdfKey];
+      document.getElementById('pdf-viewer-badge').textContent = activePdf.badge;
+      document.getElementById('pdf-viewer-title').textContent = activePdf.title;
+      document.getElementById('pdf-viewer-open-link').href = activePdf.url;
+      document.getElementById('pdf-active-external-top').href = activePdf.url;
+
+      const dlLink = document.getElementById('pdf-viewer-download-link');
+      dlLink.href = activePdf.url;
+      dlLink.setAttribute('download', activePdf.file);
+
+      const fallbackLink = document.getElementById('pdf-fallback-direct-link');
+      fallbackLink.href = activePdf.url;
+      fallbackLink.textContent = `samtechnerd.github.io/.../${activePdf.file} ↗`;
+
+      document.getElementById('pdf-viewer-iframe').src = getPdfViewerUrl(activePdf.url);
+      lucide.createIcons();
+    }
+
+    function previewPdfInApp(topicKey, scrollToViewer = false) {
+      activePdfKey = topicKey;
+      renderPdfLibrary();
+      if (scrollToViewer) {
+        const iframeEl = document.getElementById('pdf-viewer-iframe');
+        if (iframeEl) {
+          iframeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+    }
+
+    function openTopicPdfTab(topicKey) {
+      switchTab('pdf');
+      previewPdfInApp(topicKey, true);
+    }
+
+    function togglePdfEmbedMode() {
+      useGoogleDocsFallback = !useGoogleDocsFallback;
+      const label = document.getElementById('pdf-embed-label');
+      label.textContent = useGoogleDocsFallback ? 'Direct PDF Embed' : 'Compatibility Viewer';
+      renderPdfLibrary();
+      showToast(useGoogleDocsFallback ? 'Switched to Google Docs Compatibility PDF Viewer' : 'Switched to Direct Browser PDF Embed');
     }
 
     // ---------------------------------------------------------
@@ -815,8 +1003,8 @@
         html: `
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <div class="bg-surface border border-borderDark rounded-2xl p-5 print-card">
-              <div class="text-xs font-black uppercase tracking-wider text-emerald-400 mb-1">Group 1 • Dublin & Surrounds</div>
-              <h3 class="text-lg font-extrabold text-white mb-2">The Pale & Old English</h3>
+              <div class="text-xs font-black uppercase tracking-wider text-emerald-400 mb-1">Group 1 • Dublin &amp; Surrounds</div>
+              <h3 class="text-lg font-extrabold text-white mb-2">The Pale &amp; Old English</h3>
               <p class="text-xs sm:text-sm text-slate-300 print-text-muted leading-relaxed">
                 Area around Dublin stretching from <strong>Dundalk to Dalkey</strong> and west to <strong>Kells</strong>, protected by a ditch and paling fence. Inhabited by the <strong>Old English</strong> (descendants of 12th-century Norman settlers) who stayed loyal to the English King and spoke English.
               </p>
@@ -825,7 +1013,7 @@
               <div class="text-xs font-black uppercase tracking-wider text-cyan-400 mb-1">Group 2 • "More Irish than the Irish"</div>
               <h3 class="text-lg font-extrabold text-white mb-2">Anglo-Irish Lords</h3>
               <p class="text-xs sm:text-sm text-slate-300 print-text-muted leading-relaxed">
-                Descendants of 12th-century Anglo-Norman invaders who adopted Irish language, dress, and Brehon customs—e.g., <strong>Fitzgeralds</strong> of Kildare & Desmond, and <strong>Butlers</strong> of Ormond. Largely independent of the English Crown.
+                Descendants of 12th-century Anglo-Norman invaders who adopted Irish language, dress, and Brehon customs—e.g., <strong>Fitzgeralds</strong> of Kildare &amp; Desmond, and <strong>Butlers</strong> of Ormond. Largely independent of the English Crown.
               </p>
             </div>
             <div class="bg-surface border border-borderDark rounded-2xl p-5 print-card">
@@ -860,14 +1048,14 @@
                   <td class="py-2.5 px-3">Passed automatically to the <strong>eldest son</strong> (primogeniture).</td>
                 </tr>
                 <tr>
-                  <td class="py-2.5 px-3 font-bold">Crime & Punishment</td>
+                  <td class="py-2.5 px-3 font-bold">Crime &amp; Punishment</td>
                   <td class="py-2.5 px-3">No jails or executions; criminal paid an <strong>Éric</strong> (fine) to victim's family.</td>
                   <td class="py-2.5 px-3">Harsh prison sentences and <strong>execution by hanging</strong>.</td>
                 </tr>
                 <tr>
-                  <td class="py-2.5 px-3 font-bold">Women & Marriage</td>
-                  <td class="py-2.5 px-3">Wives kept their own name & property; <strong>divorce was allowed</strong>.</td>
-                  <td class="py-2.5 px-3">Wife took husband's name & property became his; <strong>divorce forbidden</strong>.</td>
+                  <td class="py-2.5 px-3 font-bold">Women &amp; Marriage</td>
+                  <td class="py-2.5 px-3">Wives kept their own name &amp; property; <strong>divorce was allowed</strong>.</td>
+                  <td class="py-2.5 px-3">Wife took husband's name &amp; property became his; <strong>divorce forbidden</strong>.</td>
                 </tr>
               </tbody>
             </table>
@@ -876,18 +1064,18 @@
           <!-- Tudor Conquest & Early Plantations -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="bg-surface border border-borderDark rounded-2xl p-5 space-y-2.5 print-card">
-              <h3 class="text-base font-extrabold text-white">Tudor Conquest & Henry VIII</h3>
+              <h3 class="text-base font-extrabold text-white">Tudor Conquest &amp; Henry VIII</h3>
               <ul class="list-disc list-inside text-xs sm:text-sm text-slate-300 print-text-muted space-y-1.5">
-                <li><strong>Why Tudors wanted control:</strong> Expand beyond the Pale, spread English laws/customs & Protestantism, stop Catholic alliances with Spain/France, prevent rebellions (like Silken Thomas Fitzgerald in 1534), and save money on troops.</li>
-                <li><strong>Henry VIII's Reformation:</strong> Passed <strong>Act of Supremacy (1534)</strong> (King = Head of Church) and <strong>Act of Dissolution (1536)</strong> (closed monasteries & seized wealth).</li>
+                <li><strong>Why Tudors wanted control:</strong> Expand beyond the Pale, spread English laws/customs &amp; Protestantism, stop Catholic alliances with Spain/France, prevent rebellions (like Silken Thomas Fitzgerald in 1534), and save money on troops.</li>
+                <li><strong>Henry VIII's Reformation:</strong> Passed <strong>Act of Supremacy (1534)</strong> (King = Head of Church) and <strong>Act of Dissolution (1536)</strong> (closed monasteries &amp; seized wealth).</li>
                 <li><strong>Surrender and Regrant:</strong> Policy where Gaelic lords surrendered their land to Henry VIII and got it back with an English title (e.g., Earl of Tyrone), swearing loyalty and agreeing to use English law/inheritance.</li>
               </ul>
             </div>
             <div class="bg-surface border border-borderDark rounded-2xl p-5 space-y-2.5 print-card">
-              <h3 class="text-base font-extrabold text-white">Early Plantations (Laois-Offaly & Munster)</h3>
+              <h3 class="text-base font-extrabold text-white">Early Plantations (Laois-Offaly &amp; Munster)</h3>
               <ul class="list-disc list-inside text-xs sm:text-sm text-slate-300 print-text-muted space-y-1.5">
-                <li><strong>Laois-Offaly (Mary I, 1556):</strong> Confiscated land from the <strong>O'Moores</strong> and <strong>O'Connors</strong>; renamed Queen's County (Portlaoise) & King's County (Daingean). <em>Failed:</em> too few English settlers arrived and native attacks persisted.</li>
-                <li><strong>Munster Plantation (Elizabeth I, 1580s):</strong> Followed the <strong>Desmond Rebellions (1569 & 1579)</strong>. Land divided into estates (4,000–12,000 acres) for <strong>Undertakers</strong> (including Sir Walter Raleigh) who agreed to bring English farmers, spread Protestantism, and pay rent.</li>
+                <li><strong>Laois-Offaly (Mary I, 1556):</strong> Confiscated land from the <strong>O'Moores</strong> and <strong>O'Connors</strong>; renamed Queen's County (Portlaoise) &amp; King's County (Daingean). <em>Failed:</em> too few English settlers arrived and native attacks persisted.</li>
+                <li><strong>Munster Plantation (Elizabeth I, 1580s):</strong> Followed the <strong>Desmond Rebellions (1569 &amp; 1579)</strong>. Land divided into estates (4,000–12,000 acres) for <strong>Undertakers</strong> (including Sir Walter Raleigh) who agreed to bring English farmers, spread Protestantism, and pay rent.</li>
                 <li><strong>Munster Results:</strong> Failed to reach 20,000 target (only ~4,000 came), forcing undertakers to rent to Gaelic Irish, though new towns like <strong>Killarney</strong> and <strong>Bandon</strong> thrived.</li>
               </ul>
             </div>
@@ -898,16 +1086,16 @@
             <h3 class="text-base sm:text-lg font-extrabold text-emerald-400">The Ulster Plantation (1609) — Core Exam Topic</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm text-slate-300 print-text-muted">
               <div class="bg-obsidian/70 p-4 rounded-xl border border-borderDark print-card">
-                <div class="font-bold text-white mb-1">1. Causes & Flight of the Earls</div>
-                <p><strong>Hugh O'Neill</strong> & <strong>Hugh O'Donnell</strong> led the <strong>Nine Years' War (1594–1603)</strong>, winning at Yellow Ford (1598). Despite 4,000 Spanish troops landing at Kinsale, the Irish lost the <strong>Battle of Kinsale (1601)</strong>, signed the <strong>Treaty of Mellifont (1603)</strong>, and fled to Europe in the <strong>Flight of the Earls (1607)</strong>. King James I declared them traitors and confiscated 6 counties: <strong>Donegal, Derry, Tyrone, Armagh, Fermanagh, Cavan</strong>.</p>
+                <div class="font-bold text-white mb-1">1. Causes &amp; Flight of the Earls</div>
+                <p><strong>Hugh O'Neill</strong> &amp; <strong>Hugh O'Donnell</strong> led the <strong>Nine Years' War (1594–1603)</strong>, winning at Yellow Ford (1598). Despite 4,000 Spanish troops landing at Kinsale, the Irish lost the <strong>Battle of Kinsale (1601)</strong>, signed the <strong>Treaty of Mellifont (1603)</strong>, and fled to Europe in the <strong>Flight of the Earls (1607)</strong>. King James I declared them traitors and confiscated 6 counties: <strong>Donegal, Derry, Tyrone, Armagh, Fermanagh, Cavan</strong>.</p>
               </div>
               <div class="bg-obsidian/70 p-4 rounded-xl border border-borderDark print-card">
                 <div class="font-bold text-white mb-1">2. How It Was Organised</div>
                 <p>Estates capped at 1,000–2,000 acres and given to 3 groups: <strong>Undertakers</strong> (English/Scottish planters; no Irish tenants allowed), <strong>Servitors</strong> (English army officers; lower rent, could take Irish tenants), and <strong>Loyal Irish</strong> (highest rent). <strong>Derry</strong> was given to London guilds, renamed <strong>Londonderry</strong>, and walled—forcing Irish outside into the <strong>Bogside</strong>.</p>
               </div>
               <div class="bg-obsidian/70 p-4 rounded-xl border border-borderDark print-card">
-                <div class="font-bold text-white mb-1">3. Results & Legacy</div>
-                <p>Created a dominant <strong>Protestant Ascendancy</strong> (owning 70% of Irish land by 1700), backed by harsh <strong>Penal Laws</strong>. Triggered the <strong>1641 Rebellion</strong>, <strong>Cromwell's invasion (1649)</strong>, and the Williamite War (<strong>Siege of Derry 1689</strong> & <strong>Battle of the Boyne 1690</strong>). English language, farming methods, and deep sectarian division took root.</p>
+                <div class="font-bold text-white mb-1">3. Results &amp; Legacy</div>
+                <p>Created a dominant <strong>Protestant Ascendancy</strong> (owning 70% of Irish land by 1700), backed by harsh <strong>Penal Laws</strong>. Triggered the <strong>1641 Rebellion</strong>, <strong>Cromwell's invasion (1649)</strong>, and the Williamite War (<strong>Siege of Derry 1689</strong> &amp; <strong>Battle of the Boyne 1690</strong>). English language, farming methods, and deep sectarian division took root.</p>
               </div>
             </div>
           </div>
@@ -926,15 +1114,15 @@
               </div>
               <div class="p-3 rounded-xl bg-obsidian/70 border border-borderDark print-card">
                 <strong class="text-emerald-400 block mb-1">3. Anglo-Norman</strong>
-                Inland walled market towns with stone castles & charters: <strong>Kilkenny, Trim, Athenry, Drogheda</strong>.
+                Inland walled market towns with stone castles &amp; charters: <strong>Kilkenny, Trim, Athenry, Drogheda</strong>.
               </div>
               <div class="p-3 rounded-xl bg-obsidian/70 border border-borderDark print-card">
                 <strong class="text-emerald-400 block mb-1">4. Plantation Towns</strong>
-                20+ planned towns with wide streets, central square (<strong>diamond</strong>), courthouse & defensive <strong>bawn</strong> (e.g., Coleraine, Enniskillen).
+                20+ planned towns with wide streets, central square (<strong>diamond</strong>), courthouse &amp; defensive <strong>bawn</strong> (e.g., Coleraine, Enniskillen).
               </div>
               <div class="p-3 rounded-xl bg-obsidian/70 border border-borderDark print-card">
                 <strong class="text-emerald-400 block mb-1">5. 18th-C. Estate Towns</strong>
-                Designed by wealthy landlords with Georgian squares & wide avenues (e.g., <strong>Kenmare, Westport, Birr</strong>).
+                Designed by wealthy landlords with Georgian squares &amp; wide avenues (e.g., <strong>Kenmare, Westport, Birr</strong>).
               </div>
             </div>
           </div>
@@ -953,8 +1141,8 @@
                 <tr class="border-b border-borderDark text-slate-400 uppercase text-[11px]">
                   <th class="py-2.5 px-3">Estate</th>
                   <th class="py-2.5 px-3">Who Belonged</th>
-                  <th class="py-2.5 px-3">Population & Land</th>
-                  <th class="py-2.5 px-3">Taxes & Privileges</th>
+                  <th class="py-2.5 px-3">Population &amp; Land</th>
+                  <th class="py-2.5 px-3">Taxes &amp; Privileges</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-borderDark text-slate-200 print-text-muted">
@@ -966,15 +1154,15 @@
                 </tr>
                 <tr>
                   <td class="py-2.5 px-3 font-bold text-purple-400">2nd Estate</td>
-                  <td class="py-2.5 px-3">The Nobility (Lords & Ladies)</td>
+                  <td class="py-2.5 px-3">The Nobility (Lords &amp; Ladies)</td>
                   <td class="py-2.5 px-3">~400,000 people • Owned <strong>60%</strong> of land</td>
-                  <td class="py-2.5 px-3">Paid <strong>NO taxes</strong>; held all top army, church & government jobs.</td>
+                  <td class="py-2.5 px-3">Paid <strong>NO taxes</strong>; held all top army, church &amp; government jobs.</td>
                 </tr>
                 <tr>
                   <td class="py-2.5 px-3 font-bold text-cyan-400">3rd Estate</td>
-                  <td class="py-2.5 px-3">Everyone else: Peasants (80%), urban workers & Bourgeoisie (doctors, lawyers)</td>
+                  <td class="py-2.5 px-3">Everyone else: Peasants (80%), urban workers &amp; Bourgeoisie (doctors, lawyers)</td>
                   <td class="py-2.5 px-3">~25 million (<strong>98%</strong> of population) • Owned 30% of land</td>
-                  <td class="py-2.5 px-3">Paid <strong>ALL taxes</strong>: <em>Taille</em> (land tax), <em>Gabelle</em> (salt tax), <em>Corvée</em> (unpaid road work), & <em>Tithe</em> (1/10th to Church).</td>
+                  <td class="py-2.5 px-3">Paid <strong>ALL taxes</strong>: <em>Taille</em> (land tax), <em>Gabelle</em> (salt tax), <em>Corvée</em> (unpaid road work), &amp; <em>Tithe</em> (1/10th to Church).</td>
                 </tr>
               </tbody>
             </table>
@@ -988,8 +1176,8 @@
               <p class="text-xs sm:text-sm text-slate-300 print-text-muted"><strong>King Louis XVI</strong> claimed a <em>Divine Right</em> to rule with total power (using <em>lettres de cachet</em> to jail people without trial). Queen <strong>Marie Antoinette</strong> was hated as an Austrian ("Madame Deficit") for extravagant spending at Versailles.</p>
             </div>
             <div class="bg-surface border border-borderDark rounded-2xl p-5 print-card">
-              <div class="text-xs font-black uppercase text-amber-400 mb-1">Cause 3 • Bankruptcy & Hunger</div>
-              <h4 class="font-extrabold text-white text-base mb-1.5">Economic & Food Crisis</h4>
+              <div class="text-xs font-black uppercase text-amber-400 mb-1">Cause 3 • Bankruptcy &amp; Hunger</div>
+              <h4 class="font-extrabold text-white text-base mb-1.5">Economic &amp; Food Crisis</h4>
               <p class="text-xs sm:text-sm text-slate-300 print-text-muted">France was bankrupt from wars against Britain—especially funding the <strong>American War of Independence</strong>. Severe droughts and hailstorms in 1788 ruined harvests, doubling the price of bread and causing starvation.</p>
             </div>
             <div class="bg-surface border border-borderDark rounded-2xl p-5 print-card">
@@ -1004,16 +1192,16 @@
             <h3 class="text-base sm:text-lg font-extrabold text-white">Course of the French Revolution (1789–1794)</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm text-slate-300 print-text-muted">
               <div class="p-3.5 rounded-xl bg-obsidian/70 border border-borderDark print-card">
-                <strong class="text-cyan-400">May–June 1789 • Estates General & Tennis Court Oath:</strong> Louis XVI called the Estates General to raise taxes, but voting was <em>by order</em> (1 vote per estate), letting the 1st & 2nd outvote the 3rd (2–1). Locked out on <strong>20 June 1789</strong>, the 3rd Estate formed the <strong>National Assembly</strong> on an indoor tennis court, swearing not to leave until France had a constitution.
+                <strong class="text-cyan-400">May–June 1789 • Estates General &amp; Tennis Court Oath:</strong> Louis XVI called the Estates General to raise taxes, but voting was <em>by order</em> (1 vote per estate), letting the 1st &amp; 2nd outvote the 3rd (2–1). Locked out on <strong>20 June 1789</strong>, the 3rd Estate formed the <strong>National Assembly</strong> on an indoor tennis court, swearing not to leave until France had a constitution.
               </div>
               <div class="p-3.5 rounded-xl bg-obsidian/70 border border-borderDark print-card">
                 <strong class="text-cyan-400">14 July 1789 • Storming of the Bastille:</strong> Fearing the King would crush the Assembly, Parisian working-class radicals (<strong>sans-culottes</strong>) attacked the Bastille royal fortress for gunpowder, freeing prisoners and sparking the revolution.
               </div>
               <div class="p-3.5 rounded-xl bg-obsidian/70 border border-borderDark print-card">
-                <strong class="text-cyan-400">Aug–Oct 1789 • Reforms & Women's March:</strong> Assembly abolished feudalism, passed the <strong>Declaration of the Rights of Man and the Citizen</strong> (<em>Liberty, Equality, Fraternity</em>), and passed the <strong>Civil Constitution of the Clergy</strong> (seizing Church land). In Oct 1789, thousands of women marched to Versailles over bread prices and forced the royal family to move to the Tuileries Palace in Paris.
+                <strong class="text-cyan-400">Aug–Oct 1789 • Reforms &amp; Women's March:</strong> Assembly abolished feudalism, passed the <strong>Declaration of the Rights of Man and the Citizen</strong> (<em>Liberty, Equality, Fraternity</em>), and passed the <strong>Civil Constitution of the Clergy</strong> (seizing Church land). In Oct 1789, thousands of women marched to Versailles over bread prices and forced the royal family to move to the Tuileries Palace in Paris.
               </div>
               <div class="p-3.5 rounded-xl bg-obsidian/70 border border-borderDark print-card">
-                <strong class="text-cyan-400">1791–Jan 1793 • Republic & Execution of Louis XVI:</strong> After Louis's failed escape (<strong>Flight to Varennes, June 1791</strong>) and war with Austria/Prussia (1792), France became a <strong>Republic (Sept 1792)</strong>. Convicted of treason, Louis XVI was <strong>guillotined on 21 Jan 1793</strong> (Marie Antoinette followed in Oct 1793).
+                <strong class="text-cyan-400">1791–Jan 1793 • Republic &amp; Execution of Louis XVI:</strong> After Louis's failed escape (<strong>Flight to Varennes, June 1791</strong>) and war with Austria/Prussia (1792), France became a <strong>Republic (Sept 1792)</strong>. Convicted of treason, Louis XVI was <strong>guillotined on 21 Jan 1793</strong> (Marie Antoinette followed in Oct 1793).
               </div>
               <div class="p-3.5 rounded-xl bg-obsidian/70 border border-rose-500/30 md:col-span-2 print-card">
                 <strong class="text-rose-400">1793–July 1794 • The Reign of Terror:</strong> Led by <strong>Maximilien Robespierre</strong> (head of the Jacobins and the 12-man <strong>Committee of Public Safety</strong>). Facing foreign invasion and the royalist <strong>Vendée rebellion</strong>, they passed the <strong>Law of Suspects</strong>—executing over <strong>16,000</strong> people by guillotine (40,000+ deaths total). On <strong>27 July 1794</strong>, fearful politicians arrested and guillotined Robespierre, replacing him with a moderate 5-man <strong>Directory</strong>.
@@ -1027,7 +1215,7 @@
             <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 text-xs sm:text-sm text-slate-300 print-text-muted">
               <li class="p-3 rounded-xl bg-obsidian/60 border border-borderDark print-card"><strong>1. End of Absolute Monarchy:</strong> Feudalism and royal divine right ended in France; democratic ideas spread across Europe.</li>
               <li class="p-3 rounded-xl bg-obsidian/60 border border-borderDark print-card"><strong>2. Rise of Middle Class:</strong> The bourgeoisie gained political power and equality before the law.</li>
-              <li class="p-3 rounded-xl bg-obsidian/60 border border-borderDark print-card"><strong>3. Metric System & Tricolore:</strong> Standardized weights/measures (metres, grams) and the French flag were introduced.</li>
+              <li class="p-3 rounded-xl bg-obsidian/60 border border-borderDark print-card"><strong>3. Metric System &amp; Tricolore:</strong> Standardized weights/measures (metres, grams) and the French flag were introduced.</li>
               <li class="p-3 rounded-xl bg-obsidian/60 border border-borderDark print-card"><strong>4. Rise of Napoleon:</strong> Political instability under the Directory allowed General Napoleon Bonaparte to seize power in 1799.</li>
               <li class="p-3 rounded-xl bg-obsidian/60 border border-borderDark sm:col-span-2 print-card"><strong>5. Inspired Ireland's 1798 Rebellion:</strong> Wolfe Tone and the United Irishmen adopted French ideals of <em>Liberty, Equality, Fraternity</em> and sought French military aid.</li>
             </ul>
@@ -1044,17 +1232,17 @@
               <h3 class="text-base font-extrabold text-amber-400">1. Causes of Discontent in 1790s Ireland</h3>
               <ul class="list-disc list-inside text-xs sm:text-sm text-slate-300 print-text-muted space-y-1.5">
                 <li><strong>Power of the Protestant Ascendancy:</strong> Anglicans (Church of Ireland) made up only <strong>15%</strong> of the population but owned <strong>80% of the land</strong> and controlled the Dublin Parliament.</li>
-                <li><strong>Penal Laws & Discrimination:</strong> Catholics (75%) could not sit in parliament or hold senior army/judge posts; <strong>Presbyterians (Dissenters, 10%)</strong> in Ulster were also excluded from public office.</li>
-                <li><strong>Tithes & Poverty:</strong> Everyone—including poor Catholics and Presbyterians—had to pay <strong>tithes</strong> (10% of crops) to support the Anglican Church, sparking secret agrarian groups like the <strong>Whiteboys</strong>.</li>
-                <li><strong>American & French Revolutions:</strong> Inspired Irish reformers with ideas of democracy, religious equality, and republicanism.</li>
+                <li><strong>Penal Laws &amp; Discrimination:</strong> Catholics (75%) could not sit in parliament or hold senior army/judge posts; <strong>Presbyterians (Dissenters, 10%)</strong> in Ulster were also excluded from public office.</li>
+                <li><strong>Tithes &amp; Poverty:</strong> Everyone—including poor Catholics and Presbyterians—had to pay <strong>tithes</strong> (10% of crops) to support the Anglican Church, sparking secret agrarian groups like the <strong>Whiteboys</strong>.</li>
+                <li><strong>American &amp; French Revolutions:</strong> Inspired Irish reformers with ideas of democracy, religious equality, and republicanism.</li>
               </ul>
             </div>
 
             <div class="bg-surface border border-borderDark rounded-2xl p-5 space-y-2.5 print-card">
-              <h3 class="text-base font-extrabold text-amber-400">2. Wolfe Tone & The United Irishmen (1791)</h3>
+              <h3 class="text-base font-extrabold text-amber-400">2. Wolfe Tone &amp; The United Irishmen (1791)</h3>
               <ul class="list-disc list-inside text-xs sm:text-sm text-slate-300 print-text-muted space-y-1.5">
                 <li><strong>Founded in Belfast (Oct 1791):</strong> By <strong>Theobald Wolfe Tone</strong> (a Protestant Dublin lawyer who wrote <em>An Argument on Behalf of the Catholics of Ireland</em>) alongside Presbyterian leaders <strong>Henry Joy McCracken, Samuel Neilson, Thomas Russell,</strong> and <strong>William Drennan</strong>.</li>
-                <li><strong>Aims & Newspaper:</strong> Unite Catholic, Protestant, and Dissenter to reform parliament and end English interference. Spread ideas via <em>The Northern Star</em> newspaper.</li>
+                <li><strong>Aims &amp; Newspaper:</strong> Unite Catholic, Protestant, and Dissenter to reform parliament and end English interference. Spread ideas via <em>The Northern Star</em> newspaper.</li>
                 <li><strong>1793–1796 Radicalisation:</strong> When Britain went to war with France (1793), the government banned the United Irishmen; they became a secret oath-bound society seeking an <strong>independent Irish Republic</strong>.</li>
                 <li><strong>Bantry Bay (Dec 1796):</strong> Tone sailed from France with 14,000 troops under <strong>General Hoche</strong>, but fierce storms prevented landing at Bantry Bay, Co. Cork.</li>
               </ul>
@@ -1063,25 +1251,25 @@
 
           <!-- Government Crackdown & 4 Theatres of Rebellion -->
           <div class="bg-surface border border-borderDark rounded-2xl p-5 space-y-3 print-card">
-            <h3 class="text-base sm:text-lg font-extrabold text-white">3. Government Terror & The 4 Main Risings (May–Oct 1798)</h3>
+            <h3 class="text-base sm:text-lg font-extrabold text-white">3. Government Terror &amp; The 4 Main Risings (May–Oct 1798)</h3>
             <p class="text-xs sm:text-sm text-slate-300 print-text-muted">
               <strong>Pre-Rising Crackdown:</strong> <strong>General Lake</strong> disarmed Ulster using brutal torture (<strong>half-hangings, pitch-capping, flogging</strong>) via the <strong>Yeomanry</strong> and sectarian <strong>Orange Order</strong> (founded 1795). British spies infiltrated the leadership, arresting <strong>Lord Edward Fitzgerald</strong> in May 1798.
             </p>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs text-slate-300 print-text-muted">
               <div class="p-3.5 rounded-xl bg-obsidian/70 border border-borderDark print-card">
-                <strong class="text-amber-400 block mb-1">1. Dublin & Kildare (May)</strong>
+                <strong class="text-amber-400 block mb-1">1. Dublin &amp; Kildare (May)</strong>
                 Signalled by stopping mail coaches (23 May), but rapidly crushed due to spies and pre-emptive arrests of leaders.
               </div>
               <div class="p-3.5 rounded-xl bg-obsidian/70 border border-amber-500/40 print-card">
                 <strong class="text-amber-400 block mb-1">2. Wexford (Most Serious)</strong>
-                Sparked by yeomanry brutality; led by <strong>Fr. John Murphy</strong> & Protestant landlord <strong>Bagenal Harvey</strong>. Won at <strong>Oulart Hill</strong> & <strong>Enniscorthy</strong>, committed the sectarian <strong>Scullabogue massacre</strong> (100+ Protestants killed), and were crushed at the <strong>Battle of Vinegar Hill (21 June)</strong>.
+                Sparked by yeomanry brutality; led by <strong>Fr. John Murphy</strong> &amp; Protestant landlord <strong>Bagenal Harvey</strong>. Won at <strong>Oulart Hill</strong> &amp; <strong>Enniscorthy</strong>, committed the sectarian <strong>Scullabogue massacre</strong> (100+ Protestants killed), and were crushed at the <strong>Battle of Vinegar Hill (21 June)</strong>.
               </div>
               <div class="p-3.5 rounded-xl bg-obsidian/70 border border-borderDark print-card">
                 <strong class="text-amber-400 block mb-1">3. Ulster (June)</strong>
                 Rebellions in <strong>Antrim</strong> (led by Henry Joy McCracken) and <strong>Down</strong> (led by Henry Munro) were defeated; both leaders were hanged.
               </div>
               <div class="p-3.5 rounded-xl bg-obsidian/70 border border-borderDark print-card">
-                <strong class="text-amber-400 block mb-1">4. Connacht & Lough Swilly</strong>
+                <strong class="text-amber-400 block mb-1">4. Connacht &amp; Lough Swilly</strong>
                 In Aug, French <strong>General Humbert</strong> landed 1,000 troops at Killala, Co. Mayo, routing British forces at the <strong>"Races of Castlebar"</strong> before surrendering at <strong>Ballinamuck, Co. Longford</strong>. In Oct, Wolfe Tone was captured at <strong>Lough Swilly</strong>, sentenced to hang, and died from a self-inflicted throat wound.
               </div>
             </div>
@@ -1094,7 +1282,7 @@
               <ul class="list-disc list-inside text-xs sm:text-sm text-slate-300 print-text-muted space-y-1">
                 <li><strong>British Spies:</strong> Informers betrayed plans and led to the arrest of Lord Edward Fitzgerald and the Sheares brothers.</li>
                 <li><strong>Lack of Effective French Aid:</strong> Bantry Bay storms (1796) and Humbert's force arriving too late and too small (Aug 1798).</li>
-                <li><strong>Inferior Weapons & Training:</strong> Rebels fought mainly with wooden <strong>pikes</strong> against disciplined British troops armed with muskets and cannons.</li>
+                <li><strong>Inferior Weapons &amp; Training:</strong> Rebels fought mainly with wooden <strong>pikes</strong> against disciplined British troops armed with muskets and cannons.</li>
                 <li><strong>Poor Co-ordination:</strong> Risings broke out at different times instead of simultaneously across Ireland.</li>
               </ul>
             </div>
@@ -1151,7 +1339,7 @@
 
           <!-- Death & Global Legacy -->
           <div class="bg-surface border border-borderDark rounded-2xl p-5 print-card">
-            <h3 class="text-base font-extrabold text-white mb-2">Death (1847) & Historical Legacy</h3>
+            <h3 class="text-base font-extrabold text-white mb-2">Death (1847) &amp; Historical Legacy</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm text-slate-300 print-text-muted">
               <p>
                 <strong>Death in Genoa (1847):</strong> Heartbroken by the outbreak of the <strong>Great Famine</strong> and Ireland's suffering, O'Connell travelled toward Rome in 1847 and died in Genoa, Italy (his heart was buried in Rome; his body in Glasnevin Cemetery, Dublin).
@@ -1181,11 +1369,22 @@
 
     function renderCheatSheet() {
       const sheet = CHEAT_SHEETS[currentCheatSheet];
+      const pdfInfo = HOSTED_PDFS[currentCheatSheet];
       const container = document.getElementById('cheatsheet-content');
       container.innerHTML = `
-        <div class="bg-gradient-to-r from-surface to-obsidian border border-borderDark rounded-3xl p-6 print-card">
-          <h2 class="text-xl sm:text-2xl font-black text-white">${sheet.title}</h2>
-          <p class="text-xs sm:text-sm text-slate-400 print-text-muted mt-1">${sheet.subtitle}</p>
+        <div class="bg-gradient-to-r from-surface to-obsidian border border-borderDark rounded-3xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 print-card">
+          <div>
+            <h2 class="text-xl sm:text-2xl font-black text-white">${sheet.title}</h2>
+            <p class="text-xs sm:text-sm text-slate-400 print-text-muted mt-1">${sheet.subtitle}</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2 shrink-0 no-print">
+            <button onclick="openTopicPdfTab('${currentCheatSheet}')" class="px-4 py-2.5 rounded-xl bg-rose-500 hover:bg-rose-400 text-white font-extrabold text-xs flex items-center gap-1.5 shadow-lg shadow-rose-500/20 transition">
+              <i data-lucide="file-down" class="w-4 h-4"></i> Open Topic PDF (${pdfInfo.file})
+            </button>
+            <a href="${pdfInfo.url}" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-xl bg-obsidian hover:bg-slate-800 border border-borderDark text-slate-300 transition" title="Open ${pdfInfo.file} in New Tab">
+              <i data-lucide="external-link" class="w-4 h-4 text-cyan-400"></i>
+            </a>
+          </div>
         </div>
         ${sheet.html}
       `;
@@ -1196,7 +1395,6 @@
     function filterCheatSheet() {
       const query = document.getElementById('cs-search-input').value.trim();
       const container = document.getElementById('cheatsheet-content');
-      // Remove existing highlights first
       container.querySelectorAll('mark.search-hl').forEach(m => {
         m.replaceWith(document.createTextNode(m.textContent));
       });
@@ -1246,8 +1444,8 @@
           badge: 'Topic 8 • Slide 1/9',
           title: 'Ireland in 1500: Three Divided Worlds',
           bullets: [
-            '<strong>The Pale & Old English:</strong> Dublin & surrounding area (Dundalk to Dalkey, west to Kells) protected by a ditch/fence; loyal to the English King.',
-            '<strong>Anglo-Irish Lords:</strong> Descendants of 12th-century Norman invaders (Fitzgeralds of Kildare/Desmond, Butlers of Ormond) who adopted Irish dress & language.',
+            '<strong>The Pale &amp; Old English:</strong> Dublin &amp; surrounding area (Dundalk to Dalkey, west to Kells) protected by a ditch/fence; loyal to the English King.',
+            '<strong>Anglo-Irish Lords:</strong> Descendants of 12th-century Norman invaders (Fitzgeralds of Kildare/Desmond, Butlers of Ormond) who adopted Irish dress &amp; language.',
             '<strong>Gaelic Irish Chieftains:</strong> Independent native clans (O\'Neills, O\'Donnells) ruling under ancient Brehon Law.'
           ],
           takeaway: 'In 1500, English control in Ireland was restricted almost entirely to The Pale around Dublin.',
@@ -1255,15 +1453,12 @@
             <svg viewBox="0 0 260 220" class="w-full max-w-xs mx-auto">
               <rect x="10" y="10" width="240" height="200" rx="18" fill="#0f172a" stroke="#1e293b" stroke-width="2"/>
               <path d="M120,25 C165,25 190,65 185,115 C180,165 140,195 95,190 C65,185 55,145 65,105 C75,65 85,25 120,25 Z" fill="#1e293b" stroke="#475569" stroke-width="2"/>
-              <!-- Gaelic North -->
               <circle cx="125" cy="55" r="24" fill="#f59e0b" fill-opacity="0.25" stroke="#f59e0b" stroke-width="2"/>
               <text x="125" y="53" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="bold">GAELIC IRISH</text>
               <text x="125" y="64" text-anchor="middle" fill="#fde68a" font-size="7">O'Neill / O'Donnell</text>
-              <!-- Anglo-Irish South/West -->
               <circle cx="105" cy="145" r="26" fill="#06b6d4" fill-opacity="0.25" stroke="#06b6d4" stroke-width="2"/>
               <text x="105" y="143" text-anchor="middle" fill="#22d3ee" font-size="9" font-weight="bold">ANGLO-IRISH</text>
               <text x="105" y="154" text-anchor="middle" fill="#cffafe" font-size="7">Fitzgeralds / Butlers</text>
-              <!-- The Pale -->
               <ellipse cx="172" cy="112" rx="22" ry="28" fill="#10b981" fill-opacity="0.35" stroke="#10b981" stroke-width="2.5"/>
               <text x="172" y="110" text-anchor="middle" fill="#34d399" font-size="9" font-weight="bold">THE PALE</text>
               <text x="172" y="121" text-anchor="middle" fill="#d1fae5" font-size="7">Dublin</text>
@@ -1273,7 +1468,7 @@
           badge: 'Topic 8 • Slide 2/9',
           title: 'Brehon Law vs. English Common Law',
           bullets: [
-            '<strong>Land & Inheritance:</strong> Brehon land belonged to the <em>clan</em> and chiefs were elected by the <em>derbhfine</em>; English land belonged to the Lord and passed to the <em>eldest son</em>.',
+            '<strong>Land &amp; Inheritance:</strong> Brehon land belonged to the <em>clan</em> and chiefs were elected by the <em>derbhfine</em>; English land belonged to the Lord and passed to the <em>eldest son</em>.',
             '<strong>Punishment:</strong> Brehon Law used compensation fines (<em>Éric</em>) instead of prisons or executions; Common Law used jails and hanging.',
             '<strong>Women\'s Rights:</strong> Under Brehon Law, women kept their own property and could divorce; under English law, a wife\'s property passed to her husband.'
           ],
@@ -1290,7 +1485,7 @@
                 <div class="p-2 rounded bg-emerald-500/10 text-emerald-200">Elected Chief (Derbhfine)</div>
                 <div class="p-2 rounded bg-cyan-500/10 text-cyan-200">Eldest son inherits</div>
                 <div class="p-2 rounded bg-emerald-500/10 text-emerald-200">Fine paid (Éric)</div>
-                <div class="p-2 rounded bg-cyan-500/10 text-cyan-200">Jail & Hanging</div>
+                <div class="p-2 rounded bg-cyan-500/10 text-cyan-200">Jail &amp; Hanging</div>
               </div>
             </div>`
         },
@@ -1299,15 +1494,15 @@
           title: 'Why the Tudors Wanted to Conquer Ireland',
           bullets: [
             '<strong>Strategic Security:</strong> Prevent Catholic Spain or France from using Ireland as a "backdoor" to invade Protestant England.',
-            '<strong>Spread Religion & Law:</strong> Replace Catholicism with Protestantism and impose English Common Law across the island.',
-            '<strong>Stop Rebellions & Save Money:</strong> Crush powerful lords like Silken Thomas Fitzgerald (1534) without paying for permanent English armies.'
+            '<strong>Spread Religion &amp; Law:</strong> Replace Catholicism with Protestantism and impose English Common Law across the island.',
+            '<strong>Stop Rebellions &amp; Save Money:</strong> Crush powerful lords like Silken Thomas Fitzgerald (1534) without paying for permanent English armies.'
           ],
           takeaway: 'Religion (Reformation) and security against Catholic Spain were the biggest drivers of Tudor conquest.',
           visual: `
             <div class="bg-obsidian border border-borderDark rounded-2xl p-5 text-center space-y-3">
               <div class="inline-block px-3 py-1 rounded-full bg-amber-500/20 text-amber-400 text-xs font-bold">TUDOR MOTIVES</div>
               <div class="grid grid-cols-2 gap-2.5 text-xs font-bold">
-                <div class="p-3 rounded-xl bg-surface border border-borderDark text-white">🛡️ Block Spain & France</div>
+                <div class="p-3 rounded-xl bg-surface border border-borderDark text-white">🛡️ Block Spain &amp; France</div>
                 <div class="p-3 rounded-xl bg-surface border border-borderDark text-white">✝️ Spread Protestantism</div>
                 <div class="p-3 rounded-xl bg-surface border border-borderDark text-white">⚖️ Impose English Law</div>
                 <div class="p-3 rounded-xl bg-surface border border-borderDark text-white">💰 Cut Military Costs</div>
@@ -1318,7 +1513,7 @@
           badge: 'Topic 8 • Slide 4/9',
           title: 'Henry VIII & Surrender and Regrant',
           bullets: [
-            '<strong>Act of Supremacy (1534) & Dissolution (1536):</strong> Henry VIII broke with the Pope, became Head of the Church, and closed Irish monasteries.',
+            '<strong>Act of Supremacy (1534) &amp; Dissolution (1536):</strong> Henry VIII broke with the Pope, became Head of the Church, and closed Irish monasteries.',
             '<strong>Surrender and Regrant:</strong> Gaelic chieftains surrendered their clan lands to Henry VIII and received them back with an English title (e.g., O\'Neill became Earl of Tyrone).',
             '<strong>Conditions:</strong> Lords had to swear loyalty, speak English, follow English inheritance, and abandon Brehon Law.'
           ],
@@ -1327,7 +1522,7 @@
             <div class="bg-obsidian border border-borderDark rounded-2xl p-5 space-y-3 text-center">
               <div class="p-3 rounded-xl bg-surface border border-borderDark text-xs font-bold text-amber-300">1. Gaelic Chief surrenders clan land to King Henry VIII</div>
               <div class="text-emerald-400 font-black">↓</div>
-              <div class="p-3 rounded-xl bg-surface border border-borderDark text-xs font-bold text-cyan-300">2. Swears loyalty & accepts English law/customs</div>
+              <div class="p-3 rounded-xl bg-surface border border-borderDark text-xs font-bold text-cyan-300">2. Swears loyalty &amp; accepts English law/customs</div>
               <div class="text-emerald-400 font-black">↓</div>
               <div class="p-3 rounded-xl bg-emerald-500/15 border border-emerald-500/40 text-xs font-bold text-emerald-300">3. Regranted land with an English Title (e.g. Earl)</div>
             </div>`
@@ -1336,8 +1531,8 @@
           badge: 'Topic 8 • Slide 5/9',
           title: 'Early Plantations: Laois-Offaly & Munster',
           bullets: [
-            '<strong>Laois-Offaly (Mary I, 1556):</strong> Confiscated land from the O\'Moores & O\'Connors (Queen\'s & King\'s County). Failed due to too few English planters and constant Gaelic raids.',
-            '<strong>Munster Plantation (Elizabeth I, 1580s):</strong> After the Desmond Rebellions (1569 & 1579), land was given to <strong>Undertakers</strong> (like Sir Walter Raleigh).',
+            '<strong>Laois-Offaly (Mary I, 1556):</strong> Confiscated land from the O\'Moores &amp; O\'Connors (Queen\'s &amp; King\'s County). Failed due to too few English planters and constant Gaelic raids.',
+            '<strong>Munster Plantation (Elizabeth I, 1580s):</strong> After the Desmond Rebellions (1569 &amp; 1579), land was given to <strong>Undertakers</strong> (like Sir Walter Raleigh).',
             '<strong>Outcome:</strong> Only ~4,000 of the planned 20,000 English settlers arrived, forcing undertakers to rent to Gaelic Irish—though new towns (Bandon, Killarney) grew.'
           ],
           takeaway: 'The failure of Laois-Offaly and Munster taught James I to use smaller estates and tougher rules in Ulster.',
@@ -1345,7 +1540,7 @@
             <div class="bg-obsidian border border-borderDark rounded-2xl p-4 space-y-3 text-xs">
               <div class="p-3 rounded-xl bg-surface border border-borderDark">
                 <div class="font-bold text-rose-400">1556 • Laois-Offaly (Mary I)</div>
-                <div class="text-slate-300 mt-1">O'Moores & O'Connors → Failed (too few settlers)</div>
+                <div class="text-slate-300 mt-1">O'Moores &amp; O'Connors → Failed (too few settlers)</div>
               </div>
               <div class="p-3 rounded-xl bg-surface border border-borderDark">
                 <div class="font-bold text-amber-400">1580s • Munster (Elizabeth I)</div>
@@ -1359,7 +1554,7 @@
           bullets: [
             '<strong>Nine Years\' War (1594–1603):</strong> Led by <strong>Hugh O\'Neill</strong> (Tyrone) and <strong>Hugh O\'Donnell</strong> (Tyrconnell) to stop English expansion into Ulster.',
             '<strong>Battle of Kinsale (1601):</strong> 4,000 Spanish troops landed in Co. Cork, but O\'Neill and O\'Donnell marched south in winter and suffered a decisive defeat.',
-            '<strong>Flight of the Earls (1607):</strong> After the <strong>Treaty of Mellifont (1603)</strong>, O\'Neill, O\'Donnell & 90 Gaelic leaders sailed to Europe. James I confiscated 6 Ulster counties.'
+            '<strong>Flight of the Earls (1607):</strong> After the <strong>Treaty of Mellifont (1603)</strong>, O\'Neill, O\'Donnell &amp; 90 Gaelic leaders sailed to Europe. James I confiscated 6 Ulster counties.'
           ],
           takeaway: 'The 6 planted counties were Donegal, Derry, Tyrone, Armagh, Fermanagh, and Cavan (Antrim & Down were settled privately).',
           visual: `
@@ -1377,7 +1572,7 @@
           bullets: [
             '<strong>3 Planter Groups:</strong> <em>Undertakers</em> (English/Scottish; no Irish tenants allowed), <em>Servitors</em> (Crown soldiers; could take Irish tenants), and <em>Loyal Irish</em> (highest rent).',
             '<strong>Smaller Estates:</strong> Capped at 1,000, 1,500, or 2,000 acres so planters could actually manage and defend them with stone <strong>bawns</strong>.',
-            '<strong>Londonderry & London Guilds:</strong> Co. Derry was granted to 12 London craft guilds; Derry was walled, renamed <strong>Londonderry</strong>, and native Irish were pushed outside into the <strong>Bogside</strong>.'
+            '<strong>Londonderry &amp; London Guilds:</strong> Co. Derry was granted to 12 London craft guilds; Derry was walled, renamed <strong>Londonderry</strong>, and native Irish were pushed outside into the <strong>Bogside</strong>.'
           ],
           takeaway: 'Scottish Presbyterians arrived in huge numbers because Scotland was only 20 miles away across the North Channel.',
           visual: `
@@ -1392,9 +1587,9 @@
           badge: 'Topic 8 • Slide 8/9',
           title: 'Long-Term Results of the Ulster Plantation',
           bullets: [
-            '<strong>Protestant Ascendancy & Penal Laws:</strong> By 1700, Protestants owned ~70–80% of Irish land and passed harsh Penal Laws restricting Catholic land, education, and worship.',
-            '<strong>17th-Century Wars:</strong> Dispossessed Catholics rebelled in <strong>1641</strong>, leading to <strong>Oliver Cromwell\'s</strong> brutal invasion (1649) and the Williamite War (<strong>Siege of Derry 1689</strong> & <strong>Battle of the Boyne 1690</strong>).',
-            '<strong>Cultural & Economic Shift:</strong> English language replaced Irish, arable farming expanded, and Ulster became religiously divided.'
+            '<strong>Protestant Ascendancy &amp; Penal Laws:</strong> By 1700, Protestants owned ~70–80% of Irish land and passed harsh Penal Laws restricting Catholic land, education, and worship.',
+            '<strong>17th-Century Wars:</strong> Dispossessed Catholics rebelled in <strong>1641</strong>, leading to <strong>Oliver Cromwell\'s</strong> brutal invasion (1649) and the Williamite War (<strong>Siege of Derry 1689</strong> &amp; <strong>Battle of the Boyne 1690</strong>).',
+            '<strong>Cultural &amp; Economic Shift:</strong> English language replaced Irish, arable farming expanded, and Ulster became religiously divided.'
           ],
           takeaway: 'The Ulster Plantation was the only plantation to permanently transform the population and religion of a province.',
           visual: `
@@ -1409,7 +1604,7 @@
                 <div class="w-full h-2.5 bg-slate-800 rounded-full"><div class="w-[59%] h-full bg-amber-500 rounded-full"></div></div>
               </div>
               <div>
-                <div class="flex justify-between mb-1"><span>1700 (After Cromwell & Boyne)</span><span class="text-rose-400 font-bold">~14%</span></div>
+                <div class="flex justify-between mb-1"><span>1700 (After Cromwell &amp; Boyne)</span><span class="text-rose-400 font-bold">~14%</span></div>
                 <div class="w-full h-2.5 bg-slate-800 rounded-full"><div class="w-[14%] h-full bg-rose-500 rounded-full"></div></div>
               </div>
             </div>`
@@ -1418,22 +1613,19 @@
           badge: 'Topic 8 • Slide 9/9',
           title: 'Growth of Towns in Ireland',
           bullets: [
-            '<strong>Early Christian & Viking:</strong> Monastic settlements (Glendalough, Armagh) followed by Viking coastal ports (Dublin, Waterford, Cork, Limerick).',
-            '<strong>Anglo-Norman & Plantation Towns:</strong> Normans built walled market towns (Kilkenny, Trim); Ulster planters built 20+ planned towns with wide streets, a central <strong>Diamond</strong> square, and stone <strong>bawns</strong>.',
+            '<strong>Early Christian &amp; Viking:</strong> Monastic settlements (Glendalough, Armagh) followed by Viking coastal ports (Dublin, Waterford, Cork, Limerick).',
+            '<strong>Anglo-Norman &amp; Plantation Towns:</strong> Normans built walled market towns (Kilkenny, Trim); Ulster planters built 20+ planned towns with wide streets, a central <strong>Diamond</strong> square, and stone <strong>bawns</strong>.',
             '<strong>18th-Century Estate Towns:</strong> Wealthy landlords laid out elegant Georgian towns like <strong>Kenmare</strong> and <strong>Westport</strong>.'
           ],
           takeaway: 'A "Diamond" (central market square) and wide straight streets are classic clues of an Ulster Plantation town.',
           visual: `
             <svg viewBox="0 0 240 190" class="w-full max-w-xs mx-auto">
               <rect x="10" y="10" width="220" height="170" rx="14" fill="#0f172a" stroke="#334155" stroke-width="2"/>
-              <!-- Wide Cross Streets -->
               <rect x="105" y="20" width="30" height="150" fill="#1e293b"/>
               <rect x="25" y="80" width="190" height="30" fill="#1e293b"/>
-              <!-- Central Diamond -->
               <rect x="92" y="67" width="56" height="56" rx="4" fill="#10b981" fill-opacity="0.25" stroke="#10b981" stroke-width="2"/>
               <text x="120" y="93" text-anchor="middle" fill="#34d399" font-size="8" font-weight="bold">CENTRAL</text>
               <text x="120" y="104" text-anchor="middle" fill="#34d399" font-size="8" font-weight="bold">DIAMOND</text>
-              <!-- Corner Buildings -->
               <rect x="35" y="30" width="52" height="32" rx="4" fill="#334155"/><text x="61" y="49" text-anchor="middle" fill="#e2e8f0" font-size="7">Church</text>
               <rect x="153" y="30" width="52" height="32" rx="4" fill="#334155"/><text x="179" y="49" text-anchor="middle" fill="#e2e8f0" font-size="7">Bawn / Fort</text>
               <rect x="35" y="128" width="52" height="32" rx="4" fill="#334155"/><text x="61" y="147" text-anchor="middle" fill="#e2e8f0" font-size="7">Courthouse</text>
@@ -1455,7 +1647,7 @@
             <div class="bg-obsidian border border-borderDark rounded-2xl p-5 text-center space-y-3">
               <div class="w-14 h-14 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto font-black text-xl">👑</div>
               <div class="font-extrabold text-white text-sm">DIVINE RIGHT OF KINGS</div>
-              <p class="text-xs text-slate-400">God → King Louis XVI → Total control over laws, taxes, army & courts without answering to the people.</p>
+              <p class="text-xs text-slate-400">God → King Louis XVI → Total control over laws, taxes, army &amp; courts without answering to the people.</p>
             </div>`
         },
         {
@@ -1468,11 +1660,16 @@
           ],
           takeaway: 'The 3rd Estate made up 98% of France and paid almost every tax while having zero political power.',
           visual: `
-            <div class="bg-obsidian border border-borderDark rounded-2xl p-4 space-y-2 text-xs">
-              <div class="p-2.5 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-200 text-center font-bold">1st Estate: Clergy (0.4% pop • 10% land • 0% tax)</div>
-              <div class="p-2.5 rounded-xl bg-purple-500/20 border border-purple-500/40 text-purple-200 text-center font-bold">2nd Estate: Nobility (1.6% pop • 60% land • 0% tax)</div>
-              <div class="p-4 rounded-xl bg-cyan-500/20 border border-cyan-500/40 text-cyan-100 text-center font-extrabold">3rd Estate: Peasants, Workers & Bourgeoisie (98% pop • Paid ALL Taxes)</div>
-            </div>`
+            <svg viewBox="0 0 260 200" class="w-full max-w-xs mx-auto">
+              <rect x="8" y="8" width="244" height="184" rx="16" fill="#0f172a" stroke="#1e293b" stroke-width="2"/>
+              <polygon points="130,22 92,66 168,66" fill="#f59e0b" fill-opacity="0.3" stroke="#f59e0b" stroke-width="2"/>
+              <text x="130" y="54" text-anchor="middle" fill="#fbbf24" font-size="8" font-weight="bold">1st: Clergy (0% Tax)</text>
+              <polygon points="88,72 172,72 202,114 58,114" fill="#a855f7" fill-opacity="0.3" stroke="#a855f7" stroke-width="2"/>
+              <text x="130" y="97" text-anchor="middle" fill="#d8b4fe" font-size="8.5" font-weight="bold">2nd: Nobility (60% Land • 0% Tax)</text>
+              <polygon points="54,120 206,120 238,172 22,172" fill="#06b6d4" fill-opacity="0.3" stroke="#06b6d4" stroke-width="2"/>
+              <text x="130" y="146" text-anchor="middle" fill="#67e8f9" font-size="9" font-weight="bold">3rd Estate: 98% of France</text>
+              <text x="130" y="160" text-anchor="middle" fill="#cffafe" font-size="7.5">Paid ALL Taxes (Taille, Gabelle, Corvée, Tithe)</text>
+            </svg>`
         },
         {
           badge: 'Topic 9 • Slide 3/9',
@@ -1487,7 +1684,7 @@
             <div class="bg-obsidian border border-borderDark rounded-2xl p-4 space-y-2.5 text-xs">
               <div class="p-3 rounded-xl bg-surface border border-borderDark"><strong class="text-rose-400">💸 War Debt:</strong> American Revolution loans bankrupted the Treasury.</div>
               <div class="p-3 rounded-xl bg-surface border border-borderDark"><strong class="text-amber-400">🍞 Bread Famine:</strong> 1788 crop failure caused widespread hunger.</div>
-              <div class="p-3 rounded-xl bg-surface border border-borderDark"><strong class="text-cyan-400">💡 Enlightenment:</strong> Voltaire & Rousseau spread ideas of equality.</div>
+              <div class="p-3 rounded-xl bg-surface border border-borderDark"><strong class="text-cyan-400">💡 Enlightenment:</strong> Voltaire &amp; Rousseau spread ideas of equality.</div>
             </div>`
         },
         {
@@ -1538,8 +1735,8 @@
           visual: `
             <div class="bg-obsidian border border-borderDark rounded-2xl p-4 space-y-2.5 text-xs">
               <div class="p-3 rounded-xl bg-blue-500/20 border border-blue-500/40 text-blue-200 font-bold text-center">LIBERTY • EQUALITY • FRATERNITY</div>
-              <div class="p-2.5 rounded-xl bg-surface text-slate-300">✓ Feudalism & noble tax exemptions abolished</div>
-              <div class="p-2.5 rounded-xl bg-surface text-slate-300">✓ Church lands nationalized & sold</div>
+              <div class="p-2.5 rounded-xl bg-surface text-slate-300">✓ Feudalism &amp; noble tax exemptions abolished</div>
+              <div class="p-2.5 rounded-xl bg-surface text-slate-300">✓ Church lands nationalized &amp; sold</div>
               <div class="p-2.5 rounded-xl bg-surface text-slate-300">✓ King brought from Versailles to Paris</div>
             </div>`
         },
@@ -1548,7 +1745,7 @@
           title: 'Flight to Varennes & Execution of Louis XVI',
           bullets: [
             '<strong>Flight to Varennes (June 1791):</strong> Disguised as servants, the royal family tried to flee to Austria for military help but were caught near the border—destroying trust in the King.',
-            '<strong>War & Republic (1792):</strong> France went to war with Austria and Prussia; in <strong>September 1792</strong>, the monarchy was abolished and France was declared a <strong>Republic</strong>.',
+            '<strong>War &amp; Republic (1792):</strong> France went to war with Austria and Prussia; in <strong>September 1792</strong>, the monarchy was abolished and France was declared a <strong>Republic</strong>.',
             '<strong>The Guillotine (Jan 1793):</strong> Put on trial for treason by the radical <strong>Jacobins</strong>, Louis XVI was guillotined on <strong>21 January 1793</strong> (Marie Antoinette followed in October).'
           ],
           takeaway: 'The Flight to Varennes proved Louis XVI was plotting with foreign armies against the revolution.',
@@ -1579,15 +1776,15 @@
           badge: 'Topic 9 • Slide 9/9',
           title: 'Consequences of the French Revolution',
           bullets: [
-            '<strong>End of Absolute Rule & Rise of Middle Class:</strong> Feudalism ended permanently; the bourgeoisie gained political power and equality before the law.',
-            '<strong>Modern Reforms & Napoleon:</strong> Introduced the <strong>metric system</strong>, spread nationalism across Europe, and paved the way for General <strong>Napoleon Bonaparte</strong> to take power in 1799.',
+            '<strong>End of Absolute Rule &amp; Rise of Middle Class:</strong> Feudalism ended permanently; the bourgeoisie gained political power and equality before the law.',
+            '<strong>Modern Reforms &amp; Napoleon:</strong> Introduced the <strong>metric system</strong>, spread nationalism across Europe, and paved the way for General <strong>Napoleon Bonaparte</strong> to take power in 1799.',
             '<strong>Impact on Ireland:</strong> Directly inspired Wolfe Tone and the <strong>United Irishmen</strong> to launch the <strong>1798 Rebellion</strong>.'
           ],
           takeaway: 'Always link the French Revolution directly to the founding of the United Irishmen in Belfast in 1791.',
           visual: `
             <div class="bg-obsidian border border-borderDark rounded-2xl p-4 space-y-2 text-xs">
-              <div class="p-2.5 rounded-xl bg-surface text-cyan-300 font-bold">1. Ended Absolute Monarchy & Feudalism</div>
-              <div class="p-2.5 rounded-xl bg-surface text-emerald-300 font-bold">2. Introduced Metric System & Civil Rights</div>
+              <div class="p-2.5 rounded-xl bg-surface text-cyan-300 font-bold">1. Ended Absolute Monarchy &amp; Feudalism</div>
+              <div class="p-2.5 rounded-xl bg-surface text-emerald-300 font-bold">2. Introduced Metric System &amp; Civil Rights</div>
               <div class="p-2.5 rounded-xl bg-surface text-purple-300 font-bold">3. Led to Rise of Napoleon (1799)</div>
               <div class="p-2.5 rounded-xl bg-surface text-amber-300 font-bold">4. Inspired Ireland's 1798 Rebellion</div>
             </div>`
@@ -1599,8 +1796,8 @@
           title: 'Causes of the 1798 Rebellion',
           bullets: [
             '<strong>Protestant Ascendancy:</strong> Anglicans (Church of Ireland) were just <strong>15%</strong> of the population but owned <strong>80% of the land</strong> and controlled the Dublin Parliament.',
-            '<strong>Penal Laws & Tithes:</strong> Catholics (75%) and Presbyterians/Dissenters (10%) were barred from Parliament and forced to pay <strong>tithes</strong> to the Anglican Church.',
-            '<strong>American & French Revolutions:</strong> Inspired Irish reformers to demand religious equality and a fair parliament.'
+            '<strong>Penal Laws &amp; Tithes:</strong> Catholics (75%) and Presbyterians/Dissenters (10%) were barred from Parliament and forced to pay <strong>tithes</strong> to the Anglican Church.',
+            '<strong>American &amp; French Revolutions:</strong> Inspired Irish reformers to demand religious equality and a fair parliament.'
           ],
           takeaway: 'Both Catholics and Ulster Presbyterians shared anger against the Anglican Protestant Ascendancy.',
           visual: `
@@ -1638,29 +1835,32 @@
           bullets: [
             '<strong>Bantry Bay Expedition (Dec 1796):</strong> Wolfe Tone convinced France to send 14,000 troops under <strong>General Hoche</strong>, but terrible storms prevented them landing at Bantry Bay, Co. Cork.',
             '<strong>General Lake\'s Terror in Ulster:</strong> British forces, the <strong>Yeomanry</strong>, and the <strong>Orange Order</strong> disarmed Ulster using <strong>half-hangings, pitch-capping,</strong> and house burnings.',
-            '<strong>Spies & Arrests:</strong> Informers betrayed the leadership, leading to the capture and death of military leader <strong>Lord Edward Fitzgerald</strong> in May 1798.'
+            '<strong>Spies &amp; Arrests:</strong> Informers betrayed the leadership, leading to the capture and death of military leader <strong>Lord Edward Fitzgerald</strong> in May 1798.'
           ],
           takeaway: 'British intelligence and General Lake\'s brutal disarmament crippled the United Irishmen before the rising even started.',
           visual: `
-            <div class="bg-obsidian border border-borderDark rounded-2xl p-4 space-y-2 text-xs">
-              <div class="p-2.5 rounded-xl bg-surface text-cyan-300"><strong>Dec 1796:</strong> Storms scatter 14,000 French troops at Bantry Bay</div>
-              <div class="p-2.5 rounded-xl bg-surface text-rose-300"><strong>1797–98:</strong> Pitch-capping & half-hangings in Ulster</div>
-              <div class="p-2.5 rounded-xl bg-surface text-amber-300"><strong>May 1798:</strong> Spies betray Lord Edward Fitzgerald</div>
-            </div>`
+            <svg viewBox="0 0 260 210" class="w-full max-w-xs mx-auto">
+              <rect x="8" y="8" width="244" height="194" rx="16" fill="#0f172a" stroke="#1e293b" stroke-width="2"/>
+              <path d="M125,20 C168,20 192,62 186,110 C180,158 140,188 94,184 C65,180 54,142 64,102 C74,62 88,20 125,20 Z" fill="#1e293b" stroke="#475569" stroke-width="2"/>
+              <circle cx="155" cy="48" r="7" fill="#f59e0b"/><text x="166" y="45" fill="#fbbf24" font-size="7.5" font-weight="bold">Antrim/Down</text>
+              <circle cx="72" cy="88" r="7" fill="#06b6d4"/><text x="20" y="84" fill="#22d3ee" font-size="7.5" font-weight="bold">Killala (Humbert)</text>
+              <circle cx="164" cy="148" r="8" fill="#ef4444"/><text x="122" y="138" fill="#fca5a5" font-size="7.5" font-weight="bold">Vinegar Hill</text>
+              <circle cx="76" cy="172" r="7" fill="#a855f7"/><text x="22" y="176" fill="#d8b4fe" font-size="7.5" font-weight="bold">Bantry Bay '96</text>
+            </svg>`
         },
         {
           badge: 'Topic 10 • Slide 4/8',
           title: 'The Wexford Rebellion (May–June 1798)',
           bullets: [
             '<strong>Most Serious Rising:</strong> Sparked in late May by brutal yeomanry torture; led by Catholic priest <strong>Father John Murphy</strong> and Protestant landlord <strong>Bagenal Harvey</strong>.',
-            '<strong>Early Victories & Atrocities:</strong> Rebels won at <strong>Oulart Hill</strong> and captured Enniscorthy & Wexford town, but sectarian anger led to the <strong>Scullabogue massacre</strong> (100+ Protestants burned in a barn).',
+            '<strong>Early Victories &amp; Atrocities:</strong> Rebels won at <strong>Oulart Hill</strong> and captured Enniscorthy &amp; Wexford town, but sectarian anger led to the <strong>Scullabogue massacre</strong> (100+ Protestants burned in a barn).',
             '<strong>Battle of Vinegar Hill (21 June 1798):</strong> 20,000 British troops under General Lake surrounded and crushed the main rebel camp near Enniscorthy.'
           ],
           takeaway: 'Vinegar Hill was the decisive turning point that broke the Wexford rebellion.',
           visual: `
             <div class="bg-obsidian border border-borderDark rounded-2xl p-4 space-y-2 text-xs font-mono">
               <div class="p-2 rounded bg-emerald-500/15 text-emerald-300">27 May: Battle of Oulart Hill (Rebel Win)</div>
-              <div class="p-2 rounded bg-emerald-500/15 text-emerald-300">28–30 May: Enniscorthy & Wexford Taken</div>
+              <div class="p-2 rounded bg-emerald-500/15 text-emerald-300">28–30 May: Enniscorthy &amp; Wexford Taken</div>
               <div class="p-2 rounded bg-rose-500/15 text-rose-300">5 June: Scullabogue Barn Massacre</div>
               <div class="p-2 rounded bg-rose-500/25 border border-rose-500/40 text-rose-200 font-bold">21 June: Defeated at Vinegar Hill</div>
             </div>`
@@ -1669,7 +1869,7 @@
           badge: 'Topic 10 • Slide 5/8',
           title: 'Risings in Dublin, Kildare & Ulster',
           bullets: [
-            '<strong>Dublin & Kildare (23 May 1798):</strong> Signalled by stopping mail coaches leaving Dublin, but poorly coordinated and swiftly defeated.',
+            '<strong>Dublin &amp; Kildare (23 May 1798):</strong> Signalled by stopping mail coaches leaving Dublin, but poorly coordinated and swiftly defeated.',
             '<strong>Antrim (7 June 1798):</strong> Led by <strong>Henry Joy McCracken</strong>; rebels attacked Antrim town but were driven back and McCracken was executed in Belfast.',
             '<strong>Down (12 June 1798):</strong> Led by <strong>Henry Munro</strong>; defeated at the Battle of Ballynahinch and Munro was hanged outside his own home.'
           ],
@@ -1677,7 +1877,7 @@
           visual: `
             <div class="bg-obsidian border border-borderDark rounded-2xl p-4 space-y-2.5 text-xs">
               <div class="p-3 rounded-xl bg-surface"><strong>Dublin/Kildare:</strong> Mail coach signal • Crushed early</div>
-              <div class="p-3 rounded-xl bg-surface"><strong>Co. Antrim:</strong> Henry Joy McCracken • Defeated & executed</div>
+              <div class="p-3 rounded-xl bg-surface"><strong>Co. Antrim:</strong> Henry Joy McCracken • Defeated &amp; executed</div>
               <div class="p-3 rounded-xl bg-surface"><strong>Co. Down:</strong> Henry Munro • Defeated at Ballynahinch</div>
             </div>`
         },
@@ -1694,16 +1894,16 @@
             <div class="bg-obsidian border border-borderDark rounded-2xl p-4 space-y-2 text-xs">
               <div class="p-2.5 rounded bg-surface"><strong class="text-cyan-400">Aug 1798:</strong> Humbert lands at Killala → Races of Castlebar</div>
               <div class="p-2.5 rounded bg-surface"><strong class="text-amber-400">Sept 1798:</strong> Surrender at Ballinamuck, Co. Longford</div>
-              <div class="p-2.5 rounded bg-rose-500/20 border border-rose-500/40"><strong class="text-rose-300">Oct 1798:</strong> Wolfe Tone captured at Lough Swilly & dies</div>
+              <div class="p-2.5 rounded bg-rose-500/20 border border-rose-500/40"><strong class="text-rose-300">Oct 1798:</strong> Wolfe Tone captured at Lough Swilly &amp; dies</div>
             </div>`
         },
         {
           badge: 'Topic 10 • Slide 7/8',
           title: 'Why Did the 1798 Rebellion Fail?',
           bullets: [
-            '<strong>1. British Spies & Informers:</strong> Betrayed plans and caused the arrest of Lord Edward Fitzgerald before the rising.',
+            '<strong>1. British Spies &amp; Informers:</strong> Betrayed plans and caused the arrest of Lord Edward Fitzgerald before the rising.',
             '<strong>2. Lack of Effective French Help:</strong> Storms at Bantry Bay (1796) and Humbert\'s small force arriving too late (Aug 1798).',
-            '<strong>3. Pikes vs. Muskets & Cannons:</strong> Poorly trained rebels with wooden pikes were outgunned by professional British troops, and risings were uncoordinated.'
+            '<strong>3. Pikes vs. Muskets &amp; Cannons:</strong> Poorly trained rebels with wooden pikes were outgunned by professional British troops, and risings were uncoordinated.'
           ],
           takeaway: 'Memorize at least 4 distinct reasons for the failure of the 1798 Rebellion for a structured paragraph question.',
           visual: `
@@ -1718,7 +1918,7 @@
           badge: 'Topic 10 • Slide 8/8',
           title: 'Consequences of 1798 & The Act of Union',
           bullets: [
-            '<strong>10,000–30,000 Deaths & Sectarianism:</strong> Huge loss of life and deep bitterness between Catholics and Protestants.',
+            '<strong>10,000–30,000 Deaths &amp; Sectarianism:</strong> Huge loss of life and deep bitterness between Catholics and Protestants.',
             '<strong>Act of Union (1800 / effective 1 Jan 1801):</strong> British PM William Pitt abolished the Irish Parliament in Dublin; Irish MPs now sat in Westminster, London.',
             '<strong>Physical Force Republican Tradition:</strong> Wolfe Tone\'s ideal of an independent Irish Republic inspired <strong>Robert Emmet (1803)</strong>, 1848, and 1916.'
           ],
@@ -1782,7 +1982,7 @@
             <div class="bg-obsidian border border-purple-500/30 rounded-2xl p-5 text-center space-y-2">
               <div class="w-12 h-12 rounded-full bg-amber-500/20 border border-amber-500/50 text-amber-400 font-black flex items-center justify-center mx-auto text-lg">1d</div>
               <div class="font-extrabold text-white text-sm">THE CATHOLIC RENT</div>
-              <p class="text-xs text-slate-300">1 Penny/Month collected at church gates → Funded campaigns, newspapers & united millions peacefully.</p>
+              <p class="text-xs text-slate-300">1 Penny/Month collected at church gates → Funded campaigns, newspapers &amp; united millions peacefully.</p>
             </div>`
         },
         {
@@ -1796,7 +1996,7 @@
           takeaway: 'Wellington admitted he passed Catholic Emancipation in 1829 to avoid civil war in Ireland.',
           visual: `
             <div class="bg-obsidian border border-borderDark rounded-2xl p-4 space-y-2 text-xs font-mono">
-              <div class="p-2.5 rounded bg-surface">1823: Catholic Association & Catholic Rent</div>
+              <div class="p-2.5 rounded bg-surface">1823: Catholic Association &amp; Catholic Rent</div>
               <div class="p-2.5 rounded bg-surface">1828: O'Connell wins Clare By-Election</div>
               <div class="p-2.5 rounded bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-bold">1829: Catholic Emancipation Act → "The Liberator"</div>
             </div>`
@@ -1814,7 +2014,7 @@
             <div class="bg-obsidian border border-borderDark rounded-2xl p-5 text-center space-y-2.5">
               <div class="text-xs font-black text-purple-400 uppercase">1843 • Repeal Campaign</div>
               <div class="text-2xl font-black text-white">MONSTER MEETINGS</div>
-              <p class="text-xs text-slate-300">100,000 to 750,000 people at Tara, Mullaghmast & Cashel demanding Repeal of the Act of Union.</p>
+              <p class="text-xs text-slate-300">100,000 to 750,000 people at Tara, Mullaghmast &amp; Cashel demanding Repeal of the Act of Union.</p>
             </div>`
         },
         {
@@ -1829,14 +2029,14 @@
           visual: `
             <div class="bg-obsidian border border-rose-500/30 rounded-2xl p-4 space-y-2 text-xs">
               <div class="font-bold text-rose-400">October 1843 • Turning Point at Clontarf</div>
-              <div class="text-slate-300">Peel sends troops & bans meeting → O'Connell cancels to save lives → Movement loses momentum → Young Irelanders split away.</div>
+              <div class="text-slate-300">Peel sends troops &amp; bans meeting → O'Connell cancels to save lives → Movement loses momentum → Young Irelanders split away.</div>
             </div>`
         },
         {
           badge: 'Topic 12 • Slide 7/8',
           title: 'O\'Connell\'s Final Years & Death (1847)',
           bullets: [
-            '<strong>Lord Mayor & Tithes:</strong> Earlier, O\'Connell helped win the <strong>1838 Tithe Reform</strong> (reducing tithes by 25%) and became Dublin\'s first Catholic Lord Mayor since 1690 (1841).',
+            '<strong>Lord Mayor &amp; Tithes:</strong> Earlier, O\'Connell helped win the <strong>1838 Tithe Reform</strong> (reducing tithes by 25%) and became Dublin\'s first Catholic Lord Mayor since 1690 (1841).',
             '<strong>The Great Famine (1845–47):</strong> In his final speech in Westminster (Feb 1847), a frail O\'Connell begged Parliament to save starving Ireland.',
             '<strong>Death in Genoa (May 1847):</strong> Travelling to Rome for his health, he died in Genoa, Italy—his heart buried in Rome and his body in Glasnevin Cemetery.'
           ],
@@ -1852,7 +2052,7 @@
           badge: 'Topic 12 • Slide 8/8',
           title: 'O\'Connell\'s Legacy in Ireland & The World',
           bullets: [
-            '<strong>Irish Parliamentary Leaders:</strong> Directly inspired <strong>Charles Stewart Parnell</strong> (Home Rule), <strong>John Redmond</strong>, and <strong>John Hume</strong> (Northern Ireland Civil Rights & Peace Process).',
+            '<strong>Irish Parliamentary Leaders:</strong> Directly inspired <strong>Charles Stewart Parnell</strong> (Home Rule), <strong>John Redmond</strong>, and <strong>John Hume</strong> (Northern Ireland Civil Rights &amp; Peace Process).',
             '<strong>Global Civil Rights Icons:</strong> His peaceful mass-movement methods inspired <strong>Mahatma Gandhi</strong> in India and <strong>Martin Luther King Jr.</strong> in the USA.',
             '<strong>Democratic Awakening:</strong> Taught ordinary Irish people how to organize peacefully for their rights.'
           ],
@@ -1912,7 +2112,6 @@
         </div>
       `;
 
-      // Render progress dots
       const dotsHtml = deck.map((_, i) => `
         <button onclick="goToSlide(${i})" class="h-2 rounded-full transition-all ${i === currentSlideIdx ? 'w-7 bg-emerald-400' : 'w-2 bg-slate-700 hover:bg-slate-500'}" title="Slide ${i + 1}"></button>
       `).join('');
@@ -2121,7 +2320,7 @@
 
       // French Revolution (7)
       { id: 'q8', topic: 'french', topicName: 'Topic 9: French Revolution', q: 'Approximately what percentage of France\'s population belonged to the 3rd Estate in 1789?', options: ['50%', '75%', '98%', '25%'], correct: 2, exp: 'About 25 million people—98% of France—belonged to the 3rd Estate and paid almost all the taxes.' },
-      { id: 'q9', topic: 'french', topicName: 'Topic 9: French Revolution', q: 'What was the "Gabelle" in pre-revolutionary France?', a: 'A tax on salt', options: ['A tax on land', 'A tax on salt', 'Unpaid road work', 'A Church tax on crops'], correct: 1, exp: 'The Gabelle was a hated tax on salt; the Taille was a land tax, Corvée was unpaid road work, and Tithe went to the Church.' },
+      { id: 'q9', topic: 'french', topicName: 'Topic 9: French Revolution', q: 'What was the "Gabelle" in pre-revolutionary France?', options: ['A tax on land', 'A tax on salt', 'Unpaid road work', 'A Church tax on crops'], correct: 1, exp: 'The Gabelle was a hated tax on salt; the Taille was a land tax, Corvée was unpaid road work, and Tithe went to the Church.' },
       { id: 'q10', topic: 'french', topicName: 'Topic 9: French Revolution', q: 'Why did the 3rd Estate break away to form the National Assembly in June 1789?', options: ['The King abolished all taxes', 'Voting by order meant the 1st and 2nd Estates always outvoted them 2–1', 'Napoleon ordered them to leave', 'Britain invaded Paris'], correct: 1, exp: 'Each estate only had one collective vote, so the privileged 1st and 2nd Estates always outvoted the 3rd Estate 2–1.' },
       { id: 'q11', topic: 'french', topicName: 'Topic 9: French Revolution', q: 'Why did the Parisian sans-culottes attack the Bastille on 14 July 1789?', options: ['To crown Napoleon Emperor', 'To capture Marie Antoinette', 'To seize gunpowder and weapons', 'To sign the Treaty of Versailles'], correct: 2, exp: 'Parisians stormed the Bastille royal fortress to get gunpowder to defend the National Assembly against royal troops.' },
       { id: 'q12', topic: 'french', topicName: 'Topic 9: French Revolution', q: 'What happened during the "Flight to Varennes" in June 1791?', options: ['Robespierre fled to England', 'Louis XVI and his family were caught trying to escape France in disguise', 'French troops invaded Austria', 'The Bastille was rebuilt'], correct: 1, exp: 'Louis XVI tried to flee to Austria for foreign military help, was caught at Varennes, and lost all trust with the French people.' },
@@ -2202,12 +2401,10 @@
       const box = document.getElementById('quiz-box');
       if (qIdx >= activeQuizList.length) {
         const pct = Math.round((quizScore / activeQuizList.length) * 100);
-        // Update best scores by topic
         const filterVal = document.getElementById('quiz-topic-filter').value;
         if (filterVal !== 'all') {
           appState.quizBestScores[filterVal] = Math.max(appState.quizBestScores[filterVal] || 0, pct);
         } else {
-          // Calculate per-topic score from this run
           ['plantations', 'french', 'rebellion1798', 'oconnell'].forEach(t => {
             const topicQs = activeQuizList.filter(q => q.topic === t);
             const topicCorrect = topicQs.filter(q => !sessionMissedIds.includes(q.id)).length;
@@ -2339,30 +2536,6 @@
       },
       {
         id: 'src2',
-        tag: 'Topic 8 • Visual Source Analysis',
-        title: '17th-Century Map & Layout of Londonderry',
-        quote: '[Map Features: Star-shaped stone defensive walls with 4 main gates; wide straight streets meeting at a central square called The Diamond; St. Columb\'s Anglican Cathedral inside the walls; small cottages clustered outside the walls in a marshy area marked "The Bogside".]',
-        citation: '— Plan of the City of Londonderry built by the London Companies (c. 1622)',
-        questions: [
-          '1. Identify TWO defensive features shown in this 17th-century plantation town plan.',
-          '2. How does the map show religious and social segregation between planters and native Irish?'
-        ],
-        modelAnswer: '<strong>1.</strong> Thick stone defensive walls surrounding the town and four fortified gates (plus wide straight streets for troop movement).<br><strong>2.</strong> British Protestant planters lived inside the safety of the walled city around the Anglican Cathedral and Diamond, while native Irish Catholics were excluded outside the walls in the Bogside.'
-      },
-      {
-        id: 'src3',
-        tag: 'Topic 9 • Primary Source (1787–1789)',
-        title: 'Arthur Young on French Peasants',
-        quote: '"Walking up a long hill, I was joined by a poor woman who complained of the times, and that it was a sad country. She said her husband had but a morsel of land, one cow, and a poor little horse, yet they had to pay 42 lbs of wheat and three chickens to one lord, and 168 lbs of oats, one chicken and a shilling to another, besides heavy tailles and other taxes."',
-        citation: '— Arthur Young, English traveller in France (12 July 1789)',
-        questions: [
-          '1. What taxes and feudal dues does the peasant woman mention paying?',
-          '2. Why is Arthur Young\'s diary useful to a historian studying the causes of the French Revolution?'
-        ],
-        modelAnswer: '<strong>1.</strong> Heavy royal land taxes (<em>tailles</em>) as well as feudal dues paid in produce and money (wheat, oats, chickens, shillings) to two different noble lords.<br><strong>2.</strong> It is a contemporary eyewitness account written two days before the Storming of the Bastille (12 July 1789) by an outside observer, showing the crushing tax burden on the 3rd Estate.'
-      },
-      {
-        id: 'src4',
         tag: 'Topic 9 • Primary Source (1790)',
         title: 'Edmund Burke on the French Revolution',
         quote: '"They have found their punishment in their success. Laws overturned; tribunals subverted; industry without vigour; commerce expiring; the revenue unpaid, yet the people impoverished; a church pillaged, and a state not relieved."',
@@ -2372,6 +2545,30 @@
           '2. What does Burke mean by "a church pillaged"?'
         ],
         modelAnswer: '<strong>1.</strong> He strongly opposes it—evidenced by phrases like "Laws overturned", "commerce expiring", and "a church pillaged".<br><strong>2.</strong> He is referring to the National Assembly\'s <em>Civil Constitution of the Clergy</em>, which confiscated Catholic Church lands and wealth across France.'
+      },
+      {
+        id: 'src3',
+        tag: 'Topic 10 • Official Report (1797–1798)',
+        title: 'General Lake\'s Disarmament of Ulster',
+        quote: '"Nothing but terror will keep them in order... Whole streets of houses have been burned where arms were concealed, and the Yeomanry have administered the pitch-cap and half-hanging to extract confessions from suspected United Irishmen."',
+        citation: '— Contemporary Account of General Gerard Lake\'s Campaign in Ulster (1797–98)',
+        questions: [
+          '1. Name TWO brutal methods used by General Lake\'s forces to disarm Ulster.',
+          '2. How did this crackdown affect the outbreak of the 1798 Rebellion?'
+        ],
+        modelAnswer: '<strong>1.</strong> Burning houses, pitch-capping (pouring hot tar on suspects\' heads), and half-hangings.<br><strong>2.</strong> It seized thousands of rebel pikes and muskets and terrorized Ulster communities before May 1798, weakening the Ulster rising when it finally broke out.'
+      },
+      {
+        id: 'src4',
+        tag: 'Topic 12 • Political Cartoon & Dispatch (1828)',
+        title: 'The 1828 Clare By-Election & Wellington\'s Warning',
+        quote: '"[Cartoon depicts Daniel O\'Connell striding into the House of Commons carrying the \'Clare Election Victory\', while Prime Minister Duke of Wellington says: \'We must pass Emancipation or face civil war in Ireland!\']"',
+        citation: '— British Political Commentary on the Clare By-Election (1828–1829)',
+        questions: [
+          '1. Why could Daniel O\'Connell not immediately take his seat after winning the 1828 Clare By-Election?',
+          '2. According to the source, why did the Duke of Wellington finally pass the Catholic Emancipation Act in 1829?'
+        ],
+        modelAnswer: '<strong>1.</strong> Because as a Catholic, he refused to swear the anti-Catholic Oath of Supremacy required of all MPs at Westminster.<br><strong>2.</strong> Wellington feared that refusing to grant Emancipation after O\'Connell\'s massive democratic victory would trigger a full-scale civil war in Ireland.'
       }
     ];
 
@@ -2631,7 +2828,8 @@
                 <span>Cards: ${masteredCount}/${topicCards.length}</span>
                 <span>Best Quiz: ${quizPct}%</span>
               </div>
-              <div class="grid grid-cols-3 gap-2 pt-1">
+              <div class="grid grid-cols-4 gap-1.5 pt-1">
+                <button onclick="openTopicPdfTab('${t.key}')" class="py-2 px-2 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-xs font-extrabold text-rose-300 transition">PDF</button>
                 <button onclick="jumpToCheatSheet('${t.key}')" class="py-2 px-2 rounded-xl bg-obsidian hover:bg-slate-800 border border-borderDark text-xs font-bold text-slate-200 transition">Notes</button>
                 <button onclick="jumpToDeck('${t.key}')" class="py-2 px-2 rounded-xl bg-obsidian hover:bg-slate-800 border border-borderDark text-xs font-bold text-slate-200 transition">Slides</button>
                 <button onclick="jumpToQuiz('${t.key}')" class="py-2 px-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-xs font-bold text-emerald-400 transition">Quiz</button>
@@ -2672,9 +2870,13 @@
 
       document.querySelectorAll('.nav-tab').forEach(btn => {
         if (btn.dataset.tab === tabKey) {
-          btn.className = 'nav-tab flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition bg-emerald-500/15 text-emerald-400 border border-emerald-500/30';
+          btn.className = btn.dataset.tab === 'pdf'
+            ? 'nav-tab flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold transition bg-rose-500 text-white border border-rose-400 shadow-md'
+            : 'nav-tab flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition bg-emerald-500/15 text-emerald-400 border border-emerald-500/30';
         } else {
-          btn.className = 'nav-tab flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-400 hover:text-white hover:bg-surface transition border border-transparent';
+          btn.className = btn.dataset.tab === 'pdf'
+            ? 'nav-tab flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 transition border border-rose-500/30'
+            : 'nav-tab flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-400 hover:text-white hover:bg-surface transition border border-transparent';
         }
       });
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2697,7 +2899,6 @@
       startQuiz();
     }
 
-    // Keyboard Controls for Flashcards & Slides
     document.addEventListener('keydown', (e) => {
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
 
@@ -2725,6 +2926,7 @@
     window.addEventListener('DOMContentLoaded', () => {
       loadState();
       updateReadinessUI();
+      renderPdfLibrary();
       renderCheatSheet();
       renderSlide();
       renderFlashcard();
